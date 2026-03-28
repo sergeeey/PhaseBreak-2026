@@ -728,10 +728,11 @@ PhaseBreak/
 Неделя 9-10 → Этап 6:   Paper writing (arXiv → workshop)
 ```
 
-**3 contributions (vs 1 в исходном плане):**
+**4 contributions (vs 1 в исходном плане):**
 1. Multi-window DS LPPLS Confidence Indicator (Sornette 2015 method, validated)
 2. HMM-gated LPPLS ensemble (novel combination, not in literature)
-3. Cross-domain phase transition universality (main thesis)
+3. Certified convergence bounds for tc (Richardson extrapolation, adapted from ChernoffPy/Galkin-Remizov 2025)
+4. Cross-domain phase transition universality (main thesis)
 
 ---
 

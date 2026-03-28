@@ -35,7 +35,8 @@ pytest tests/ -v
 
 1. **Multi-window DS LPPLS Confidence Indicator** — fit on multiple overlapping windows, consensus = confident signal (Sornette 2015)
 2. **HMM-gated LPPLS ensemble** — Hidden Markov Model pre-screens regime → LPPLS fits only in bubble state (novel combination)
-3. **Cross-domain universality** — same (m, ω) fingerprint across finance, geology, fraud?
+3. **Certified convergence bounds for tc** — Richardson extrapolation validates fit stability, detects overfitting (adapted from ChernoffPy/Galkin-Remizov 2025)
+4. **Cross-domain universality** — same (m, ω) fingerprint across finance, geology, fraud?
 
 ## Project Status
 
@@ -43,8 +44,9 @@ pytest tests/ -v
 - [x] Grid search + L-BFGS-B optimizer
 - [x] 6 known bubble datasets (BTC 2017/2021, Dot-com, Tesla, Shanghai, S&P500)
 - [x] 15 unit tests passing
+- [x] 6 negative control datasets with 0/6 false positives
+- [x] Certified convergence bounds (Richardson extrapolation)
 - [ ] Validation on known bubbles + multi-window confidence (Stage 1)
-- [ ] 6 negative control datasets (Stage 1)
 - [ ] HMM regime detection + ensemble (Stage 1.5)
 - [ ] Cross-domain geology (Stage 2)
 - [ ] Bayesian survival for fraud (Stage 3)

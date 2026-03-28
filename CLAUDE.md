@@ -5,7 +5,7 @@ Universal Phase Transition Detection with Adversarial AI Validation.
 Cross-domain: Finance (LPPLS) + Geology (Sentinel-2) + Fraud Survival (Doomsday Bayesian).
 
 ## Stack
-Python 3.11, NumPy, SciPy, yfinance, hmmlearn, lifelines, structlog, pytest.
+Python 3.11, NumPy, SciPy, yfinance, hmmlearn, chernoffpy, lifelines, structlog, pytest.
 
 ## Key files
 - `src/lppls/model.py` — Core LPPLS equation (Sornette 2003)
@@ -14,7 +14,8 @@ Python 3.11, NumPy, SciPy, yfinance, hmmlearn, lifelines, structlog, pytest.
 - `src/lppls/confidence.py` — Multi-window DS LPPLS Confidence Indicator
 - `src/lppls/regime.py` — HMM regime detection (3 states)
 - `src/lppls/ensemble.py` — HMM-gated LPPLS pipeline
-- `tests/test_lppls_model.py` — Unit tests (15 passing)
+- `src/lppls/certified_fit.py` — Richardson extrapolation certified tc bounds
+- `tests/test_lppls_model.py` — Unit tests
 
 ## Math
 LPPLS: `ln(p(t)) = A + B(tc-t)^m + C(tc-t)^m * cos(ω*ln(tc-t) + φ)`
@@ -26,10 +27,11 @@ OLS for linear (A,B,C1,C2), grid+L-BFGS-B for nonlinear (tc,m,ω).
 - B < 0 for bubble detection
 - damping |B|/|C| > 0.5
 
-## 3 Contributions
+## 4 Contributions
 1. Multi-window DS LPPLS Confidence Indicator (Sornette 2015, validated)
 2. HMM-gated LPPLS ensemble (novel, not in literature)
-3. Cross-domain phase transition universality (main thesis)
+3. Certified convergence bounds for tc via Richardson extrapolation (ChernoffPy, novel)
+4. Cross-domain phase transition universality (main thesis)
 
 ## Commands
 ```bash
