@@ -115,7 +115,14 @@ S\&P 2020 & LOW & 35 days & --- & 0.30 & 10.02 \\
 \end{tabular}
 \end{table}
 
-4/6 known bubbles detected with $t_c$ error $<$ 30 days. 0/6 false positives on negative controls. Tesla 2021 (meme stock) and S\&P 2020 (COVID exogenous shock) correctly rejected---not classical LPPLS bubbles.
+4/6 known bubbles detected with $t_c$ error $<$ 30 days. 0/6 false positives on negative controls. Tesla 2021 (meme stock) and S\&P 2020 (COVID exogenous shock) correctly rejected---not classical LPPLS bubbles. See Figure~\ref{fig:tc} for prediction accuracy.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.7\textwidth]{figures/fig3_tc_accuracy.pdf}
+\caption{Critical time prediction error for 4 detected bubbles. All within 30-day threshold. Multi-window CI reduces China 2015 from 48 to 16 days.}
+\label{fig:tc}
+\end{figure}
 
 \subsection{Results: Ablation}
 
@@ -137,6 +144,13 @@ LPPLS (loose filters) & 6 & 5 & 0 & 1 & 55\% & 100\% & 71\% \\
 \end{table}
 
 Tightened Sornette filters are the critical improvement: without them, FP rate = 83\% (5/6 controls falsely detected as bubbles). The filter changes ($m < 0.87$, $|B| > 0.003$, filter-aware fallback) raise precision from 55\% to 100\% at the cost of recall (100\% $\to$ 67\%). Multi-window CI detects weaker signals but introduces false positives on borderline cases (S\&P 2013 QE rally); HMM gating recovers precision to 80\%. EWS confirmation is too strict for these datasets, reducing recall to 50\% while eliminating all false positives. \textbf{Note:} filter thresholds were tuned on this evaluation set; held-out validation with additional financial data is needed to confirm generalization.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig2_ablation_bar.pdf}
+\caption{Ablation study: precision, recall, and false positive rate for each layer. Tight Sornette filters provide the largest improvement (+83\% precision). EWS gating eliminates all FP but reduces recall to 50\%.}
+\label{fig:ablation}
+\end{figure}
 
 \subsection{Results: Geology}
 
@@ -162,7 +176,14 @@ $\omega$ & 4 & 13 & 0.222 & 0.864 & Not rejected$^*$ \\
 \end{tabular}
 \end{table}
 
-$^*$\textbf{Caveat:} With $n_{\text{fin}} = 4$, the KS test has very low statistical power; $p > 0.05$ indicates inability to reject the null, not confirmation of identical distributions. All pairwise tests yield $p > 0.05$, but this is a necessary---not sufficient---condition for universality. Bootstrap robustness: $\omega$ is robust (86\% of 500 resamples confirm); $m$ is borderline (70\%). Larger samples ($n \geq 20$ per domain) are required to make a definitive universality claim.
+$^*$\textbf{Caveat:} With $n_{\text{fin}} = 4$, the KS test has very low statistical power; $p > 0.05$ indicates inability to reject the null, not confirmation of identical distributions. All pairwise tests yield $p > 0.05$, but this is a necessary---not sufficient---condition for universality. Bootstrap robustness: $\omega$ is robust (86\% of 500 resamples confirm); $m$ is borderline (70\%). Larger samples ($n \geq 20$ per domain) are required to make a definitive universality claim. Figure~\ref{fig:scatter} shows the parameter distribution overlap.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.75\textwidth]{figures/fig1_m_omega_scatter.pdf}
+\caption{LPPLS parameters $(m, \omega)$ across domains. Red circles: financial bubbles (yfinance). Blue squares: geological spectral anomalies (Sentinel-2). Dashed lines: Sornette bounds. Overlap is visible but sample sizes are small.}
+\label{fig:scatter}
+\end{figure}
 
 \section{Discussion}
 
