@@ -1,0 +1,15 @@
+__pycache__/
+*.pyc
+.venv/
+*.egg-info/
+dist/
+build/
+.env
+data/finance/*.csv
+data/geology/*.tif
+data/fraud/*.csv
+.ipynb_checkpoints/
+*.pkl
+*.joblib
+.coverage
+htmlcov/

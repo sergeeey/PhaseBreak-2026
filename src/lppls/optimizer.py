@@ -1,0 +1,188 @@
+"""LPPLS Optimizer: Grid search + L-BFGS-B refinement.
+
+Strategy (Sornette 2003):
+1. Outer: Grid search over nonlinear params (tc, m, omega) — ~1000 combinations
+2. Inner: OLS for linear params (A, B, C1, C2) at each grid point
+3. Polish: L-BFGS-B on all 7 params starting from best grid point
+4. Filter: Sornette constraints (m, omega, B < 0)
+"""
+
+from __future__ import annotations
+
+import structlog
+import numpy as np
+from scipy.optimize import minimize
+from numpy.typing import NDArray
+
+from src.lppls.model import LPPLS, LPPLSParams
+
+log = structlog.get_logger()
+
+# WHY: Sornette (2003) empirical ranges for financial bubbles
+DEFAULT_BOUNDS = {
+    "tc_margin_left": 1,  # tc > last observation + 1
+    "tc_margin_right": 252,  # tc within 1 trading year
+    "m_low": 0.1,
+    "m_high": 0.9,
+    "omega_low": 6.0,
+    "omega_high": 13.0,
+}
+
+
+class LPPLSOptimizer:
+    """Two-stage LPPLS optimizer: grid search → L-BFGS-B polish."""
+
+    def __init__(
+        self,
+        tc_range: tuple[float, float] | None = None,
+        m_range: tuple[float, float] = (0.1, 0.9),
+        omega_range: tuple[float, float] = (6.0, 13.0),
+        grid_size: int = 10,
+        n_best: int = 5,
+    ) -> None:
+        self.tc_range = tc_range
+        self.m_range = m_range
+        self.omega_range = omega_range
+        self.grid_size = grid_size
+        self.n_best = n_best
+
+    def fit(self, t: NDArray, log_price: NDArray) -> LPPLS:
+        """Fit LPPLS model to time series.
+
+        Args:
+            t: Time array (integer indices or float days)
+            log_price: Natural log of price series
+
+        Returns:
+            Fitted LPPLS model with best parameters
+        """
+        t_last = float(t[-1])
+
+        # WHY: default tc range = 1 day to 1 year after last observation
+        if self.tc_range is None:
+            tc_lo = t_last + DEFAULT_BOUNDS["tc_margin_left"]
+            tc_hi = t_last + DEFAULT_BOUNDS["tc_margin_right"]
+        else:
+            tc_lo, tc_hi = self.tc_range
+
+        # Stage 1: Grid search
+        best_candidates = self._grid_search(t, log_price, tc_lo, tc_hi)
+        log.info("grid_search_done", n_candidates=len(best_candidates))
+
+        # Stage 2: L-BFGS-B polish on top candidates
+        best_params = None
+        best_sse = float("inf")
+
+        for tc0, m0, omega0, sse0 in best_candidates:
+            try:
+                params, sse = self._polish(t, log_price, tc0, m0, omega0, tc_lo, tc_hi)
+                if sse < best_sse and self._passes_filters(params):
+                    best_sse = sse
+                    best_params = params
+            except Exception:
+                continue
+
+        if best_params is None:
+            log.warning(
+                "optimization_failed", msg="No valid solution found, returning best grid point"
+            )
+            tc0, m0, omega0, _ = best_candidates[0]
+            A, B, C1, C2 = LPPLS.solve_linear(t, log_price, tc0, m0, omega0)
+            best_params = LPPLSParams(tc=tc0, m=m0, omega=omega0, A=A, B=B, C1=C1, C2=C2)
+
+        model = LPPLS(params=best_params)
+        r2 = model.r_squared(t, log_price)
+        log.info(
+            "fit_complete",
+            tc=best_params.tc,
+            m=round(best_params.m, 4),
+            omega=round(best_params.omega, 4),
+            B=round(best_params.B, 6),
+            is_bubble=best_params.is_bubble,
+            r_squared=round(r2, 4),
+        )
+        return model
+
+    def _grid_search(
+        self, t: NDArray, log_price: NDArray, tc_lo: float, tc_hi: float
+    ) -> list[tuple[float, float, float, float]]:
+        """Exhaustive grid search over (tc, m, omega). Returns top-N by SSE."""
+        tc_grid = np.linspace(tc_lo, tc_hi, self.grid_size)
+        m_grid = np.linspace(self.m_range[0], self.m_range[1], self.grid_size)
+        omega_grid = np.linspace(self.omega_range[0], self.omega_range[1], self.grid_size)
+
+        results: list[tuple[float, float, float, float]] = []
+
+        for tc in tc_grid:
+            for m in m_grid:
+                for omega in omega_grid:
+                    try:
+                        sse = LPPLS.sse_for_nonlinear(t, log_price, tc, m, omega)
+                        if np.isfinite(sse):
+                            results.append((tc, m, omega, sse))
+                    except Exception:
+                        continue
+
+        results.sort(key=lambda x: x[3])
+        return results[: self.n_best]
+
+    def _polish(
+        self,
+        t: NDArray,
+        log_price: NDArray,
+        tc0: float,
+        m0: float,
+        omega0: float,
+        tc_lo: float,
+        tc_hi: float,
+    ) -> tuple[LPPLSParams, float]:
+        """Refine nonlinear params with L-BFGS-B, solve linear via OLS."""
+
+        def objective(x: NDArray) -> float:
+            tc, m, omega = x
+            return LPPLS.sse_for_nonlinear(t, log_price, tc, m, omega)
+
+        bounds = [
+            (tc_lo, tc_hi),
+            (self.m_range[0], self.m_range[1]),
+            (self.omega_range[0], self.omega_range[1]),
+        ]
+
+        result = minimize(
+            objective,
+            x0=[tc0, m0, omega0],
+            method="L-BFGS-B",
+            bounds=bounds,
+            options={"maxiter": 200, "ftol": 1e-10},
+        )
+
+        tc_opt, m_opt, omega_opt = result.x
+        A, B, C1, C2 = LPPLS.solve_linear(t, log_price, tc_opt, m_opt, omega_opt)
+
+        params = LPPLSParams(
+            tc=float(tc_opt),
+            m=float(m_opt),
+            omega=float(omega_opt),
+            A=float(A),
+            B=float(B),
+            C1=float(C1),
+            C2=float(C2),
+        )
+        return params, float(result.fun)
+
+    @staticmethod
+    def _passes_filters(params: LPPLSParams) -> bool:
+        """Sornette filter conditions for valid LPPLS fit."""
+        # m must be in valid range
+        if not (0.01 <= params.m <= 0.99):
+            return False
+        # omega should show oscillatory behavior
+        if not (2.0 <= params.omega <= 25.0):
+            return False
+        # B < 0 for bubble (super-exponential growth)
+        if params.B >= 0:
+            return False
+        # damping: oscillations should not dominate power law
+        if params.damping < 0.5:
+            return False
+        return True
