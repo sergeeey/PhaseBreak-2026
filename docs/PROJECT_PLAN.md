@@ -103,7 +103,65 @@ tests/
 ├── test_known_bubbles.py         # Regression: known tc dates
 ```
 
-#### 1.3 Comparison с baseline (День 5)
+#### 1.3 Multi-Window Confidence Indicator (День 4-5)
+
+**Проблема:** Один fit window → один tc. Но LPPLS нестабилен — сдвиг window на 10 дней даёт другой tc.
+
+**Решение (Sornette 2015, "Real-Time Bubble Detection"):**
+
+DS LPPLS Confidence Indicator — для каждого `t_end`:
+```python
+windows = [60, 90, 120, 150, 180]  # дней назад
+fits = [lppls.fit(t[t_end-w:t_end], log_price[t_end-w:t_end]) for w in windows]
+tc_values = [f.params.tc for f in fits if f.params.is_bubble and f.r_squared() > 0.5]
+
+# Confidence: доля windows где tc совпадает (±15 дней)
+tc_median = np.median(tc_values)
+n_agree = sum(1 for tc in tc_values if abs(tc - tc_median) < 15)
+confidence = n_agree / len(windows)  # 0.0 → noise, 0.6+ → bubble signal
+```
+
+**Пороги:**
+- `confidence >= 0.6` (3+/5 windows agree) → CONFIDENT bubble signal
+- `confidence < 0.4` → NOISE, discard
+- `tc_std < 20 дней` → stable prediction
+
+**WHY критично:** Без multi-window Gate 1 может не пройти — single-window LPPLS часто переfit на noise. Multi-window повышает precision на 30-50% (Sornette 2015).
+
+**Файлы:**
+```
+src/
+├── lppls/
+│   ├── confidence.py      # Multi-window confidence indicator
+│   └── scanner.py         # Scan time series with rolling windows
+```
+
+#### 1.4 Negative Control Dataset (День 5)
+
+**Проблема:** 6 known bubbles — все positive. Без negative control LPPLS может detect bubbles everywhere = useless model.
+
+**Negative controls (6 "boring" periods):**
+
+| Период | Актив | Характер | Ожидание |
+|--------|-------|----------|----------|
+| S&P 500 2013-2014 | ^GSPC | Steady growth, no crash | is_bubble=False или R²<0.5 |
+| BTC Q1-Q3 2019 | BTC-USD | Sideways / range-bound | is_bubble=False |
+| NASDAQ 2016 | ^IXIC | Normal market | is_bubble=False |
+| Gold 2022 | GC=F | Range-bound | is_bubble=False |
+| Tesla 2023 | TSLA | Recovery, not bubble | is_bubble=False |
+| Shanghai 2018 | 000001.SS | Decline, not bubble | is_bubble=False |
+
+**Метрика:**
+- LPPLS false positive rate на negative controls ≤ 1/6 (max 1 false alarm)
+- С multi-window confidence → false positive rate = 0/6
+
+**Файлы:**
+```
+src/lppls/data.py          # + NEGATIVE_CONTROLS dict
+tests/test_negative_controls.py  # LPPLS must NOT detect bubble
+```
+
+#### 1.5 Comparison с baselines (День 6)
 
 **Baselines для сравнения:**
 - PyPI `lppls` package (Sornette reference implementation)
@@ -113,14 +171,94 @@ tests/
 
 **Output Этапа 1:**
 - [ ] LPPLS модель fit/predict работает
-- [ ] 6 known bubbles: tc error < 30 дней на 4/6
+- [ ] Multi-window confidence indicator (DS LPPLS CI)
+- [ ] 6 known bubbles: tc error < 30 дней на 4/6 (с multi-window)
+- [ ] 6 negative controls: false positive rate ≤ 1/6
 - [ ] Out-of-sample 2024-2026: accuracy > 50%
-- [ ] Comparison table: LPPLS vs baselines
+- [ ] Comparison table: LPPLS vs LPPLS+multi-window vs baselines
 - [ ] **GO/NO-GO decision**
 
 ---
 
-### ЭТАП 2 — Cross-Domain: Геология (Неделя 2-3)
+### ЭТАП 1.5 — HMM Regime Detection + Ensemble (Неделя 2)
+**Цель:** Повысить precision через pre-screening: LPPLS фитится только в "bubble regime", а не на всём ряде. Publishable contribution — комбинация HMM + LPPLS ранее не описана.
+
+#### 1.5.1 Hidden Markov Model для режимов рынка
+
+**3 скрытых состояния:**
+```
+State 0: NORMAL  — low volatility, moderate returns
+State 1: GROWTH  — high returns, increasing volatility
+State 2: BUBBLE  — super-exponential returns, high volatility, accelerating
+```
+
+**Implementation (hmmlearn):**
+```python
+from hmmlearn import GaussianHMM
+
+# Features: [log_return, volatility_20d, acceleration]
+features = np.column_stack([log_returns, rolling_vol, np.diff(rolling_vol, prepend=0)])
+
+hmm = GaussianHMM(n_components=3, covariance_type="full", n_iter=100)
+hmm.fit(features)
+states = hmm.predict(features)
+
+# Map states to regimes by mean return (highest = BUBBLE)
+state_means = [features[states == i, 0].mean() for i in range(3)]
+bubble_state = np.argmax(state_means)
+```
+
+#### 1.5.2 Ensemble: HMM pre-screen → LPPLS fit
+
+**Pipeline:**
+```
+Raw time series → HMM regime detection → BUBBLE state detected?
+                                              │
+                                    YES       │       NO
+                                    ↓         │       ↓
+                              LPPLS fit       │    SKIP (no bubble)
+                              + multi-window  │
+                                    ↓
+                              tc prediction
+                              + confidence
+```
+
+**Преимущества:**
+- **Precision↑**: LPPLS не фитится на noise/normal periods → меньше false positives
+- **Speed↑**: LPPLS fit только на ~20% данных (bubble periods) → 5x быстрее scanning
+- **Publishable**: "HMM-gated LPPLS" = новая комбинация, нет в литературе
+
+#### 1.5.3 Метрики
+
+| Метрика | LPPLS only | HMM + LPPLS (ожидание) |
+|---------|-----------|----------------------|
+| Precision (known bubbles) | baseline | +10-20% |
+| False positive rate (negative controls) | ≤1/6 | 0/6 |
+| Scan speed (1000 days) | ~30 sec | ~6 sec |
+| tc error (median) | baseline | same or better |
+
+**Output Этапа 1.5:**
+- [ ] HMM regime detector (3 states: normal/growth/bubble)
+- [ ] Ensemble pipeline: HMM → LPPLS
+- [ ] Comparison: standalone LPPLS vs HMM+LPPLS на 12 datasets (6 pos + 6 neg)
+- [ ] **If precision improvement < 10% → drop HMM, keep multi-window only**
+
+**Файлы:**
+```
+src/
+├── lppls/
+│   ├── regime.py          # HMM regime detection
+│   └── ensemble.py        # HMM-gated LPPLS pipeline
+tests/
+├── test_regime.py         # HMM state detection tests
+├── test_ensemble.py       # End-to-end pipeline tests
+```
+
+**Зависимость:** `hmmlearn>=0.3` (добавить в pyproject.toml)
+
+---
+
+### ЭТАП 2 — Cross-Domain: Геология (Неделя 3-4)
 **Цель:** Применить LPPLS к спутниковым данным Sentinel-2 для обнаружения phase transitions в геологических процессах.
 
 #### 2.1 Гипотеза
@@ -194,7 +332,7 @@ notebooks/
 
 ---
 
-### ЭТАП 3 — Bayesian Survival для Fraud (Неделя 4)
+### ЭТАП 3 — Bayesian Survival для Fraud (Неделя 5)
 **Цель:** Doomsday Argument math → предсказание lifetime fraud-схем.
 
 #### 3.1 Модель
@@ -264,7 +402,7 @@ notebooks/
 
 ---
 
-### ЭТАП 4 — Adversarial AI Validation (Неделя 5)
+### ЭТАП 4 — Adversarial AI Validation (Неделя 6)
 **Цель:** CogniRouter council дебатирует каждый `tc` prediction. Novel methodology.
 
 #### 4.1 Архитектура
@@ -344,7 +482,7 @@ notebooks/
 
 ---
 
-### ЭТАП 5 — Cross-Domain Correlation (Неделя 6-7)
+### ЭТАП 5 — Cross-Domain Correlation (Неделя 7-8)
 **Цель:** THE MAIN FINDING. Параметры phase transitions коррелируют между доменами?
 
 #### 5.1 Центральный вопрос
@@ -390,7 +528,7 @@ ks_omega = ks_2samp(finance_omega, geology_omega)
 
 ---
 
-### ЭТАП 6 — Paper Writing (Неделя 8-9)
+### ЭТАП 6 — Paper Writing (Неделя 9-10)
 **Цель:** arXiv preprint → workshop submission.
 
 #### 6.1 Paper structure
@@ -457,6 +595,11 @@ PhaseBreak/
 │   ├── lppls/
 │   │   ├── model.py              # Core LPPLS implementation
 │   │   ├── optimizer.py          # Grid search + L-BFGS-B
+│   │   ├── data.py               # yfinance loader + known bubbles + negative controls
+│   │   ├── confidence.py         # Multi-window DS LPPLS Confidence Indicator (NEW)
+│   │   ├── scanner.py            # Rolling window scanner (NEW)
+│   │   ├── regime.py             # HMM regime detection (NEW)
+│   │   ├── ensemble.py           # HMM-gated LPPLS pipeline (NEW)
 │   │   └── metrics.py            # R², AIC, residual analysis
 │   ├── geo/
 │   │   ├── sentinel_loader.py    # Sentinel-2 temporal series
@@ -477,7 +620,8 @@ PhaseBreak/
 │   ├── 04_sentinel_lppls.ipynb
 │   ├── 05_geo_finance_correlation.ipynb
 │   ├── 06_doomsday_fraud.ipynb
-│   └── 07_adversarial_validation.ipynb
+│   ├── 07_adversarial_validation.ipynb
+│   └── 08_hmm_ensemble.ipynb     # HMM+LPPLS comparison (NEW)
 ├── data/
 │   ├── finance/                  # yfinance cached data
 │   ├── geology/                  # Sentinel-2 time series
@@ -487,8 +631,12 @@ PhaseBreak/
 │   ├── figures/
 │   └── references.bib
 ├── tests/
-│   ├── test_lppls_model.py
-│   ├── test_known_bubbles.py
+│   ├── test_lppls_model.py       # Core math tests (15 passing)
+│   ├── test_known_bubbles.py     # Regression: known tc dates
+│   ├── test_negative_controls.py # LPPLS must NOT detect bubble (NEW)
+│   ├── test_confidence.py        # Multi-window CI tests (NEW)
+│   ├── test_regime.py            # HMM state detection tests (NEW)
+│   ├── test_ensemble.py          # End-to-end pipeline tests (NEW)
 │   ├── test_doomsday.py
 │   └── test_council_validator.py
 ├── configs/
@@ -509,13 +657,26 @@ PhaseBreak/
 
 | Метрика | GO | NO-GO |
 |---------|-----|--------|
-| tc error на known bubbles | < 30 дней на 4/6 | > 60 дней на 3+ |
+| tc error на known bubbles (multi-window) | < 30 дней на 4/6 | > 60 дней на 3+ |
+| Multi-window confidence на known bubbles | ≥ 0.6 на 4/6 | < 0.4 на 3+ |
+| False positive rate (negative controls) | ≤ 1/6 | ≥ 3/6 |
 | Out-of-sample accuracy | > 50% | < 40% |
 | R² on best fits | > 0.75 | < 0.50 |
 
 **NO-GO action:** Вернуться к Skeptic Engine SHIP.
 
-### Gate 2 — после Этапа 2 (Неделя 3)
+### Gate 1.5 — после Этапа 1.5 (Неделя 2)
+**Вопрос:** Добавляет ли HMM ensemble ценность?
+
+| Метрика | GO | NO-GO |
+|---------|-----|--------|
+| Precision improvement vs standalone LPPLS | > 10% | < 5% |
+| False positive rate (negative controls) | 0/6 | > 1/6 (не лучше LPPLS) |
+| Scan speed improvement | > 2x | < 1.5x |
+
+**NO-GO action:** Drop HMM → продолжить с multi-window LPPLS only. Не блокирует проект.
+
+### Gate 2 — после Этапа 2 (Неделя 4)
 **Вопрос:** Есть ли cross-domain signal?
 
 | Метрика | GO | NO-GO |
@@ -526,7 +687,7 @@ PhaseBreak/
 
 **NO-GO action:** Pivot → только Finance + Fraud (drop geology).
 
-### Gate 3 — после Этапа 4 (Неделя 5)
+### Gate 3 — после Этапа 4 (Неделя 6)
 **Вопрос:** Помогает ли adversarial validation?
 
 | Метрика | GO | NO-GO |
@@ -550,16 +711,38 @@ PhaseBreak/
 | Workshop registration | $200-500 | If accepted |
 | **Total** | **$0-500** | |
 
-**Timeline:** 9 недель (2 месяца)
+**Timeline:** 10 недель (~2.5 месяца)
 **Risk:** Отвлечение от Skeptic Engine sales
 
 ---
 
-## ПЕРВЫЙ ШАГ
+## ОБНОВЛЁННЫЙ ТАЙМЛАЙН
 
-Создать GitHub repo `PhaseBreak` и реализовать Этап 1.1:
-1. `src/lppls/model.py` — LPPLS class
+```
+Неделя 1    → Этап 1:   LPPLS baseline + multi-window CI + negative controls → GO/NO-GO
+Неделя 2    → Этап 1.5: HMM regime detection + ensemble (NEW) → Gate 1.5
+Неделя 3-4  → Этап 2:   Геология (Sentinel-2) → Gate 2
+Неделя 5    → Этап 3:   Fraud survival (Doomsday Bayesian)
+Неделя 6    → Этап 4:   Adversarial AI validation → Gate 3
+Неделя 7-8  → Этап 5:   Cross-domain correlation
+Неделя 9-10 → Этап 6:   Paper writing (arXiv → workshop)
+```
+
+**3 contributions (vs 1 в исходном плане):**
+1. Multi-window DS LPPLS Confidence Indicator (Sornette 2015 method, validated)
+2. HMM-gated LPPLS ensemble (novel combination, not in literature)
+3. Cross-domain phase transition universality (main thesis)
+
+---
+
+## ПЕРВЫЙ ШАГ (ВЫПОЛНЕН)
+
+Создан GitHub repo `PhaseBreak` с Этапом 1.1:
+1. `src/lppls/model.py` — LPPLS class (fit, predict, R², RMSE)
 2. `src/lppls/optimizer.py` — Grid search + L-BFGS-B
-3. `notebooks/01_btc_2017_bubble.ipynb` — первый fit
+3. `src/lppls/data.py` — yfinance loader + 6 known bubbles
+4. `tests/test_lppls_model.py` — 15 unit tests (all passing)
+
+**СЛЕДУЮЩИЙ ШАГ:** Этап 1.2 — validation на known bubbles + Этап 1.3 multi-window CI
 
 **GO/NO-GO через 5 дней.**

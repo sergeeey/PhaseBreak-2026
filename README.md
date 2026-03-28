@@ -31,17 +31,26 @@ pip install -e ".[dev]"
 pytest tests/ -v
 ```
 
+## Key Contributions
+
+1. **Multi-window DS LPPLS Confidence Indicator** — fit on multiple overlapping windows, consensus = confident signal (Sornette 2015)
+2. **HMM-gated LPPLS ensemble** — Hidden Markov Model pre-screens regime → LPPLS fits only in bubble state (novel combination)
+3. **Cross-domain universality** — same (m, ω) fingerprint across finance, geology, fraud?
+
 ## Project Status
 
 - [x] LPPLS model (fit, predict, R², RMSE)
 - [x] Grid search + L-BFGS-B optimizer
 - [x] 6 known bubble datasets (BTC 2017/2021, Dot-com, Tesla, Shanghai, S&P500)
 - [x] 15 unit tests passing
-- [ ] Validation on known bubbles (Étape 1)
-- [ ] Cross-domain geology (Étape 2)
-- [ ] Bayesian survival for fraud (Étape 3)
-- [ ] Adversarial AI validation (Étape 4)
-- [ ] Paper
+- [ ] Validation on known bubbles + multi-window confidence (Stage 1)
+- [ ] 6 negative control datasets (Stage 1)
+- [ ] HMM regime detection + ensemble (Stage 1.5)
+- [ ] Cross-domain geology (Stage 2)
+- [ ] Bayesian survival for fraud (Stage 3)
+- [ ] Adversarial AI validation (Stage 4)
+- [ ] Cross-domain (m, ω) correlation (Stage 5)
+- [ ] Paper (Stage 6)
 
 ## License
 
