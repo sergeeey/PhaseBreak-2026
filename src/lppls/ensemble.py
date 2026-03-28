@@ -123,6 +123,21 @@ class HMMLPPLSEnsemble:
                 "→ possible bubble, monitor closely"
             )
 
+        # WHY: HMM=BUBBLE + LPPLS=LOW → weak but present log-periodic signal.
+        # HMM alone has high false positive rate on normal growth, so require
+        # at least LOW LPPLS confirmation before flagging.
+        if hmm_bubble and lppls.confidence == "LOW":
+            return "POSSIBLE_BUBBLE", (
+                f"HMM=BUBBLE + LPPLS=LOW → weak log-periodic signal in bubble regime"
+            )
+
+        # HMM=BUBBLE but LPPLS sees nothing → HMM false positive (normal growth)
+        if hmm_bubble and lppls.confidence == "NO_SIGNAL":
+            return "NO_BUBBLE", (
+                f"HMM=BUBBLE but LPPLS=NO_SIGNAL → no log-periodic confirmation, "
+                "likely normal growth misclassified by HMM"
+            )
+
         # HMM sees growth but LPPLS disagrees
         if hmm_growth and lppls.confidence in ("LOW", "NO_SIGNAL"):
             return "NO_BUBBLE", (

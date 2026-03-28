@@ -63,7 +63,12 @@ class HMMRegimeDetector:
         self._model = None
 
     def _build_features(self, log_price: NDArray) -> NDArray:
-        """Extract features for HMM: returns, volatility, acceleration."""
+        """Extract features for HMM: returns, volatility, acceleration, cumulative return.
+
+        WHY 4 features: 3-feature HMM missed BTC 2017 bubble (classified as NORMAL).
+        Cumulative return captures the overall trend that distinguishes bubbles from
+        normal growth — even when daily returns look similar.
+        """
         returns = np.diff(log_price)
         # Rolling volatility (20-day window)
         vol_window = min(20, len(returns) // 3)
@@ -74,9 +79,16 @@ class HMMRegimeDetector:
         )
         # Return acceleration (second derivative)
         acceleration = np.diff(returns, prepend=returns[0])
+        # WHY: cumulative return over rolling window captures trend strength
+        cum_window = min(40, len(returns) // 2)
+        if cum_window < 5:
+            cum_window = 5
+        cum_return = np.array(
+            [np.sum(returns[max(0, i - cum_window) : i + 1]) for i in range(len(returns))]
+        )
 
-        # Stack: (T, 3)
-        features = np.column_stack([returns, volatility, acceleration])
+        # Stack: (T, 4)
+        features = np.column_stack([returns, volatility, acceleration, cum_return])
         return features
 
     def fit_predict(self, log_price: NDArray) -> RegimeResult:
@@ -97,13 +109,29 @@ class HMMRegimeDetector:
         features = self._build_features(log_price)
 
         # Fit HMM
-        model = GaussianHMM(
-            n_components=self.n_states,
-            covariance_type="full",
-            n_iter=self.n_iter,
-            random_state=42,
-        )
-        model.fit(features)
+        # WHY: use "diag" covariance — "full" fails on low-variance data
+        # (flat series → singular covariance matrix → Cholesky decomposition fails)
+        try:
+            model = GaussianHMM(
+                n_components=self.n_states,
+                covariance_type="full",
+                n_iter=self.n_iter,
+                random_state=42,
+            )
+            model.fit(features)
+        except ValueError:
+            # Fallback to diagonal covariance for degenerate data
+            try:
+                model = GaussianHMM(
+                    n_components=self.n_states,
+                    covariance_type="diag",
+                    n_iter=self.n_iter,
+                    random_state=42,
+                )
+                model.fit(features)
+            except Exception:
+                log.warning("hmm_fit_failed", msg="falling back to heuristic")
+                return self._fallback_regime(log_price)
         self._model = model
 
         # Predict states
