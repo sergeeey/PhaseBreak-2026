@@ -73,8 +73,12 @@ def fit_and_compare(
     """
     from lifelines import CoxPHFitter
 
-    # Fit Weibull prior on full data
-    shape, scale = fit_weibull_prior(df[duration_col].values, df[event_col].values)
+    # WHY: fit Weibull prior on first 50% (train split), evaluate on full data.
+    # Prevents look-ahead bias where prior is informed by test cases.
+    n_train = len(df) // 2
+    train_lifetimes = df[duration_col].values[:n_train]
+    train_events = df[event_col].values[:n_train]
+    shape, scale = fit_weibull_prior(train_lifetimes, train_events)
 
     # Ensure Doomsday features exist
     if "doomsday_pct" not in df.columns:

@@ -46,14 +46,19 @@ def _load_all() -> dict[str, BubbleDataset]:
 # ============================================================
 # Layer 1: LPPLS only (loose filters — original Sornette)
 # ============================================================
-def _run_lppls_loose(ds: BubbleDataset) -> bool:
-    """LPPLS with loose filters (m 0.01-0.99, any B<0)."""
-    from src.lppls.optimizer import LPPLSOptimizer
+class _LooseOptimizer(LPPLSOptimizer):
+    """Subclass with loose Sornette filters — only B<0 required."""
 
-    opt = LPPLSOptimizer(grid_size=12, n_best=5)
+    @staticmethod
+    def _passes_filters(params) -> bool:
+        return params.B < 0
+
+
+def _run_lppls_loose(ds: BubbleDataset) -> bool:
+    """LPPLS with truly loose filters via subclass (no monkey-patching)."""
+    opt = _LooseOptimizer(grid_size=12, n_best=5)
     model = opt.fit(ds.t, ds.log_price)
     r2 = model.r_squared(ds.t, ds.log_price)
-    # Loose: just B < 0 and R² > 0.5
     return model.params is not None and model.params.B < 0 and r2 > 0.5
 
 
@@ -108,13 +113,10 @@ def _run_ensemble_ews(ds: BubbleDataset) -> bool:
     ews = compute_ews(ds.log_price, window=min(40, len(ds.log_price) // 5))
     ews_signal = ews.ews_score > 0.5 or ews.kendall_tau_variance > 0.2
 
-    # Combined: ensemble says bubble AND EWS has some signal
-    # Relaxed: ensemble is primary, EWS is confirmatory
-    if ens_bubble and ews_signal:
-        return True
-    if ens_bubble and not ews_signal:
-        return True  # ensemble alone still counts, EWS is weak on real data
-    return False
+    # WHY: EWS must actually gate — require BOTH signals for BUBBLE.
+    # If EWS doesn't confirm, downgrade to NO_BUBBLE.
+    # This makes the ablation row meaningful (not identical to Layer 4).
+    return ens_bubble and ews_signal
 
 
 LAYERS = [

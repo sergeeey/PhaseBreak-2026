@@ -127,15 +127,16 @@ S\&P 2020 & LOW & 35 days & --- & 0.30 & 10.02 \\
 \toprule
 Layer & TP & FP & FN & TN & Precision & Recall & F1 \\
 \midrule
-LPPLS (tight filters) & 4 & 0 & 2 & 6 & 100\% & 67\% & 80\% \\
+LPPLS (loose filters) & 6 & 5 & 0 & 1 & 55\% & 100\% & 71\% \\
++ Tight Sornette filters & 4 & 0 & 2 & 6 & 100\% & 67\% & 80\% \\
 + Multi-window CI & 4 & 2 & 2 & 4 & 67\% & 67\% & 67\% \\
 + HMM gate & 4 & 1 & 2 & 5 & 80\% & 67\% & 73\% \\
-+ EWS confirm & 4 & 1 & 2 & 5 & 80\% & 67\% & 73\% \\
++ EWS confirm & 3 & 0 & 3 & 6 & 100\% & 50\% & 67\% \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-Tightened Sornette filters are the critical improvement: without them, FP rate = 83\% (5/6 controls falsely detected). Multi-window CI detects weaker signals but introduces false positives on borderline cases; HMM gating recovers precision. EWS layer shows no additional discriminative value on these datasets.
+Tightened Sornette filters are the critical improvement: without them, FP rate = 83\% (5/6 controls falsely detected as bubbles). The filter changes ($m < 0.87$, $|B| > 0.003$, filter-aware fallback) raise precision from 55\% to 100\% at the cost of recall (100\% $\to$ 67\%). Multi-window CI detects weaker signals but introduces false positives on borderline cases (S\&P 2013 QE rally); HMM gating recovers precision to 80\%. EWS confirmation is too strict for these datasets, reducing recall to 50\% while eliminating all false positives. \textbf{Note:} filter thresholds were tuned on this evaluation set; held-out validation with additional financial data is needed to confirm generalization.
 
 \subsection{Results: Geology}
 
@@ -143,7 +144,7 @@ LPPLS fitted on Sentinel-2 spectral time series: 13/20 fits with $R^2 > 0.5$. Tw
 
 \subsection{Results: Fraud}
 
-Cox baseline C-index: 0.68. Cox + Doomsday: 0.87 (+27\%). The \texttt{doomsday\_percentile} feature dominates ($\beta = 1263$), confirming that the random observer assumption provides strong predictive signal for remaining scheme lifetime.
+Cox baseline C-index: 0.68. Cox + Doomsday: improved C-index on calibrated synthetic data. \textbf{Limitation:} the \texttt{n\_observed} feature, while generated from observable covariates (velocity), retains residual correlation with lifetime through the data generation process. The reported improvement should be interpreted as an upper bound; validation on external fraud datasets (e.g., IEEE-CIS) is needed to confirm the Doomsday feature's independent predictive value.
 
 \subsection{Results: Cross-Domain Universality}
 
@@ -155,13 +156,13 @@ Cox baseline C-index: 0.68. Cox + Doomsday: 0.87 (+27\%). The \texttt{doomsday\_
 \toprule
 Parameter & $n_{\text{fin}}$ & $n_{\text{geo}}$ & KS $p$ & MW $p$ & Verdict \\
 \midrule
-$m$ & 4 & 13 & 0.085 & 0.271 & UNIVERSAL \\
-$\omega$ & 4 & 13 & 0.222 & 0.864 & UNIVERSAL \\
+$m$ & 4 & 13 & 0.085 & 0.271 & Not rejected$^*$ \\
+$\omega$ & 4 & 13 & 0.222 & 0.864 & Not rejected$^*$ \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-All pairwise tests: $p > 0.05$---we cannot reject the null hypothesis that $(m, \omega)$ distributions are drawn from the same population. Bootstrap robustness: $\omega$ is robust (86\% of 500 resamples confirm); $m$ is borderline (70\%). Sample sizes are small ($n = 4 + 13$); larger studies are needed to confirm.
+$^*$\textbf{Caveat:} With $n_{\text{fin}} = 4$, the KS test has very low statistical power; $p > 0.05$ indicates inability to reject the null, not confirmation of identical distributions. All pairwise tests yield $p > 0.05$, but this is a necessary---not sufficient---condition for universality. Bootstrap robustness: $\omega$ is robust (86\% of 500 resamples confirm); $m$ is borderline (70\%). Larger samples ($n \geq 20$ per domain) are required to make a definitive universality claim.
 
 \section{Discussion}
 

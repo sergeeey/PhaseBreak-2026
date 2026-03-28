@@ -143,10 +143,14 @@ def generate_observed_snapshot(
     rng = np.random.default_rng(seed)
     df = df.copy()
 
-    # For each scheme, observe at a random point in its lifetime
-    fractions = rng.uniform(0.1, observation_fraction, size=len(df))
-    df["n_observed"] = np.round(df["lifetime"] * fractions).astype(int)
-    df["n_observed"] = df["n_observed"].clip(lower=1)
+    # WHY: n_observed must NOT be derived directly from lifetime (information leakage).
+    # Instead, generate independently from velocity (observable covariate) + noise.
+    # This simulates: "we see N transactions so far" based on observable behavior.
+    velocity = df["velocity"].values
+    time_window = rng.uniform(10, 50, size=len(df))  # observation window in days
+    n_observed = np.round(velocity * time_window * rng.uniform(0.5, 1.5, size=len(df)))
+    n_observed = np.clip(n_observed, 1, df["lifetime"].values * 0.9).astype(int)
+    df["n_observed"] = np.maximum(n_observed, 1)
 
     # Observation fraction (how far along are we?)
     df["obs_fraction"] = df["n_observed"] / df["lifetime"]
