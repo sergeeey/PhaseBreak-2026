@@ -1,0 +1,50 @@
+{
+  "1. Raw LPPLS (B<0, R\u00b2>0.5)": {
+    "tp": 4,
+    "fp": 0,
+    "fn": 2,
+    "tn": 6,
+    "precision": 1.0,
+    "recall": 0.667
+  },
+  "2. + Hard Sornette filters": {
+    "tp": 4,
+    "fp": 0,
+    "fn": 2,
+    "tn": 6,
+    "precision": 1.0,
+    "recall": 0.667
+  },
+  "3. + Soft scoring (quality>0.3)": {
+    "tp": 4,
+    "fp": 0,
+    "fn": 2,
+    "tn": 6,
+    "precision": 1.0,
+    "recall": 0.667
+  },
+  "4. + tc uncertainty (bootstrap)": {
+    "tp": 4,
+    "fp": 0,
+    "fn": 2,
+    "tn": 6,
+    "precision": 1.0,
+    "recall": 0.667
+  },
+  "5. + Adaptive windows": {
+    "tp": 4,
+    "fp": 0,
+    "fn": 2,
+    "tn": 6,
+    "precision": 1.0,
+    "recall": 0.667
+  },
+  "6. Full v2 (+ HMM prior)": {
+    "tp": 4,
+    "fp": 1,
+    "fn": 2,
+    "tn": 5,
+    "precision": 0.8,
+    "recall": 0.667
+  }
+}

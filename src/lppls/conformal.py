@@ -1,5 +1,12 @@
 """Conformal prediction for LPPLS critical time intervals.
 
+SECONDARY uncertainty method for PhaseBreak v2.
+Requires a calibration set of |tc_predicted - tc_actual| errors from known
+episodes. Provides coverage guarantee (1-alpha) but is limited to domains
+where ground truth tc is available.
+
+Primary method: bootstrap (uncertainty.py) — works standalone.
+
 Converts point-estimate tc into calibrated prediction intervals:
   tc_estimate → (tc_lower, tc_upper) with coverage guarantee.
 

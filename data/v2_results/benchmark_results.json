@@ -1,0 +1,450 @@
+{
+  "version": "v2",
+  "timestamp": "2026-03-29 14:38:03",
+  "elapsed_seconds": 39.3,
+  "total_episodes": 38,
+  "total_correct": 24,
+  "overall_accuracy": 0.632,
+  "domains": {
+    "finance": {
+      "domain": "finance",
+      "n": 12,
+      "tp": 4,
+      "fp": 1,
+      "fn": 2,
+      "tn": 5,
+      "precision": 0.8,
+      "recall": 0.667,
+      "fp_rate": 0.167,
+      "mean_quality_score": 0.475,
+      "mean_tc_interval_width": 4.1,
+      "episodes": [
+        {
+          "name": "btc_2017",
+          "expected": true,
+          "verdict": "BUBBLE",
+          "quality": 0.7347,
+          "correct": true,
+          "tc": 349.0,
+          "tc_interval": "[348.4, 349.0]",
+          "hmm": "BUBBLE"
+        },
+        {
+          "name": "btc_2021",
+          "expected": true,
+          "verdict": "BUBBLE",
+          "quality": 0.619,
+          "correct": true,
+          "tc": 318.7,
+          "tc_interval": "[314.4, 319.4]",
+          "hmm": "BUBBLE"
+        },
+        {
+          "name": "dotcom_2000",
+          "expected": true,
+          "verdict": "BUBBLE",
+          "quality": 0.7661,
+          "correct": true,
+          "tc": 550.2,
+          "tc_interval": "[549.1, 550.2]",
+          "hmm": "BUBBLE"
+        },
+        {
+          "name": "tesla_2021",
+          "expected": true,
+          "verdict": "NO_BUBBLE",
+          "quality": 0.2046,
+          "correct": false,
+          "tc": 543.5,
+          "tc_interval": null,
+          "hmm": "GROWTH"
+        },
+        {
+          "name": "china_2015",
+          "expected": true,
+          "verdict": "BUBBLE",
+          "quality": 0.74,
+          "correct": true,
+          "tc": 299.9,
+          "tc_interval": "[293.7, 303.5]",
+          "hmm": "BUBBLE"
+        },
+        {
+          "name": "sp500_2020",
+          "expected": true,
+          "verdict": "NO_BUBBLE",
+          "quality": 0.0,
+          "correct": false,
+          "tc": null,
+          "tc_interval": null,
+          "hmm": "NORMAL"
+        },
+        {
+          "name": "sp500_2013_steady",
+          "expected": false,
+          "verdict": "NO_BUBBLE",
+          "quality": 0.2948,
+          "correct": true,
+          "tc": 443.5,
+          "tc_interval": null,
+          "hmm": "BUBBLE"
+        },
+        {
+          "name": "btc_2019_sideways",
+          "expected": false,
+          "verdict": "NO_BUBBLE",
+          "quality": 0.0,
+          "correct": true,
+          "tc": null,
+          "tc_interval": null,
+          "hmm": "NORMAL"
+        },
+        {
+          "name": "nasdaq_2016_normal",
+          "expected": false,
+          "verdict": "NO_BUBBLE",
+          "quality": 0.0,
+          "correct": true,
+          "tc": null,
+          "tc_interval": null,
+          "hmm": "NORMAL"
+        },
+        {
+          "name": "gold_2022_range",
+          "expected": false,
+          "verdict": "NO_BUBBLE",
+          "quality": 0.2517,
+          "correct": true,
+          "tc": 502.0,
+          "tc_interval": null,
+          "hmm": "BUBBLE"
+        },
+        {
+          "name": "tsla_2023_recovery",
+          "expected": false,
+          "verdict": "NO_BUBBLE",
+          "quality": 0.2565,
+          "correct": true,
+          "tc": 232.6,
+          "tc_interval": null,
+          "hmm": "BUBBLE"
+        },
+        {
+          "name": "shanghai_2018_decline",
+          "expected": false,
+          "verdict": "POSSIBLE",
+          "quality": 0.408,
+          "correct": false,
+          "tc": 357.1,
+          "tc_interval": null,
+          "hmm": "GROWTH"
+        }
+      ]
+    },
+    "commodities": {
+      "domain": "commodities",
+      "n": 10,
+      "tp": 2,
+      "fp": 1,
+      "fn": 4,
+      "tn": 3,
+      "precision": 0.667,
+      "recall": 0.333,
+      "fp_rate": 0.25,
+      "mean_quality_score": 0.345,
+      "mean_tc_interval_width": 8.6,
+      "episodes": [
+        {
+          "name": "oil_2008",
+          "expected": true,
+          "verdict": "NO_BUBBLE",
+          "quality": 0.0,
+          "correct": false,
+          "tc": null,
+          "tc_interval": null,
+          "hmm": "NORMAL"
+        },
+        {
+          "name": "gold_2011",
+          "expected": true,
+          "verdict": "POSSIBLE",
+          "quality": 0.4981,
+          "correct": true,
+          "tc": 770.4,
+          "tc_interval": "[766.5, 778.2]",
+          "hmm": "GROWTH"
+        },
+        {
+          "name": "oil_2014",
+          "expected": true,
+          "verdict": "NO_BUBBLE",
+          "quality": 0.1828,
+          "correct": false,
+          "tc": 436.5,
+          "tc_interval": null,
+          "hmm": "GROWTH"
+        },
+        {
+          "name": "silver_2011",
+          "expected": true,
+          "verdict": "NO_BUBBLE",
+          "quality": 0.3,
+          "correct": false,
+          "tc": 527.6,
+          "tc_interval": null,
+          "hmm": "BUBBLE"
+        },
+        {
+          "name": "natgas_2022",
+          "expected": true,
+          "verdict": "BUBBLE",
+          "quality": 0.6178,
+          "correct": true,
+          "tc": 388.4,
+          "tc_interval": "[382.1, 393.5]",
+          "hmm": "GROWTH"
+        },
+        {
+          "name": "wheat_2022",
+          "expected": true,
+          "verdict": "NO_BUBBLE",
+          "quality": 0.3,
+          "correct": false,
+          "tc": 193.0,
+          "tc_interval": null,
+          "hmm": "BUBBLE"
+        },
+        {
+          "name": "oil_2017_flat",
+          "expected": false,
+          "verdict": "NO_BUBBLE",
+          "quality": 0.1873,
+          "correct": true,
+          "tc": 502.0,
+          "tc_interval": null,
+          "hmm": "GROWTH"
+        },
+        {
+          "name": "gold_2019_stable",
+          "expected": false,
+          "verdict": "NO_BUBBLE",
+          "quality": 0.0,
+          "correct": true,
+          "tc": null,
+          "tc_interval": null,
+          "hmm": "NORMAL"
+        },
+        {
+          "name": "silver_2023_flat",
+          "expected": false,
+          "verdict": "NO_BUBBLE",
+          "quality": 0.2116,
+          "correct": true,
+          "tc": 250.0,
+          "tc_interval": null,
+          "hmm": "BUBBLE"
+        },
+        {
+          "name": "natgas_2024_low",
+          "expected": false,
+          "verdict": "POSSIBLE",
+          "quality": 0.4648,
+          "correct": false,
+          "tc": 275.8,
+          "tc_interval": "[273.9, 276.6]",
+          "hmm": "GROWTH"
+        }
+      ]
+    },
+    "housing": {
+      "domain": "housing",
+      "n": 10,
+      "tp": 1,
+      "fp": 1,
+      "fn": 5,
+      "tn": 3,
+      "precision": 0.5,
+      "recall": 0.167,
+      "fp_rate": 0.25,
+      "mean_quality_score": 0.304,
+      "mean_tc_interval_width": 16.6,
+      "episodes": [
+        {
+          "name": "az_2006",
+          "expected": true,
+          "verdict": "NO_BUBBLE",
+          "quality": 0.0,
+          "correct": false,
+          "tc": null,
+          "tc_interval": null,
+          "hmm": "NORMAL"
+        },
+        {
+          "name": "nv_2006",
+          "expected": true,
+          "verdict": "NO_BUBBLE",
+          "quality": 0.0,
+          "correct": false,
+          "tc": null,
+          "tc_interval": null,
+          "hmm": "NORMAL"
+        },
+        {
+          "name": "fl_2006",
+          "expected": true,
+          "verdict": "NO_BUBBLE",
+          "quality": 0.21,
+          "correct": false,
+          "tc": 54.8,
+          "tc_interval": null,
+          "hmm": "GROWTH"
+        },
+        {
+          "name": "ca_2006",
+          "expected": true,
+          "verdict": "NO_BUBBLE",
+          "quality": 0.0,
+          "correct": false,
+          "tc": null,
+          "tc_interval": null,
+          "hmm": "NORMAL"
+        },
+        {
+          "name": "az_2022",
+          "expected": true,
+          "verdict": "NO_BUBBLE",
+          "quality": 0.21,
+          "correct": false,
+          "tc": 50.8,
+          "tc_interval": null,
+          "hmm": "GROWTH"
+        },
+        {
+          "name": "id_2022",
+          "expected": true,
+          "verdict": "POSSIBLE",
+          "quality": 0.5667,
+          "correct": true,
+          "tc": 50.7,
+          "tc_interval": "[44.2, 58.3]",
+          "hmm": "GROWTH"
+        },
+        {
+          "name": "tx_2015",
+          "expected": false,
+          "verdict": "NO_BUBBLE",
+          "quality": 0.0,
+          "correct": true,
+          "tc": null,
+          "tc_interval": null,
+          "hmm": "NORMAL"
+        },
+        {
+          "name": "oh_2018",
+          "expected": false,
+          "verdict": "POSSIBLE",
+          "quality": 0.3245,
+          "correct": false,
+          "tc": 24.6,
+          "tc_interval": "[23.0, 42.2]",
+          "hmm": "GROWTH"
+        },
+        {
+          "name": "pa_2014",
+          "expected": false,
+          "verdict": "NO_BUBBLE",
+          "quality": 0.3,
+          "correct": true,
+          "tc": 24.0,
+          "tc_interval": null,
+          "hmm": "BUBBLE"
+        },
+        {
+          "name": "il_2016",
+          "expected": false,
+          "verdict": "NO_BUBBLE",
+          "quality": 0.21,
+          "correct": true,
+          "tc": 24.0,
+          "tc_interval": null,
+          "hmm": "GROWTH"
+        }
+      ]
+    },
+    "adversarial": {
+      "domain": "adversarial",
+      "n": 6,
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "tn": 5,
+      "precision": 1.0,
+      "recall": 1.0,
+      "fp_rate": 0.0,
+      "mean_quality_score": 0.472,
+      "mean_tc_interval_width": 4.6,
+      "episodes": [
+        {
+          "name": "v_recovery",
+          "expected": false,
+          "verdict": "NO_BUBBLE",
+          "quality": 0.0,
+          "correct": true,
+          "tc": null,
+          "tc_interval": null,
+          "hmm": "NORMAL"
+        },
+        {
+          "name": "monotonic_rally",
+          "expected": false,
+          "verdict": "NO_BUBBLE",
+          "quality": 0.0,
+          "correct": true,
+          "tc": null,
+          "tc_interval": null,
+          "hmm": "NORMAL"
+        },
+        {
+          "name": "fake_oscillation",
+          "expected": false,
+          "verdict": "NO_BUBBLE",
+          "quality": 0.0,
+          "correct": true,
+          "tc": null,
+          "tc_interval": null,
+          "hmm": "NORMAL"
+        },
+        {
+          "name": "regime_jump",
+          "expected": false,
+          "verdict": "NO_BUBBLE",
+          "quality": 0.0,
+          "correct": true,
+          "tc": null,
+          "tc_interval": null,
+          "hmm": "NORMAL"
+        },
+        {
+          "name": "real_lppls_signal",
+          "expected": true,
+          "verdict": "BUBBLE",
+          "quality": 0.7525,
+          "correct": true,
+          "tc": 214.5,
+          "tc_interval": "[213.9, 218.5]",
+          "hmm": "BUBBLE"
+        },
+        {
+          "name": "high_vol_flat",
+          "expected": false,
+          "verdict": "NO_BUBBLE",
+          "quality": 0.1921,
+          "correct": true,
+          "tc": 291.3,
+          "tc_interval": null,
+          "hmm": "GROWTH"
+        }
+      ]
+    }
+  }
+}

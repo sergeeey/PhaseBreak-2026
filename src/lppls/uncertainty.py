@@ -1,5 +1,14 @@
 """tc uncertainty via bootstrap and perturbation.
 
+PRIMARY uncertainty method for PhaseBreak v2.
+Chosen over conformal prediction because:
+- Works standalone without a calibration set of known episodes
+- Produces distributional summary (median, p10, p90)
+- No coverage guarantee but empirically well-calibrated
+
+Conformal prediction (conformal.py) is SECONDARY — requires calibration errors
+from known bubbles, which limits it to domains with ground truth.
+
 Produces tc distribution without full Bayesian LPPLS:
 - Bootstrap over random subsets of windows/data
 - Perturbation of initial conditions
