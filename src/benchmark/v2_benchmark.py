@@ -298,7 +298,7 @@ def compute_domain_summary(results: list[EpisodeResult], domain: str) -> dict:
                 "quality": r.v2_quality_score,
                 "correct": r.correct,
                 "tc": r.tc_estimate,
-                "tc_interval": f"[{r.tc_lower}, {r.tc_upper}]" if r.tc_lower else None,
+                "tc_interval": f"[{r.tc_lower}, {r.tc_upper}]" if r.tc_lower is not None else None,
                 "hmm": r.hmm_regime,
             }
             for r in domain_results
