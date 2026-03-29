@@ -370,15 +370,62 @@ def run_full_pipeline(
 # ---------------------------------------------------------------------------
 
 
+def _legacy_screening(t: NDArray, values: NDArray) -> ScreeningResult:
+    """Pure legacy screening: basic HMM only, no Hurst override, no domain hacks."""
+    n = len(t)
+    if n < 20:
+        return ScreeningResult(
+            data_quality="LOW_N",
+            n_points=n,
+            hmm_regime=None,
+            hmm_bubble_prob=0.0,
+            should_fit_lppls=False,
+            reason=f"Too few points: {n}",
+        )
+    valid = np.isfinite(values)
+    if valid.sum() < 20:
+        return ScreeningResult(
+            data_quality="MISSING",
+            n_points=int(valid.sum()),
+            hmm_regime=None,
+            hmm_bubble_prob=0.0,
+            should_fit_lppls=False,
+            reason="Too many invalid values",
+        )
+    try:
+        from src.lppls.regime import HMMRegimeDetector
+
+        hmm = HMMRegimeDetector()  # default threshold=0.5, no domain hacks
+        regime_result = hmm.fit_predict(np.log(np.clip(values, 1e-10, None)))
+        return ScreeningResult(
+            data_quality="OK",
+            n_points=n,
+            hmm_regime=regime_result.current_regime.name,
+            hmm_bubble_prob=regime_result.bubble_probability,
+            should_fit_lppls=regime_result.should_fit_lppls,
+            reason="legacy screening",
+        )
+    except Exception:
+        return ScreeningResult(
+            data_quality="OK",
+            n_points=n,
+            hmm_regime=None,
+            hmm_bubble_prob=0.5,
+            should_fit_lppls=True,
+            reason="HMM failed, fallback",
+        )
+
+
 def run_legacy_pipeline(t: NDArray, values: NDArray) -> PipelineResult:
     """Legacy path: original HMM-gated ensemble without v2 enhancements.
 
     Preserved for backward compatibility and ablation comparison.
     Uses hard filters, fixed windows, no uncertainty intervals.
+    Uses its own clean screening (no Hurst, no domain hacks, no MFDFA).
     """
     log_price = np.log(np.clip(values, 1e-10, None))
 
-    screening = run_screening(t, values)
+    screening = _legacy_screening(t, values)
 
     if not screening.should_fit_lppls:
         return PipelineResult(

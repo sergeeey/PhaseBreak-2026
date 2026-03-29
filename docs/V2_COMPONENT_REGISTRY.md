@@ -9,7 +9,7 @@
 |-----------|------|--------|----------|
 | Soft scoring | `scoring.py` | **CONFIRMED** | Same detection as hard filters + richer diagnostics. Ablation: no FP change. |
 | tc uncertainty (bootstrap) | `uncertainty.py` | **CONFIRMED** | Primary uncertainty method. Produces [p10, p90] intervals. Mean width ~4 days on finance. |
-| HMM prior weighting | `stages.py` | **CONFIRMED (with caveat)** | Adds 1 FP on finance (shanghai_2018 borderline). Reduces compute on non-bubble periods. Net positive for operational use. |
+| HMM prior weighting | `stages.py` | **CONFIRMED INTEGRATION, MIXED ACCURACY** | Architectural: reduces compute by skipping LPPLS on NORMAL periods. Accuracy: +1 FP on finance ablation, 0 recall gain. Multi-window fallback + Hurst override partially compensate. Not an accuracy improvement — an operational convenience with accuracy trade-off. |
 | Adaptive windows | `windowing.py` | **CONFIRMED** | Correctly selects quarterly windows for housing. Same detection on daily data. No degradation. |
 | Pipeline separation (A/B/C) | `stages.py` | **CONFIRMED** | Architectural improvement. Detector separated from science layer. |
 | Triple split protocol | `splits.py` | **CONFIRMED** | Train/val/test separation prevents in-sample critique. |

@@ -15,9 +15,26 @@ Outputs:
 from __future__ import annotations
 
 import json
+import sys
 import time
 from dataclasses import asdict, dataclass
 from pathlib import Path
+
+# WHY hard-fail: official benchmark depends on hurst + MFDFA for v2 pipeline.
+# Without them, pipeline silently degrades and produces different results.
+_MISSING = []
+try:
+    import hurst  # noqa: F401
+except ImportError:
+    _MISSING.append("hurst")
+try:
+    import MFDFA  # noqa: F401
+except ImportError:
+    _MISSING.append("MFDFA")
+if _MISSING:
+    print(f"ERROR: Official benchmark requires: {', '.join(_MISSING)}")
+    print("Install with: pip install -e '.[v2]'")
+    sys.exit(1)
 
 import numpy as np
 import structlog

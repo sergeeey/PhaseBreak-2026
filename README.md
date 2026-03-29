@@ -16,13 +16,13 @@ ln(E[p(t)]) = A + B(tc - t)^m + C(tc - t)^m * cos(ω * ln(tc - t) + φ)
 
 7 parameters: `tc` (critical time), `m` (exponent), `ω` (frequency), `A`, `B`, `C1`, `C2`
 
-## Domains (5)
+## Domains (5) — 58 benchmark episodes
 
 | Domain | Data Source | Episodes | v2 Results |
 |--------|-----------|----------|------------|
-| **Finance** | Yahoo Finance | 6 bubbles + 6 controls | Precision=80%, Recall=67% |
-| **Commodities** | Yahoo Finance (futures) | 6 bubbles + 4 controls | Precision=67%, Recall=33% |
-| **Housing** | FHFA HPI | 6 bubbles + 4 controls | Precision=50%, Recall=17% |
+| **Finance** | Yahoo Finance | 11 bubbles + 9 controls | Precision=78%, Recall=64% |
+| **Commodities** | Yahoo Finance (futures) | 6 bubbles + 4 controls | Precision=67%, Recall=50% |
+| **Housing** | FHFA + Zillow | 10+6 episodes | Precision=67%, Recall=33-50% |
 | **Geology** | Sentinel-2 temporal series | Seismic precursor patterns | KS p>0.05 |
 | **Fraud** | Transaction timelines | Doomsday Bayesian, C-index +27% | Survival model |
 
@@ -63,7 +63,7 @@ python -m src.benchmark.v2_ablation        # run ablation study
 | Soft scoring | Confirmed | Quality score 0-1 instead of binary pass/fail |
 | tc uncertainty (bootstrap) | Confirmed | [p10, p90] intervals, mean width ~4 days |
 | Adaptive windows | Confirmed | Frequency-aware: daily/quarterly/highvol presets |
-| HMM prior weighting | Confirmed | Bubble prob modulates verdict confidence |
+| HMM prior weighting | Confirmed (mixed impact) | Reduces compute on normal periods; +1 FP on finance ablation |
 | Pipeline separation | Confirmed | Detector ≠ science inference |
 | Triple split | Confirmed | Train/val/test per domain |
 | Adversarial controls | Confirmed | 6/6 correct (TP=1, TN=5) |
@@ -98,10 +98,11 @@ python -m src.benchmark.v2_ablation        # run ablation study
 - [x] Cross-domain correlation — KS + Mann-Whitney + bootstrap (Stage 5)
 - [x] Paper draft — 7 pages, 3 figures (Stage 6)
 - [x] v2 integration — soft scoring, uncertainty, adaptive windows, HMM prior
-- [x] v2 benchmark — 38 episodes across 4 domains + adversarial
+- [x] v2 benchmark — 58 episodes across 6 categories (finance, commodities, housing, housing_monthly, adversarial, forward)
 - [x] v2 ablation — layer-by-layer evaluation
 - [x] 5 domains validated (finance, commodities, housing, geology, fraud)
-- [x] **240+ tests passing**
+- [x] Forward validation 2024-2025: Nvidia/Nikkei/BTC detected, 0 FP
+- [x] **253 tests passing**
 
 ## License
 

@@ -32,6 +32,19 @@ geo = [
     "rasterio>=1.3",
     "rioxarray>=0.15",
 ]
+# v2 pipeline enhancements — required for official benchmark results
+v2 = [
+    "hurst>=0.0.5",
+    "MFDFA>=0.4",
+]
+# Science layer — required for TOST equivalence claims in paper
+science = [
+    "pingouin>=0.5",
+]
+# Baselines comparison
+benchmark = [
+    "bayesian_changepoint_detection",
+]
 
 [tool.ruff]
 line-length = 100
