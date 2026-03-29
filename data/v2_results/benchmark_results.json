@@ -1,23 +1,23 @@
 {
   "version": "v2",
-  "timestamp": "2026-03-29 18:59:34",
-  "elapsed_seconds": 100.4,
+  "timestamp": "2026-03-29 19:53:47",
+  "elapsed_seconds": 72.2,
   "total_episodes": 58,
-  "total_correct": 39,
-  "overall_accuracy": 0.672,
+  "total_correct": 40,
+  "overall_accuracy": 0.69,
   "domains": {
     "finance": {
       "domain": "finance",
       "n": 20,
-      "tp": 6,
-      "fp": 1,
-      "fn": 5,
-      "tn": 8,
-      "precision": 0.857,
-      "recall": 0.545,
-      "fp_rate": 0.111,
-      "mean_quality_score": 0.43,
-      "mean_tc_interval_width": 8.0,
+      "tp": 7,
+      "fp": 2,
+      "fn": 4,
+      "tn": 7,
+      "precision": 0.778,
+      "recall": 0.636,
+      "fp_rate": 0.222,
+      "mean_quality_score": 0.493,
+      "mean_tc_interval_width": 6.8,
       "episodes": [
         {
           "name": "btc_2017",
@@ -93,7 +93,7 @@
           "name": "amzn_1999",
           "expected": true,
           "verdict": "BUBBLE",
-          "quality": 0.6719,
+          "quality": 0.7677,
           "correct": true,
           "tc": 687.1,
           "tc_interval": "[675.6, 699.1]",
@@ -102,11 +102,11 @@
         {
           "name": "gme_2021",
           "expected": true,
-          "verdict": "NO_BUBBLE",
-          "quality": 0.3,
-          "correct": false,
-          "tc": 190.5,
-          "tc_interval": null,
+          "verdict": "BUBBLE",
+          "quality": 0.8633,
+          "correct": true,
+          "tc": 193.7,
+          "tc_interval": "[122.0, 122.0]",
           "hmm": "BUBBLE"
         },
         {
@@ -212,10 +212,10 @@
         {
           "name": "spy_2017_normal",
           "expected": false,
-          "verdict": "NO_BUBBLE",
-          "quality": 0.3,
-          "correct": true,
-          "tc": 502.0,
+          "verdict": "BUBBLE",
+          "quality": 0.706,
+          "correct": false,
+          "tc": 272.5,
           "tc_interval": null,
           "hmm": "BUBBLE"
         }
@@ -224,15 +224,15 @@
     "commodities": {
       "domain": "commodities",
       "n": 10,
-      "tp": 3,
-      "fp": 1,
-      "fn": 3,
-      "tn": 3,
-      "precision": 0.75,
-      "recall": 0.5,
-      "fp_rate": 0.25,
-      "mean_quality_score": 0.383,
-      "mean_tc_interval_width": 8.5,
+      "tp": 4,
+      "fp": 2,
+      "fn": 2,
+      "tn": 2,
+      "precision": 0.667,
+      "recall": 0.667,
+      "fp_rate": 0.5,
+      "mean_quality_score": 0.523,
+      "mean_tc_interval_width": 6.2,
       "episodes": [
         {
           "name": "oil_2008",
@@ -247,8 +247,8 @@
         {
           "name": "gold_2011",
           "expected": true,
-          "verdict": "POSSIBLE",
-          "quality": 0.5945,
+          "verdict": "BUBBLE",
+          "quality": 0.6794,
           "correct": true,
           "tc": 770.4,
           "tc_interval": "[766.3, 776.2]",
@@ -267,11 +267,11 @@
         {
           "name": "silver_2011",
           "expected": true,
-          "verdict": "NO_BUBBLE",
-          "quality": 0.25,
-          "correct": false,
-          "tc": 527.6,
-          "tc_interval": null,
+          "verdict": "BUBBLE",
+          "quality": 0.905,
+          "correct": true,
+          "tc": 542.8,
+          "tc_interval": "[519.8, 522.9]",
           "hmm": "BUBBLE"
         },
         {
@@ -297,11 +297,11 @@
         {
           "name": "oil_2017_flat",
           "expected": false,
-          "verdict": "NO_BUBBLE",
-          "quality": 0.1523,
-          "correct": true,
-          "tc": 502.0,
-          "tc_interval": null,
+          "verdict": "POSSIBLE",
+          "quality": 0.5946,
+          "correct": false,
+          "tc": 286.8,
+          "tc_interval": "[500.0, 500.0]",
           "hmm": "GROWTH"
         },
         {
@@ -327,8 +327,8 @@
         {
           "name": "natgas_2024_low",
           "expected": false,
-          "verdict": "POSSIBLE",
-          "quality": 0.5282,
+          "verdict": "BUBBLE",
+          "quality": 0.6037,
           "correct": false,
           "tc": 275.8,
           "tc_interval": "[272.8, 277.2]",
@@ -604,15 +604,15 @@
     "forward": {
       "domain": "forward",
       "n": 6,
-      "tp": 2,
+      "tp": 3,
       "fp": 0,
-      "fn": 1,
+      "fn": 0,
       "tn": 3,
       "precision": 1.0,
-      "recall": 0.667,
+      "recall": 1.0,
       "fp_rate": 0.0,
-      "mean_quality_score": 0.423,
-      "mean_tc_interval_width": 6.7,
+      "mean_quality_score": 0.509,
+      "mean_tc_interval_width": 4.8,
       "episodes": [
         {
           "name": "nvidia_2024",
@@ -627,11 +627,11 @@
         {
           "name": "nikkei_2024",
           "expected": true,
-          "verdict": "NO_BUBBLE",
-          "quality": 0.21,
-          "correct": false,
-          "tc": 478.4,
-          "tc_interval": null,
+          "verdict": "BUBBLE",
+          "quality": 0.64,
+          "correct": true,
+          "tc": 452.3,
+          "tc_interval": "[451.3, 452.3]",
           "hmm": "GROWTH"
         },
         {

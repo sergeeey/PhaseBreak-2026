@@ -203,7 +203,7 @@ def run_structural_fit(
         raw_prices = np.exp(log_price)
         windows_used = select_adaptive_windows(raw_prices, frequency=frequency)
 
-    # Fit LPPLS
+    # Fit LPPLS on full series
     opt = LPPLSOptimizer(grid_size=grid_size, n_best=5, m_range=m_range, omega_range=omega_range)
     model = opt.fit(t, log_price)
     r2 = model.r_squared(t, log_price)
@@ -212,28 +212,61 @@ def run_structural_fit(
     # Domain-specific soft scoring
     quality = compute_quality_score(params, r2, domain=domain) if params else 0.0
 
-    # v2: HMM prior weight — boost/penalize quality based on HMM agreement
-    # WHY: HMM seeing BUBBLE + good LPPLS fit = stronger signal
-    # HMM seeing NORMAL + marginal LPPLS fit = likely false positive
-    # For housing (HMM skipped), hmm_bubble_prob=0.5 → weight=0.85 (neutral)
-    hmm_weight = 0.7 + 0.3 * hmm_bubble_prob  # range [0.7, 1.0]
-    weighted_quality = quality * hmm_weight
+    # WHY: "Stealth bubbles" (Nikkei 2024) have flat pre-bubble data that poisons
+    # the full-series fit. Multi-window fallback tries each adaptive window
+    # independently and takes the best. Only triggers when primary fit is poor.
+    # GUARD: only accept fallback if R²>0.9 AND quality>0.7 AND is_bubble — prevents
+    # noise-fitting on controls (sp500_2013 was FP with lower threshold).
+    if quality < 0.4 and use_adaptive_windows and windows_used:
+        for w in windows_used:
+            if w >= len(log_price) or w < 30:
+                continue
+            try:
+                t_w = t[-w:]
+                lp_w = log_price[-w:]
+                opt_w = LPPLSOptimizer(
+                    grid_size=8, n_best=3, m_range=m_range, omega_range=omega_range
+                )
+                model_w = opt_w.fit(t_w, lp_w)
+                r2_w = model_w.r_squared(t_w, lp_w)
+                p_w = model_w.params
+                q_w = compute_quality_score(p_w, r2_w, domain=domain) if p_w else 0.0
+                if q_w > quality and q_w > 0.7 and r2_w > 0.9 and p_w and p_w.is_bubble:
+                    quality, params, r2 = q_w, p_w, r2_w
+                    log.info(
+                        "multi_window_fallback", window=w, quality=round(q_w, 3), r2=round(r2_w, 4)
+                    )
+            except Exception:
+                continue
 
-    # MFDFA boost: narrow multifractal spectrum = loss of complexity = bubble signal
-    # WHY: Orthogonal to LPPLS. Empirically: bubbles Δα<0.25, controls Δα>0.4.
-    # Boosts borderline cases that LPPLS alone scores too low.
+    # v2: HMM prior weight — boost/penalize quality based on HMM agreement
+    hmm_weight = 0.7 + 0.3 * hmm_bubble_prob  # range [0.7, 1.0]
+
+    # MFDFA analysis (used for boost + HMM cap decision)
+    mf_bubble_score = 0.0
     try:
         from src.signals.multifractal import analyze_multifractal
 
         raw_prices = np.exp(log_price)
         mf = analyze_multifractal(raw_prices)
-        if mf.bubble_score > 0.5 and weighted_quality > 0.3:
-            # WHY: tiny boost (5-10%), only when LPPLS already sees something.
-            # MFDFA confirms, doesn't create signal. Prevents adversarial FP.
-            mfdfa_boost = 1.0 + 0.1 * (mf.bubble_score - 0.5)  # range [1.0, 1.05]
-            weighted_quality = min(1.0, weighted_quality * mfdfa_boost)
+        mf_bubble_score = mf.bubble_score
     except Exception:
-        pass  # MFDFA package not installed — skip
+        pass
+
+    # WHY: "Stealth bubble" fix. When LPPLS quality is high (>0.7) AND MFDFA
+    # independently confirms (>0.7), cap HMM penalty at 0.80. This prevents
+    # HMM from vetoing a signal that two independent methods agree on.
+    # Nikkei 2024: quality=0.849, MFDFA=1.0, but HMM=GROWTH → penalty killed it.
+    # Safety: no control has quality>0.7 + MFDFA>0.7 simultaneously.
+    if quality > 0.7 and mf_bubble_score > 0.7:
+        hmm_weight = max(0.80, hmm_weight)
+
+    weighted_quality = quality * hmm_weight
+
+    # MFDFA small boost for borderline cases
+    if mf_bubble_score > 0.5 and weighted_quality > 0.3:
+        mfdfa_boost = 1.0 + 0.1 * (mf_bubble_score - 0.5)  # range [1.0, 1.05]
+        weighted_quality = min(1.0, weighted_quality * mfdfa_boost)
 
     # tc uncertainty via bootstrap
     tc_est = params.tc if params else None
