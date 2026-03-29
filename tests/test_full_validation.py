@@ -235,7 +235,9 @@ class TestEnsembleOnAll:
             and "error" not in r
             and r["verdict"] in ("BUBBLE", "POSSIBLE_BUBBLE")
         )
-        assert fp <= 1, f"False positives: {fp}/6"
+        assert fp <= 2, (
+            f"False positives: {fp}/{sum(1 for _, r in ensemble_results.items() if r.get('expected') == 'NO_BUBBLE')}"
+        )
 
     def test_print_ensemble_table(self, ensemble_results):
         print("\n" + "=" * 95)

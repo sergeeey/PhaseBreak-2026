@@ -5,7 +5,7 @@ from src.lppls.data import NEGATIVE_CONTROLS, KNOWN_BUBBLES
 
 class TestDatasets:
     def test_negative_controls_exist(self):
-        assert len(NEGATIVE_CONTROLS) == 6
+        assert len(NEGATIVE_CONTROLS) == 9  # 6 original + 3 expanded (v2.1)
 
     def test_all_controls_have_no_tc(self):
         """Negative controls must NOT have a known crash date."""
