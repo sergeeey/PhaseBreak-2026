@@ -26,6 +26,15 @@ ln(E[p(t)]) = A + B(tc - t)^m + C(tc - t)^m * cos(ω * ln(tc - t) + φ)
 | **Geology** | Sentinel-2 temporal series | Seismic precursor patterns | KS p>0.05 |
 | **Fraud** | Transaction timelines | Doomsday Bayesian, C-index +27% | Survival model |
 
+## Domain Maturity Tiers
+
+| Tier | Domains | Meaning |
+|------|---------|---------|
+| **Supported** | Finance, Commodities | Validated on real data, forward-tested, production-usable |
+| **Experimental** | Housing, Epidemics | Works but limited recall, needs more data/tuning |
+| **Science-only** | Geology, AI Compute, Landslides | Research validation, not for operational decisions |
+| **Separate track** | Fraud | Different model (survival), not LPPLS bubble detection |
+
 ## Pipeline Architecture (v2)
 
 ```

@@ -332,6 +332,23 @@ def run_full_pipeline(
         domain: "finance", "commodities", "housing", "geology", "adversarial"
             Controls HMM gating aggressiveness and scoring weights.
     """
+    # Production data QC: reject clearly unusable input
+    if len(values) < 20 or not np.any(np.isfinite(values)):
+        return PipelineResult(
+            screening=ScreeningResult(
+                data_quality="INSUFFICIENT_DATA",
+                n_points=len(values),
+                hmm_regime=None,
+                hmm_bubble_prob=0.0,
+                should_fit_lppls=False,
+                reason="Insufficient or invalid data",
+            ),
+            fit=None,
+            final_verdict="INSUFFICIENT_DATA",
+            final_confidence=0.0,
+            path="v2",
+        )
+
     log_price = np.log(np.clip(values, 1e-10, None))
 
     screening = run_screening(t, values, domain=domain)
