@@ -1,0 +1,233 @@
+{
+  "prediction_date": "2026-03-29",
+  "model": "PhaseBreak v2 + Hurst + MFDFA",
+  "new_domains": [
+    "ai_compute",
+    "epidemic",
+    "landslide"
+  ],
+  "total_predictions": 18,
+  "results": [
+    {
+      "domain": "ai_compute",
+      "series": "training",
+      "name": "AI Training Compute (notable systems)",
+      "verdict": "BUBBLE",
+      "quality": 0.836,
+      "r_squared": 0.9968,
+      "tc_year": 2037.9,
+      "m": 0.827,
+      "omega": 12.73,
+      "n_points": 14
+    },
+    {
+      "domain": "ai_compute",
+      "series": "investment",
+      "name": "Cumulative AI Infrastructure Investment",
+      "verdict": "NO_SIGNAL",
+      "quality": 0.212,
+      "r_squared": -663.3184,
+      "tc_year": 2049.8,
+      "m": 0.9,
+      "omega": 20.0,
+      "n_points": 8
+    },
+    {
+      "domain": "ai_compute",
+      "series": "electricity",
+      "name": "Data Center Electricity Consumption",
+      "verdict": "NO_SIGNAL",
+      "quality": 0.268,
+      "r_squared": -106.2279,
+      "tc_year": 2027.0,
+      "m": 0.318,
+      "omega": 4.0,
+      "n_points": 12
+    },
+    {
+      "domain": "epidemic",
+      "name": "US Wave 1 (initial outbreak)",
+      "country": "United States",
+      "verdict": "NO_BUBBLE",
+      "quality": 0.0,
+      "expected_wave": true,
+      "tc_date": null,
+      "peak_date": "2020-04-10",
+      "correct": false,
+      "n_points": 56
+    },
+    {
+      "domain": "epidemic",
+      "name": "US Delta Wave 2021",
+      "country": "United States",
+      "verdict": "BUBBLE",
+      "quality": 0.862,
+      "expected_wave": true,
+      "tc_date": null,
+      "peak_date": "2021-09-13",
+      "correct": true,
+      "n_points": 102
+    },
+    {
+      "domain": "epidemic",
+      "name": "US Omicron Wave 2022",
+      "country": "United States",
+      "verdict": "BUBBLE",
+      "quality": 0.655,
+      "expected_wave": true,
+      "tc_date": null,
+      "peak_date": "2022-01-15",
+      "correct": true,
+      "n_points": 62
+    },
+    {
+      "domain": "epidemic",
+      "name": "India Delta Wave 2021 (catastrophic)",
+      "country": "India",
+      "verdict": "NO_BUBBLE",
+      "quality": 0.235,
+      "expected_wave": true,
+      "tc_date": null,
+      "peak_date": "2021-05-07",
+      "correct": false,
+      "n_points": 95
+    },
+    {
+      "domain": "epidemic",
+      "name": "UK Alpha Wave (B.1.1.7)",
+      "country": "United Kingdom",
+      "verdict": "NO_BUBBLE",
+      "quality": 0.0,
+      "expected_wave": true,
+      "tc_date": null,
+      "peak_date": "2021-01-08",
+      "correct": false,
+      "n_points": 69
+    },
+    {
+      "domain": "epidemic",
+      "name": "Brazil Gamma Wave (P.1)",
+      "country": "Brazil",
+      "verdict": "NO_BUBBLE",
+      "quality": 0.0,
+      "expected_wave": true,
+      "tc_date": null,
+      "peak_date": "2021-03-26",
+      "correct": false,
+      "n_points": 85
+    },
+    {
+      "domain": "epidemic",
+      "name": "US Summer 2020 (plateau)",
+      "country": "United States",
+      "verdict": "POSSIBLE",
+      "quality": 0.549,
+      "expected_wave": false,
+      "tc_date": null,
+      "peak_date": null,
+      "correct": false,
+      "n_points": 32
+    },
+    {
+      "domain": "epidemic",
+      "name": "Japan Stable Period 2020",
+      "country": "Japan",
+      "verdict": "NO_BUBBLE",
+      "quality": 0.21,
+      "expected_wave": false,
+      "tc_date": null,
+      "peak_date": null,
+      "correct": true,
+      "n_points": 122
+    },
+    {
+      "domain": "landslide",
+      "name": "Vaiont Dam Landslide 1963 (Italy, 2000 deaths)",
+      "verdict": "BUBBLE",
+      "quality": 0.608,
+      "expected_failure": true,
+      "correct": true,
+      "tc_index": 100.9,
+      "actual_tc": 100,
+      "failure_date": "1963-10-09",
+      "n_points": 80
+    },
+    {
+      "domain": "landslide",
+      "name": "Randa Rockslide 1991 (Switzerland)",
+      "verdict": "BUBBLE",
+      "quality": 0.62,
+      "expected_failure": true,
+      "correct": true,
+      "tc_index": 119.0,
+      "actual_tc": 120,
+      "failure_date": "1991-04-18",
+      "n_points": 100
+    },
+    {
+      "domain": "landslide",
+      "name": "Asamushi Landslide 2015 (Japan, GPS monitored)",
+      "verdict": "BUBBLE",
+      "quality": 0.722,
+      "expected_failure": true,
+      "correct": true,
+      "tc_index": 154.8,
+      "actual_tc": 150,
+      "failure_date": "2015-08-20",
+      "n_points": 120
+    },
+    {
+      "domain": "landslide",
+      "name": "Xinmo Landslide 2017 (China, catastrophic)",
+      "verdict": "BUBBLE",
+      "quality": 0.682,
+      "expected_failure": true,
+      "correct": true,
+      "tc_index": 91.0,
+      "actual_tc": 90,
+      "failure_date": "2017-06-24",
+      "n_points": 70
+    },
+    {
+      "domain": "landslide",
+      "name": "Bingham Canyon Mine Slide 2013 (USA, largest in N.America)",
+      "verdict": "BUBBLE",
+      "quality": 0.897,
+      "expected_failure": true,
+      "correct": true,
+      "tc_index": 114.1,
+      "actual_tc": 110,
+      "failure_date": "2013-04-10",
+      "n_points": 90
+    },
+    {
+      "domain": "landslide",
+      "name": "Stable Slope (linear creep, no failure)",
+      "verdict": "NO_BUBBLE",
+      "quality": 0.0,
+      "expected_failure": false,
+      "correct": true,
+      "tc_index": null,
+      "actual_tc": null,
+      "failure_date": null,
+      "n_points": 100
+    },
+    {
+      "domain": "landslide",
+      "name": "Stable Slope (seasonal fluctuation, no failure)",
+      "verdict": "NO_BUBBLE",
+      "quality": 0.196,
+      "expected_failure": false,
+      "correct": true,
+      "tc_index": 188.5,
+      "actual_tc": null,
+      "failure_date": null,
+      "n_points": 120
+    }
+  ],
+  "key_findings": {
+    "ai_compute": "Training FLOP shows BUBBLE signal (q=0.84), tc\u22482038. First LPPLS on AI scaling.",
+    "epidemic": "2/6 COVID waves detected (Delta, Omicron). HMM blocks others. Needs domain tuning.",
+    "landslide": "7/7 correct (100%). m=[0.12-0.33] differs from finance m=[0.45-0.64]."
+  }
+}
