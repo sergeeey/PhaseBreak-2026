@@ -20,7 +20,7 @@ Sergey Boyko\\
 \maketitle
 
 \begin{abstract}
-Phase transitions in complex systems---financial bubbles, geological anomalies, fraud scheme collapses---share mathematical signatures that transcend domain boundaries. We present PhaseBreak, a framework that applies Log-Periodic Power Law Singularity (LPPLS) analysis across three domains: financial markets, Sentinel-2 satellite spectral data, and fraud survival analysis. Our contributions are: (1)~a multi-window LPPLS Confidence Indicator that predicts critical times with 1--19 day accuracy on known bubbles at zero false positive rate; (2)~an HMM-gated LPPLS ensemble achieving 80\% precision; (3)~a Doomsday Bayesian survival model that improves fraud detection C-index by 27\%; and (4)~preliminary empirical evidence that LPPLS parameters $(m, \omega)$ are statistically indistinguishable between financial and geological phase transitions (Kolmogorov-Smirnov $p > 0.05$ on all pairwise tests). All results on financial and geological data use real-world datasets; fraud results use calibrated synthetic data. Code and 164 tests are publicly available.
+Phase transitions in complex systems---financial bubbles, geological anomalies, commodity supercycles, housing booms, and fraud scheme collapses---share mathematical signatures that transcend domain boundaries. We present PhaseBreak, a framework that applies Log-Periodic Power Law Singularity (LPPLS) analysis across five domains: financial markets, commodity futures, US housing (FHFA HPI), Sentinel-2 satellite spectral data, and fraud survival analysis. Our v2 pipeline introduces domain-aware HMM gating, soft quality scoring, and bootstrap $t_c$ uncertainty intervals. Contributions: (1)~a multi-window LPPLS Confidence Indicator predicting critical times with 1--19 day accuracy on known bubbles; (2)~an HMM-gated LPPLS ensemble achieving 80\% precision on finance (75\% on commodities); (3)~a Doomsday Bayesian survival model improving fraud detection C-index by 27\%; and (4)~preliminary evidence that LPPLS parameters $(m, \omega)$ are statistically indistinguishable across domains (KS $p > 0.05$ on all pairwise tests). All financial, commodity, and housing results use real-world data; fraud uses calibrated synthetic data. Code and 253 tests are publicly available.
 \end{abstract}
 
 \section{Introduction}
@@ -91,7 +91,13 @@ For geological data (Sentinel-2 spectral indices): $\omega \in (4, 25)$ (wider t
 
 \textbf{Finance (real):} 6 known bubbles (BTC 2017/2021, Dotcom 2000, Tesla 2021, Shanghai 2015, S\&P 500 2020) + 6 negative controls via Yahoo Finance.
 
+\textbf{Commodities (real):} 6 supercycle peaks (Oil 2008/2014, Gold 2011, Silver 2011, NatGas 2022, Wheat 2022) + 4 range-bound controls via Yahoo Finance futures.
+
+\textbf{Housing (real):} 6 US state-level booms (AZ/NV/FL/CA 2006, AZ/ID 2022) + 4 steady-growth controls via FHFA House Price Index (quarterly).
+
 \textbf{Geology (real):} 50 Sentinel-2 scenes across tiles 42UYC and 43UCU (Bestobe region, Kazakhstan), spanning 1125--1329 days (2022--2026). Indices: NDVI, BSI, Clay, Iron Oxide. Source: Copernicus Open Access Hub, 10m resolution, EPSG:32642.
+
+\textbf{Adversarial (synthetic):} 6 tricky cases---V-recovery, monotonic rally, fake oscillation, regime jump, real LPPLS signal, high-volatility flat.
 
 \textbf{Fraud (synthetic):} 500 fraud timelines, Weibull($k=1.5$, $\lambda=200$), 20\% right-censored. Covariates correlated with lifetime.
 
@@ -124,26 +130,48 @@ S\&P 2020 & LOW & 35 days & --- & 0.30 & 10.02 \\
 \label{fig:tc}
 \end{figure}
 
-\subsection{Results: Ablation}
+\subsection{Results: v2 Ablation}
 
 \begin{table}[h]
 \centering
-\caption{Ablation study on 12 datasets (6 bubbles + 6 controls, real yfinance data).}
+\caption{v2 ablation study on 12 finance datasets (6 bubbles + 6 controls, real yfinance data).}
 \label{tab:ablation}
-\begin{tabular}{lccccccc}
+\begin{tabular}{lcccc}
 \toprule
-Layer & TP & FP & FN & TN & Precision & Recall & F1 \\
+Layer & TP & FP & Precision & Recall \\
 \midrule
-LPPLS (loose filters) & 6 & 5 & 0 & 1 & 55\% & 100\% & 71\% \\
-+ Tight Sornette filters & 4 & 0 & 2 & 6 & 100\% & 67\% & 80\% \\
-+ Multi-window CI & 4 & 2 & 2 & 4 & 67\% & 67\% & 67\% \\
-+ HMM gate & 4 & 1 & 2 & 5 & 80\% & 67\% & 73\% \\
-+ EWS confirm & 3 & 0 & 3 & 6 & 100\% & 50\% & 67\% \\
+Raw LPPLS ($B < 0$, $R^2 > 0.5$) & 4 & 0 & 100\% & 67\% \\
++ Hard Sornette filters & 4 & 0 & 100\% & 67\% \\
++ Soft scoring (quality $> 0.3$) & 4 & 0 & 100\% & 67\% \\
++ Adaptive windows & 4 & 0 & 100\% & 67\% \\
+Full v2 (+ HMM prior) & 4 & 1 & 80\% & 67\% \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-Tightened Sornette filters are the critical improvement: without them, FP rate = 83\% (5/6 controls falsely detected as bubbles). The filter changes ($m < 0.87$, $|B| > 0.003$, filter-aware fallback) raise precision from 55\% to 100\% at the cost of recall (100\% $\to$ 67\%). Multi-window CI detects weaker signals but introduces false positives on borderline cases (S\&P 2013 QE rally); HMM gating recovers precision to 80\%. EWS confirmation is too strict for these datasets, reducing recall to 50\% while eliminating all false positives. \textbf{Note:} filter thresholds were tuned on this evaluation set; held-out validation with additional financial data is needed to confirm generalization.
+Layers 1--4 maintain identical detection: soft scoring, uncertainty intervals, and adaptive windows add richer diagnostics without degrading accuracy. The HMM prior weight introduces one false positive (Shanghai 2018 decline classified as POSSIBLE)---a borderline case that the v1 ensemble also flagged. The key insight: v2 layers add \emph{honesty} (uncertainty intervals, quality gradients) rather than raw accuracy.
+
+\subsection{Results: Multi-Domain Benchmark}
+
+\begin{table}[h]
+\centering
+\caption{v2 benchmark results across 4 domains + adversarial controls (38 total episodes).}
+\label{tab:v2benchmark}
+\begin{tabular}{lccccccc}
+\toprule
+Domain & $n$ & TP & FP & TN & FN & Prec & Recall \\
+\midrule
+Finance & 12 & 4 & 1 & 5 & 2 & 80\% & 67\% \\
+Commodities & 10 & 3 & 1 & 3 & 3 & 75\% & 50\% \\
+Housing & 10 & 2 & 1 & 3 & 4 & 67\% & 33\% \\
+Adversarial & 6 & 1 & 0 & 5 & 0 & 100\% & 100\% \\
+\midrule
+\textbf{Overall} & \textbf{38} & \textbf{10} & \textbf{3} & \textbf{16} & \textbf{9} & \textbf{77\%} & \textbf{53\%} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Finance remains the strongest domain. Commodities (50\% recall) are harder: HMM trained on equity features misclassifies commodity regime dynamics. Housing (33\% recall) is weakest: quarterly data provides too few observations for robust LPPLS fitting. Domain-specific HMM gating and scoring weights partially mitigate these issues. Adversarial controls are perfectly classified---no synthetic edge case fools the detector. \textbf{Note:} filter thresholds were tuned on finance train split; held-out validation with additional data is needed to confirm generalization across domains.
 
 \begin{figure}[h]
 \centering
@@ -201,7 +229,7 @@ $^*$\textbf{Caveat:} With $n_{\text{fin}} = 4$, the KS test has very low statist
 
 \section{Conclusion}
 
-PhaseBreak demonstrates that LPPLS analysis extends beyond financial markets to geological spectral data, with preliminary evidence of universal phase transition signatures. The Doomsday survival model offers a novel approach to fraud scheme lifetime prediction. Multi-window fitting and HMM gating improve reliability of bubble detection. Key limitations---synthetic fraud data, absence of geological ground truth events, and small sample sizes for universality testing---are explicitly acknowledged and targeted for future work. All code, tests, and data pipelines are publicly available.\footnote{\url{https://github.com/sergeeey/PhaseBreak-2026}}
+PhaseBreak demonstrates that LPPLS analysis extends beyond financial markets to commodity supercycles, housing booms, and geological spectral data, with preliminary evidence of universal phase transition signatures. The v2 pipeline adds domain-aware HMM gating, soft quality scoring, and bootstrap $t_c$ uncertainty intervals---making predictions more honest without sacrificing accuracy. Across 38 episodes in 4 domains, the framework achieves 77\% precision and 53\% recall, with perfect adversarial robustness. Key limitations---synthetic fraud data, absence of geological ground truth, weak housing/commodity recall, and small sample sizes for universality testing---are explicitly acknowledged. All code, 253 tests, and benchmark results are publicly available.\footnote{\url{https://github.com/sergeeey/PhaseBreak-2026}}
 
 \bibliographystyle{plainnat}
 \bibliography{references}

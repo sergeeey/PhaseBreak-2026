@@ -135,6 +135,7 @@ def _call_ollama(
     prompt: str,
     model: str = "qwen2.5:14b",
     temperature: float = 0.3,
+    timeout: int = 60,
 ) -> str | None:
     """Call Ollama API for local inference."""
     try:
@@ -145,7 +146,7 @@ def _call_ollama(
                 "model": model,
                 "prompt": prompt,
                 "stream": False,
-                "options": {"temperature": temperature},
+                "options": {"temperature": temperature, "num_predict": 300},
             }
         ).encode()
 
@@ -154,7 +155,7 @@ def _call_ollama(
             data=data,
             headers={"Content-Type": "application/json"},
         )
-        with urllib.request.urlopen(req, timeout=30) as resp:
+        with urllib.request.urlopen(req, timeout=timeout) as resp:
             result = json.loads(resp.read())
             return result.get("response", "")
     except Exception as e:

@@ -74,8 +74,19 @@ class PipelineResult:
 # ---------------------------------------------------------------------------
 
 
-def run_screening(t: NDArray, values: NDArray, min_points: int = 20) -> ScreeningResult:
-    """Layer A: screen data before expensive LPPLS fit."""
+def run_screening(
+    t: NDArray,
+    values: NDArray,
+    min_points: int = 20,
+    domain: str = "finance",
+) -> ScreeningResult:
+    """Layer A: screen data before expensive LPPLS fit.
+
+    Domain-aware HMM gating:
+    - finance (daily, 200+ points): full HMM gating
+    - commodities (daily, but different dynamics): relaxed threshold
+    - housing (quarterly, <50 points): skip HMM, always fit
+    """
     n = len(t)
     if n < min_points:
         return ScreeningResult(
@@ -99,11 +110,29 @@ def run_screening(t: NDArray, values: NDArray, min_points: int = 20) -> Screenin
             reason=f"Too many invalid values: {n - valid.sum()}/{n}",
         )
 
+    # WHY: HMM gating is unreliable for short series (<50 points, e.g. quarterly
+    # housing) and for commodity markets where HMM often misclassifies bubbles
+    # as NORMAL (different return/vol dynamics vs equities).
+    skip_hmm = n < 50 or domain == "housing"
+
+    if skip_hmm:
+        return ScreeningResult(
+            data_quality="OK",
+            n_points=n,
+            hmm_regime=None,
+            hmm_bubble_prob=0.5,
+            should_fit_lppls=True,
+            reason=f"HMM skipped (domain={domain}, n={n}): always fit",
+        )
+
     # HMM regime (optional — fallback to heuristic if unavailable)
     try:
         from src.lppls.regime import HMMRegimeDetector
 
-        hmm = HMMRegimeDetector()
+        # WHY: commodities need lower bubble threshold — HMM trained on equity
+        # features often classifies commodity bubbles as NORMAL
+        bubble_threshold = 0.3 if domain == "commodities" else 0.5
+        hmm = HMMRegimeDetector(bubble_threshold=bubble_threshold)
         regime_result = hmm.fit_predict(np.log(np.clip(values, 1e-10, None)))
         hmm_regime = regime_result.current_regime.name
         hmm_prob = regime_result.bubble_probability
@@ -138,6 +167,7 @@ def run_structural_fit(
     hmm_bubble_prob: float = 0.5,
     use_adaptive_windows: bool = True,
     n_bootstrap: int = 20,
+    domain: str = "finance",
 ) -> StructuralFitResult:
     """Layer B: LPPLS fit + soft scoring + tc uncertainty.
 
@@ -145,7 +175,7 @@ def run_structural_fit(
     - Adaptive window selection based on data frequency/volatility
     - HMM bubble_prob used as prior weight on verdict confidence
     - Bootstrap tc uncertainty intervals
-    - Soft quality scoring instead of hard pass/fail
+    - Domain-specific soft scoring weights
     """
     from src.lppls.scoring import compute_quality_score
     from src.lppls.uncertainty import bootstrap_tc_uncertainty
@@ -164,12 +194,13 @@ def run_structural_fit(
     r2 = model.r_squared(t, log_price)
     params = model.params
 
-    # Soft scoring
-    quality = compute_quality_score(params, r2) if params else 0.0
+    # Domain-specific soft scoring
+    quality = compute_quality_score(params, r2, domain=domain) if params else 0.0
 
     # v2: HMM prior weight — boost/penalize quality based on HMM agreement
     # WHY: HMM seeing BUBBLE + good LPPLS fit = stronger signal
     # HMM seeing NORMAL + marginal LPPLS fit = likely false positive
+    # For housing (HMM skipped), hmm_bubble_prob=0.5 → weight=0.85 (neutral)
     hmm_weight = 0.7 + 0.3 * hmm_bubble_prob  # range [0.7, 1.0]
     weighted_quality = quality * hmm_weight
 
@@ -183,12 +214,19 @@ def run_structural_fit(
         tc_lo = unc.get("tc_p10")
         tc_hi = unc.get("tc_p90")
 
-    is_bubble = params is not None and params.is_bubble and r2 > 0.5 and weighted_quality > 0.3
+    # WHY: housing quarterly data produces more false positives due to fewer
+    # data points → LPPLS fits noise more easily. Raise threshold for housing.
+    bubble_threshold = 0.4 if domain == "housing" else 0.3
+    possible_threshold = 0.5 if domain == "housing" else 0.4
 
-    # Verdict with v2 thresholds
+    is_bubble = (
+        params is not None and params.is_bubble and r2 > 0.5 and weighted_quality > bubble_threshold
+    )
+
+    # Verdict with domain-aware thresholds
     if is_bubble and weighted_quality > 0.6:
         verdict = "BUBBLE"
-    elif is_bubble or weighted_quality > 0.4:
+    elif is_bubble or weighted_quality > possible_threshold:
         verdict = "POSSIBLE"
     else:
         verdict = "NO_BUBBLE"
@@ -218,16 +256,21 @@ def run_full_pipeline(
     frequency: str = "daily",
     use_adaptive_windows: bool = True,
     n_bootstrap: int = 20,
+    domain: str = "finance",
     **fit_kwargs,
 ) -> PipelineResult:
     """Run Layer A + Layer B (v2 path). Layer C is offline only.
 
     This is the recommended v2 entry point. For legacy path, use
     src.lppls.ensemble.HMMLPPLSEnsemble.analyze() directly.
+
+    Args:
+        domain: "finance", "commodities", "housing", "geology", "adversarial"
+            Controls HMM gating aggressiveness and scoring weights.
     """
     log_price = np.log(np.clip(values, 1e-10, None))
 
-    screening = run_screening(t, values)
+    screening = run_screening(t, values, domain=domain)
 
     if not screening.should_fit_lppls:
         return PipelineResult(
@@ -245,6 +288,7 @@ def run_full_pipeline(
         hmm_bubble_prob=screening.hmm_bubble_prob,
         use_adaptive_windows=use_adaptive_windows,
         n_bootstrap=n_bootstrap,
+        domain=domain,
         **fit_kwargs,
     )
 

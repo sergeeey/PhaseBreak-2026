@@ -55,25 +55,32 @@ def score_r_squared(r2: float) -> float:
     return float(max(0, (r2 - 0.3) / 0.65))
 
 
+# WHY: different domains have different parameter dynamics.
+# Commodities: B is often smaller, omega range wider → relax B weight, boost R².
+# Housing: quarterly data with fewer oscillations → relax omega weight, boost m+R².
+DOMAIN_WEIGHTS: dict[str, dict[str, float]] = {
+    "finance": {"m": 0.20, "B": 0.25, "omega": 0.15, "damping": 0.15, "r2": 0.25},
+    "commodities": {"m": 0.20, "B": 0.15, "omega": 0.10, "damping": 0.15, "r2": 0.40},
+    "housing": {"m": 0.25, "B": 0.15, "omega": 0.05, "damping": 0.15, "r2": 0.40},
+    "geology": {"m": 0.20, "B": 0.20, "omega": 0.10, "damping": 0.15, "r2": 0.35},
+}
+
+
 def compute_quality_score(
     params: LPPLSParams | None,
     r_squared: float,
     weights: dict[str, float] | None = None,
+    domain: str = "finance",
 ) -> float:
     """Compute weighted quality score for an LPPLS fit.
 
     Returns 0-1 score. Higher = more likely real phase transition.
+    Uses domain-specific weights if no custom weights provided.
     """
     if params is None:
         return 0.0
 
-    w = weights or {
-        "m": 0.20,
-        "B": 0.25,
-        "omega": 0.15,
-        "damping": 0.15,
-        "r2": 0.25,
-    }
+    w = weights or DOMAIN_WEIGHTS.get(domain, DOMAIN_WEIGHTS["finance"])
 
     scores = {
         "m": score_m(params.m),

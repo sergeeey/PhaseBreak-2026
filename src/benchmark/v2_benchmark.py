@@ -66,7 +66,7 @@ def _run_episode(
     frequency: str = "daily",
 ) -> EpisodeResult:
     """Run v2 pipeline on one episode and return structured result."""
-    result = run_full_pipeline(t, values, frequency=frequency, n_bootstrap=15)
+    result = run_full_pipeline(t, values, frequency=frequency, n_bootstrap=15, domain=domain)
 
     predicted_bubble = result.final_verdict in ("BUBBLE", "POSSIBLE")
     correct = predicted_bubble == expected_bubble
