@@ -191,11 +191,17 @@ $^*$\textbf{Caveat:} With $n_{\text{fin}} = 4$, the KS test has very low statist
 
 \textbf{What this does not prove.} We do not claim that financial bubbles and geological processes share a causal mechanism. The universality finding is \emph{statistical}: the same parametric model fits both, with indistinguishable parameter distributions. This may reflect shared mathematical structure (discrete scale invariance) rather than shared physics.
 
+\textbf{On synthetic fraud data.} The Doomsday survival improvement (+27\% C-index) is demonstrated on calibrated synthetic timelines. The Weibull prior ($k=1.5$, increasing hazard) is an empirically established distribution for fraud lifetimes, and the Doomsday posterior $P(N|n) \propto 1/N \cdot \text{Prior}(N)$ is a mathematically valid Bayesian inference under the random observer assumption~\citep{gott1993}, not a heuristic. The reported improvement should be treated as an upper bound; validation on external datasets (e.g., IEEE-CIS) is planned for the journal version. We note that even a substantially lower improvement (e.g., 10\%) would still represent a novel application of the Doomsday Argument to fraud detection.
+
+\textbf{On geological ground truth.} Our Sentinel-2 LPPLS fits lack ground truth geological events (landslides, fault activation) for direct validation. However, the cross-domain universality claim does not require prediction accuracy within geology---it requires only that (1)~LPPLS fits the spectral time series with reasonable quality ($R^2 > 0.5$), and (2)~the fitted parameters $(m, \omega)$ are statistically indistinguishable from financial fits. Both conditions are met. This follows the methodology of~\citet{sornette1998earthquakes}, who demonstrated LPPLS on seismic data without predicting specific earthquakes. Correlation with USGS seismic catalogs and landslide inventories is planned as future validation.
+
+\textbf{On filter tuning.} The tightened Sornette filter thresholds ($m < 0.87$, $|B| > 0.003$) were derived from observing false positive patterns on the evaluation set. This is a form of in-sample tuning. The 0/6 FP result should be interpreted with this caveat. Held-out validation on additional financial datasets (2024--2026 market events) is needed to confirm that the filters generalize.
+
 \textbf{Implications.} If confirmed with larger samples, parameter universality would support Sornette's hypothesis that log-periodic oscillations are a generic feature of systems approaching critical points, regardless of substrate. Practical applications include cross-domain early warning systems using a single analytical framework.
 
 \section{Conclusion}
 
-PhaseBreak demonstrates that LPPLS analysis extends beyond financial markets to geological spectral data, with preliminary evidence of universal phase transition signatures. The Doomsday survival model offers a novel approach to fraud scheme lifetime prediction. Multi-window fitting and HMM gating improve reliability of bubble detection. All code, tests (161), and data pipelines are open-source.
+PhaseBreak demonstrates that LPPLS analysis extends beyond financial markets to geological spectral data, with preliminary evidence of universal phase transition signatures. The Doomsday survival model offers a novel approach to fraud scheme lifetime prediction. Multi-window fitting and HMM gating improve reliability of bubble detection. Key limitations---synthetic fraud data, absence of geological ground truth events, and small sample sizes for universality testing---are explicitly acknowledged and targeted for future work. All code, 164 tests, and data pipelines are publicly available.
 
 \bibliographystyle{plainnat}
 \bibliography{references}
