@@ -1,0 +1,38 @@
+{
+  "CAGR>50%": {
+    "tp": 12,
+    "fp": 4,
+    "fn": 4,
+    "tn": 14,
+    "precision": 0.75,
+    "recall": 0.75,
+    "f1": 0.75
+  },
+  "Z-score>2": {
+    "tp": 0,
+    "fp": 0,
+    "fn": 16,
+    "tn": 18,
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1": 0.0
+  },
+  "Trend>2\u03c3": {
+    "tp": 7,
+    "fp": 0,
+    "fn": 9,
+    "tn": 18,
+    "precision": 1.0,
+    "recall": 0.438,
+    "f1": 0.609
+  },
+  "Vol spike>2\u00d7": {
+    "tp": 1,
+    "fp": 0,
+    "fn": 15,
+    "tn": 18,
+    "precision": 1.0,
+    "recall": 0.062,
+    "f1": 0.118
+  }
+}

@@ -180,6 +180,69 @@ NEGATIVE_CONTROLS: dict[str, dict] = {
 }
 
 
+# ============================================================
+# Time-forward validation: 2024-2025 episodes
+# These were NOT seen during any threshold tuning.
+# ============================================================
+
+FORWARD_BUBBLES: dict[str, dict] = {
+    "nvidia_2024": {
+        "ticker": "NVDA",
+        "start": "2023-01-01",
+        "end": "2024-06-18",
+        "known_tc_date": "2024-06-20",
+        "name": "Nvidia 2024 AI Bubble Peak ($140)",
+    },
+    "nikkei_2024": {
+        "ticker": "^N225",
+        "start": "2023-06-01",
+        "end": "2024-07-10",
+        "known_tc_date": "2024-07-11",
+        "name": "Nikkei 2024 ATH Peak (42k, crashed Aug 5)",
+    },
+    "btc_2024": {
+        "ticker": "BTC-USD",
+        "start": "2023-10-01",
+        "end": "2024-03-13",
+        "known_tc_date": "2024-03-14",
+        "name": "Bitcoin 2024 ETF Rally Peak ($73k)",
+    },
+}
+
+FORWARD_CONTROLS: dict[str, dict] = {
+    "sp500_2024_steady": {
+        "ticker": "^GSPC",
+        "start": "2024-01-01",
+        "end": "2024-12-31",
+        "known_tc_date": None,
+        "name": "S&P 500 2024 Steady Growth (no crash)",
+    },
+    "gold_2024_rise": {
+        "ticker": "GC=F",
+        "start": "2024-01-01",
+        "end": "2024-12-31",
+        "known_tc_date": None,
+        "name": "Gold 2024 Steady Rise (no crash)",
+    },
+    "msft_2024_stable": {
+        "ticker": "MSFT",
+        "start": "2024-01-01",
+        "end": "2024-12-31",
+        "known_tc_date": None,
+        "name": "Microsoft 2024 Stable Growth",
+    },
+}
+
+
+def load_forward_episode(name: str) -> BubbleDataset:
+    """Load a time-forward validation episode (unseen during tuning)."""
+    all_episodes = {**FORWARD_BUBBLES, **FORWARD_CONTROLS}
+    if name not in all_episodes:
+        available = ", ".join(all_episodes.keys())
+        raise ValueError(f"Unknown forward episode '{name}'. Available: {available}")
+    return load_yfinance(**all_episodes[name])
+
+
 def load_known_bubble(name: str) -> BubbleDataset:
     """Load a pre-defined known bubble dataset."""
     if name not in KNOWN_BUBBLES:

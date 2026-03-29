@@ -29,7 +29,7 @@ log = structlog.get_logger()
 def bootstrap_tc_uncertainty(
     t: NDArray,
     log_price: NDArray,
-    n_bootstrap: int = 30,
+    n_bootstrap: int = 100,
     subsample_frac: float = 0.8,
     seed: int = 42,
     m_range: tuple = (0.1, 0.9),

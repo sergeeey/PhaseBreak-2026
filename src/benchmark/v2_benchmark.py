@@ -22,7 +22,13 @@ from pathlib import Path
 import numpy as np
 import structlog
 
-from src.lppls.data import KNOWN_BUBBLES, NEGATIVE_CONTROLS, load_yfinance
+from src.lppls.data import (
+    KNOWN_BUBBLES,
+    NEGATIVE_CONTROLS,
+    FORWARD_BUBBLES,
+    FORWARD_CONTROLS,
+    load_yfinance,
+)
 from src.lppls.data_commodities import (
     COMMODITY_BUBBLES,
     COMMODITY_CONTROLS,
@@ -66,7 +72,7 @@ def _run_episode(
     frequency: str = "daily",
 ) -> EpisodeResult:
     """Run v2 pipeline on one episode and return structured result."""
-    result = run_full_pipeline(t, values, frequency=frequency, n_bootstrap=15, domain=domain)
+    result = run_full_pipeline(t, values, frequency=frequency, n_bootstrap=50, domain=domain)
 
     predicted_bubble = result.final_verdict in ("BUBBLE", "POSSIBLE")
     correct = predicted_bubble == expected_bubble
@@ -150,11 +156,18 @@ def run_commodity_benchmark() -> list[EpisodeResult]:
 
 
 def run_housing_benchmark() -> list[EpisodeResult]:
-    """Run v2 pipeline on all housing episodes (quarterly frequency)."""
-    from src.housing.data import HOUSING_BUBBLES, HOUSING_CONTROLS, load_housing_episode
+    """Run v2 pipeline on all housing episodes (FHFA quarterly + Zillow monthly)."""
+    from src.housing.data import (
+        HOUSING_BUBBLES,
+        HOUSING_CONTROLS,
+        ZILLOW_BUBBLES,
+        ZILLOW_CONTROLS,
+        load_housing_episode,
+    )
 
     results = []
 
+    # FHFA quarterly
     for name in HOUSING_BUBBLES:
         log.info("benchmark_housing_bubble", episode=name)
         try:
@@ -173,6 +186,54 @@ def run_housing_benchmark() -> list[EpisodeResult]:
             r = _run_episode(
                 name, "housing", ds.t, ds.values, expected_bubble=False, frequency="quarterly"
             )
+            results.append(r)
+        except Exception as e:
+            log.warning("episode_failed", episode=name, error=str(e))
+
+    # Zillow monthly (more data points → better LPPLS fits)
+    for name in ZILLOW_BUBBLES:
+        log.info("benchmark_zillow_bubble", episode=name)
+        try:
+            ds = load_housing_episode(name)
+            r = _run_episode(
+                name, "housing_monthly", ds.t, ds.values, expected_bubble=True, frequency="monthly"
+            )
+            results.append(r)
+        except Exception as e:
+            log.warning("episode_failed", episode=name, error=str(e))
+
+    for name in ZILLOW_CONTROLS:
+        log.info("benchmark_zillow_control", episode=name)
+        try:
+            ds = load_housing_episode(name)
+            r = _run_episode(
+                name, "housing_monthly", ds.t, ds.values, expected_bubble=False, frequency="monthly"
+            )
+            results.append(r)
+        except Exception as e:
+            log.warning("episode_failed", episode=name, error=str(e))
+
+    return results
+
+
+def run_forward_benchmark() -> list[EpisodeResult]:
+    """Run v2 pipeline on time-forward 2024-2025 episodes (unseen during tuning)."""
+    results = []
+
+    for name, config in FORWARD_BUBBLES.items():
+        log.info("benchmark_forward_bubble", episode=name)
+        try:
+            ds = load_yfinance(**config)
+            r = _run_episode(name, "forward", ds.t, ds.prices, expected_bubble=True)
+            results.append(r)
+        except Exception as e:
+            log.warning("episode_failed", episode=name, error=str(e))
+
+    for name, config in FORWARD_CONTROLS.items():
+        log.info("benchmark_forward_control", episode=name)
+        try:
+            ds = load_yfinance(**config)
+            r = _run_episode(name, "forward", ds.t, ds.prices, expected_bubble=False)
             results.append(r)
         except Exception as e:
             log.warning("episode_failed", episode=name, error=str(e))
@@ -268,11 +329,22 @@ def run_full_benchmark() -> dict:
     log.info("--- Adversarial controls ---")
     all_results.extend(run_adversarial_benchmark())
 
+    # Time-forward 2024-2025 (unseen during tuning)
+    log.info("--- Forward validation 2024-2025 ---")
+    all_results.extend(run_forward_benchmark())
+
     elapsed = time.time() - start
 
     # Summaries
     summaries = {}
-    for domain in ["finance", "commodities", "housing", "adversarial"]:
+    for domain in [
+        "finance",
+        "commodities",
+        "housing",
+        "housing_monthly",
+        "adversarial",
+        "forward",
+    ]:
         summaries[domain] = compute_domain_summary(all_results, domain)
 
     # Global

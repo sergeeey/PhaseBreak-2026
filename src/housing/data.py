@@ -313,11 +313,84 @@ HOUSING_CONTROLS: dict[str, dict] = {
 }
 
 
+# Zillow monthly episodes — more data points than quarterly FHFA
+ZILLOW_BUBBLES: dict[str, dict] = {
+    "phoenix_2006": {
+        "metro": "Phoenix",
+        "start": "2003-01",
+        "end": "2006-06",
+        "peak_date": "2006-06",
+        "name": "Phoenix 2006 Housing Bubble (monthly)",
+    },
+    "las_vegas_2006": {
+        "metro": "Las Vegas",
+        "start": "2003-01",
+        "end": "2006-08",
+        "peak_date": "2006-08",
+        "name": "Las Vegas 2006 Housing Bubble (monthly)",
+    },
+    "miami_2006": {
+        "metro": "Miami",
+        "start": "2003-01",
+        "end": "2006-12",
+        "peak_date": "2006-12",
+        "name": "Miami 2006 Housing Bubble (monthly)",
+    },
+    "los_angeles_2006": {
+        "metro": "Los Angeles",
+        "start": "2003-01",
+        "end": "2006-09",
+        "peak_date": "2006-09",
+        "name": "Los Angeles 2006 Housing Bubble (monthly)",
+    },
+}
+
+ZILLOW_CONTROLS: dict[str, dict] = {
+    "dallas_2015": {
+        "metro": "Dallas",
+        "start": "2013-01",
+        "end": "2015-12",
+        "peak_date": None,
+        "name": "Dallas 2013-2015 Steady Growth (monthly)",
+    },
+    "chicago_2016": {
+        "metro": "Chicago",
+        "start": "2014-01",
+        "end": "2016-12",
+        "peak_date": None,
+        "name": "Chicago 2014-2016 Recovery (monthly)",
+    },
+}
+
+
 def load_housing_episode(name: str) -> HousingDataset:
-    """Load a pre-defined housing episode (bubble or control)."""
+    """Load a pre-defined housing episode (bubble or control).
+
+    Checks Zillow monthly first (more data), falls back to FHFA quarterly.
+    """
+    # Try Zillow monthly first
+    all_zillow = {**ZILLOW_BUBBLES, **ZILLOW_CONTROLS}
+    if name in all_zillow:
+        config = all_zillow[name]
+        df = load_zillow_metro(
+            metro=config["metro"],
+            start=config["start"],
+            end=config["end"],
+        )
+        return make_housing_dataset(
+            df=df,
+            value_col="zhvi",
+            name=config["name"],
+            region=config["metro"],
+            source="Zillow",
+            peak_date=config.get("peak_date"),
+            frequency="monthly",
+        )
+
+    # FHFA quarterly
     all_episodes = {**HOUSING_BUBBLES, **HOUSING_CONTROLS}
     if name not in all_episodes:
-        available = ", ".join(all_episodes.keys())
+        available = ", ".join({**all_episodes, **all_zillow}.keys())
         raise ValueError(f"Unknown episode '{name}'. Available: {available}")
 
     config = all_episodes[name]
