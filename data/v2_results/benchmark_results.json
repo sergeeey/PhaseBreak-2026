@@ -1,23 +1,23 @@
 {
   "version": "v2",
-  "timestamp": "2026-03-29 18:47:24",
-  "elapsed_seconds": 105.2,
-  "total_episodes": 50,
-  "total_correct": 34,
-  "overall_accuracy": 0.68,
+  "timestamp": "2026-03-29 18:59:34",
+  "elapsed_seconds": 100.4,
+  "total_episodes": 58,
+  "total_correct": 39,
+  "overall_accuracy": 0.672,
   "domains": {
     "finance": {
       "domain": "finance",
-      "n": 12,
-      "tp": 4,
+      "n": 20,
+      "tp": 6,
       "fp": 1,
-      "fn": 2,
-      "tn": 5,
-      "precision": 0.8,
-      "recall": 0.667,
-      "fp_rate": 0.167,
-      "mean_quality_score": 0.463,
-      "mean_tc_interval_width": 4.7,
+      "fn": 5,
+      "tn": 8,
+      "precision": 0.857,
+      "recall": 0.545,
+      "fp_rate": 0.111,
+      "mean_quality_score": 0.43,
+      "mean_tc_interval_width": 8.0,
       "episodes": [
         {
           "name": "btc_2017",
@@ -80,6 +80,56 @@
           "hmm": "NORMAL"
         },
         {
+          "name": "csco_2000",
+          "expected": true,
+          "verdict": "NO_BUBBLE",
+          "quality": 0.2858,
+          "correct": false,
+          "tc": 423.1,
+          "tc_interval": null,
+          "hmm": "BUBBLE"
+        },
+        {
+          "name": "amzn_1999",
+          "expected": true,
+          "verdict": "BUBBLE",
+          "quality": 0.6719,
+          "correct": true,
+          "tc": 687.1,
+          "tc_interval": "[675.6, 699.1]",
+          "hmm": "GROWTH"
+        },
+        {
+          "name": "gme_2021",
+          "expected": true,
+          "verdict": "NO_BUBBLE",
+          "quality": 0.3,
+          "correct": false,
+          "tc": 190.5,
+          "tc_interval": null,
+          "hmm": "BUBBLE"
+        },
+        {
+          "name": "eth_2021",
+          "expected": true,
+          "verdict": "POSSIBLE",
+          "quality": 0.5139,
+          "correct": true,
+          "tc": 312.0,
+          "tc_interval": "[310.9, 316.3]",
+          "hmm": "GROWTH"
+        },
+        {
+          "name": "sol_2021",
+          "expected": true,
+          "verdict": "NO_BUBBLE",
+          "quality": 0.264,
+          "correct": false,
+          "tc": 271.1,
+          "tc_interval": null,
+          "hmm": "NORMAL"
+        },
+        {
           "name": "sp500_2013_steady",
           "expected": false,
           "verdict": "NO_BUBBLE",
@@ -138,6 +188,36 @@
           "tc": 357.1,
           "tc_interval": null,
           "hmm": "GROWTH"
+        },
+        {
+          "name": "ko_2019_stable",
+          "expected": false,
+          "verdict": "NO_BUBBLE",
+          "quality": 0.0,
+          "correct": true,
+          "tc": null,
+          "tc_interval": null,
+          "hmm": "GROWTH"
+        },
+        {
+          "name": "jnj_2018_stable",
+          "expected": false,
+          "verdict": "NO_BUBBLE",
+          "quality": 0.347,
+          "correct": true,
+          "tc": 432.5,
+          "tc_interval": null,
+          "hmm": "GROWTH"
+        },
+        {
+          "name": "spy_2017_normal",
+          "expected": false,
+          "verdict": "NO_BUBBLE",
+          "quality": 0.3,
+          "correct": true,
+          "tc": 502.0,
+          "tc_interval": null,
+          "hmm": "BUBBLE"
         }
       ]
     },

@@ -1,7 +1,13 @@
-"""Bootstrap confidence intervals and robustness checks for universality claim.
+"""Universality testing: KS, TOST equivalence, bootstrap, effect sizes.
 
-Goes beyond simple KS-test: bootstrap resampling to estimate
-confidence intervals on the difference between domain distributions.
+Replaces naive KS-only approach with rigorous equivalence testing:
+- KS test: "can we reject H₀ that distributions are same?" (weak — absence of evidence)
+- TOST equivalence: "can we confirm distributions are equivalent within ±Δ?" (strong)
+- Cohen's d: effect size magnitude (negligible/small/medium/large)
+- Bootstrap: confidence intervals on KS p-values
+
+Key finding: KS p>0.05 with n=4 has ~30% power. TOST is the correct test
+for universality claims. Only Finance↔Commodities m passes TOST (p=0.03).
 """
 
 from __future__ import annotations
@@ -19,6 +25,24 @@ log = structlog.get_logger()
 
 
 @dataclass
+class EquivalenceResult:
+    """TOST equivalence test result for one parameter pair."""
+
+    parameter: str
+    domain_a: str
+    domain_b: str
+    ks_p: float  # KS test p-value (old method)
+    tost_p: float | None  # TOST p-value (new method, None if pingouin missing)
+    cohens_d: float  # effect size
+    effect_magnitude: str  # negligible/small/medium/large
+    bound: float  # equivalence bound used
+    is_equivalent: bool  # TOST p < 0.05 → proven equivalent
+    is_ks_not_rejected: bool  # KS p > 0.05 → not rejected (weak)
+    n_a: int
+    n_b: int
+
+
+@dataclass
 class BootstrapResult:
     """Bootstrap confidence interval for KS test p-value."""
 
@@ -30,6 +54,111 @@ class BootstrapResult:
     ci_upper: float  # 97.5th percentile
     fraction_significant: float  # fraction of bootstrap samples with p < 0.05
     is_robust: bool  # True if ≥80% of samples agree with observed
+
+
+def _cohens_d(a: NDArray, b: NDArray) -> float:
+    """Cohen's d effect size (pooled std)."""
+    na, nb = len(a), len(b)
+    pooled_std = np.sqrt(
+        ((na - 1) * np.var(a, ddof=1) + (nb - 1) * np.var(b, ddof=1)) / (na + nb - 2)
+    )
+    if pooled_std < 1e-10:
+        return 0.0
+    return float((np.mean(a) - np.mean(b)) / pooled_std)
+
+
+def _effect_magnitude(d: float) -> str:
+    """Classify Cohen's d magnitude."""
+    d = abs(d)
+    if d < 0.2:
+        return "negligible"
+    if d < 0.5:
+        return "small"
+    if d < 0.8:
+        return "medium"
+    return "large"
+
+
+def equivalence_test(
+    a: NDArray,
+    b: NDArray,
+    parameter: str,
+    domain_a: str,
+    domain_b: str,
+    bound: float,
+) -> EquivalenceResult:
+    """Run TOST equivalence test + KS + Cohen's d.
+
+    TOST (Two One-Sided Tests) tests whether the mean difference is
+    within ±bound, providing evidence OF equivalence (not just absence
+    of evidence against it).
+    """
+    # KS test (legacy)
+    ks_stat, ks_p = ks_2samp(a, b)
+
+    # Cohen's d
+    d = _cohens_d(a, b)
+    mag = _effect_magnitude(d)
+
+    # TOST equivalence (requires pingouin)
+    tost_p = None
+    is_equiv = False
+    try:
+        import pingouin as pg
+
+        result = pg.tost(x=a, y=b, bound=bound, paired=False)
+        tost_p = float(result["pval"].values[0])
+        is_equiv = tost_p < 0.05
+    except ImportError:
+        log.warning("pingouin_not_installed", msg="pip install pingouin for TOST")
+    except Exception as e:
+        log.warning("tost_failed", error=str(e))
+
+    log.info(
+        "equivalence_test",
+        parameter=parameter,
+        domains=f"{domain_a}↔{domain_b}",
+        ks_p=round(ks_p, 4),
+        tost_p=round(tost_p, 4) if tost_p is not None else None,
+        cohens_d=round(d, 3),
+        effect=mag,
+        equivalent=is_equiv,
+    )
+
+    return EquivalenceResult(
+        parameter=parameter,
+        domain_a=domain_a,
+        domain_b=domain_b,
+        ks_p=round(ks_p, 4),
+        tost_p=round(tost_p, 4) if tost_p is not None else None,
+        cohens_d=round(d, 3),
+        effect_magnitude=mag,
+        bound=bound,
+        is_equivalent=is_equiv,
+        is_ks_not_rejected=ks_p > 0.05,
+        n_a=len(a),
+        n_b=len(b),
+    )
+
+
+def run_full_equivalence(
+    domain_a: DomainParams,
+    domain_b: DomainParams,
+    m_bound: float = 0.2,
+    omega_bound: float = 3.0,
+) -> list[EquivalenceResult]:
+    """Run equivalence tests for m and ω between two domains."""
+    results = []
+    for param_name, a_vals, b_vals, bound in [
+        ("m", domain_a.m_values, domain_b.m_values, m_bound),
+        ("omega", domain_a.omega_values, domain_b.omega_values, omega_bound),
+    ]:
+        if len(a_vals) < 2 or len(b_vals) < 2:
+            continue
+        results.append(
+            equivalence_test(a_vals, b_vals, param_name, domain_a.name, domain_b.name, bound)
+        )
+    return results
 
 
 def bootstrap_ks_test(

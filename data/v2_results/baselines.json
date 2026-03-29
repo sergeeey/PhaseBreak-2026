@@ -1,38 +1,47 @@
 {
   "CAGR>50%": {
-    "tp": 12,
+    "tp": 17,
     "fp": 4,
     "fn": 4,
-    "tn": 14,
-    "precision": 0.75,
-    "recall": 0.75,
-    "f1": 0.75
+    "tn": 17,
+    "precision": 0.81,
+    "recall": 0.81,
+    "f1": 0.81
   },
   "Z-score>2": {
     "tp": 0,
     "fp": 0,
-    "fn": 16,
-    "tn": 18,
+    "fn": 21,
+    "tn": 21,
     "precision": 0.0,
     "recall": 0.0,
     "f1": 0.0
   },
   "Trend>2\u03c3": {
-    "tp": 7,
+    "tp": 9,
     "fp": 0,
-    "fn": 9,
-    "tn": 18,
+    "fn": 12,
+    "tn": 21,
     "precision": 1.0,
-    "recall": 0.438,
-    "f1": 0.609
+    "recall": 0.429,
+    "f1": 0.6
   },
   "Vol spike>2\u00d7": {
-    "tp": 1,
-    "fp": 0,
-    "fn": 15,
-    "tn": 18,
-    "precision": 1.0,
-    "recall": 0.062,
-    "f1": 0.118
+    "tp": 2,
+    "fp": 1,
+    "fn": 19,
+    "tn": 20,
+    "precision": 0.667,
+    "recall": 0.095,
+    "f1": 0.167
+  },
+  "BOCPD": {
+    "tp": 21,
+    "fp": 21,
+    "fn": 0,
+    "tn": 0,
+    "precision": 0.5,
+    "recall": 1.0,
+    "f1": 0.667
   }
 }

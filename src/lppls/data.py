@@ -130,6 +130,42 @@ KNOWN_BUBBLES: dict[str, dict] = {
         "known_tc_date": "2020-02-20",
         "name": "S&P 500 Pre-COVID Peak",
     },
+    # === Expanded episodes (v2.1) ===
+    "csco_2000": {
+        "ticker": "CSCO",
+        "start": "1999-01-01",
+        "end": "2000-03-24",
+        "known_tc_date": "2000-03-27",
+        "name": "Cisco Dotcom Bubble 2000",
+    },
+    "amzn_1999": {
+        "ticker": "AMZN",
+        "start": "1998-01-01",
+        "end": "1999-12-09",
+        "known_tc_date": "1999-12-10",
+        "name": "Amazon Dotcom Bubble 1999",
+    },
+    "gme_2021": {
+        "ticker": "GME",
+        "start": "2020-08-01",
+        "end": "2021-01-27",
+        "known_tc_date": "2021-01-27",
+        "name": "GameStop Meme Squeeze 2021",
+    },
+    "eth_2021": {
+        "ticker": "ETH-USD",
+        "start": "2021-01-01",
+        "end": "2021-11-09",
+        "known_tc_date": "2021-11-10",
+        "name": "Ethereum 2021 Bubble",
+    },
+    "sol_2021": {
+        "ticker": "SOL-USD",
+        "start": "2021-06-01",
+        "end": "2021-11-05",
+        "known_tc_date": "2021-11-06",
+        "name": "Solana 2021 Bubble",
+    },
 }
 
 
@@ -176,6 +212,28 @@ NEGATIVE_CONTROLS: dict[str, dict] = {
         "end": "2018-12-31",
         "known_tc_date": None,
         "name": "Shanghai 2018 Decline (not bubble)",
+    },
+    # === Expanded controls (v2.1) ===
+    "ko_2019_stable": {
+        "ticker": "KO",
+        "start": "2019-01-01",
+        "end": "2019-12-31",
+        "known_tc_date": None,
+        "name": "Coca-Cola 2019 Stable (defensive stock)",
+    },
+    "jnj_2018_stable": {
+        "ticker": "JNJ",
+        "start": "2018-01-01",
+        "end": "2018-12-31",
+        "known_tc_date": None,
+        "name": "J&J 2018 Stable (healthcare)",
+    },
+    "spy_2017_normal": {
+        "ticker": "SPY",
+        "start": "2017-01-01",
+        "end": "2017-12-31",
+        "known_tc_date": None,
+        "name": "S&P 500 ETF 2017 Normal Growth",
     },
 }
 

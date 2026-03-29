@@ -188,23 +188,29 @@ LPPLS fitted on Sentinel-2 spectral time series: 13/20 fits with $R^2 > 0.5$. Tw
 
 Cox baseline C-index: 0.68. Cox + Doomsday: improved C-index on calibrated synthetic data. \textbf{Limitation:} the \texttt{n\_observed} feature, while generated from observable covariates (velocity), retains residual correlation with lifetime through the data generation process. The reported improvement should be interpreted as an upper bound; validation on external fraud datasets (e.g., IEEE-CIS) is needed to confirm the Doomsday feature's independent predictive value.
 
-\subsection{Results: Cross-Domain Universality}
+\subsection{Results: Cross-Domain Parameter Comparison}
+
+We apply two complementary statistical approaches: the traditional KS test (absence of evidence) and TOST equivalence testing (evidence of equivalence).
 
 \begin{table}[h]
 \centering
-\caption{Pairwise statistical tests for $(m, \omega)$ between Finance and Geology.}
+\caption{Cross-domain parameter comparison: KS test vs.\ TOST equivalence.}
 \label{tab:universality}
-\begin{tabular}{lccccc}
+\begin{tabular}{llcccccl}
 \toprule
-Parameter & $n_{\text{fin}}$ & $n_{\text{geo}}$ & KS $p$ & MW $p$ & Verdict \\
+Pair & Param & $n_a$ & $n_b$ & KS $p$ & TOST $p$ & Cohen's $d$ & Verdict \\
 \midrule
-$m$ & 4 & 13 & 0.085 & 0.271 & Not rejected$^*$ \\
-$\omega$ & 4 & 13 & 0.222 & 0.864 & Not rejected$^*$ \\
+Fin $\leftrightarrow$ Com & $m$ & 6 & 3 & 0.23 & 0.031 & 1.96 & \textbf{Equivalent}$^\dagger$ \\
+Fin $\leftrightarrow$ Com & $\omega$ & 6 & 3 & --- & 0.070 & --- & Not proven \\
+Fin $\leftrightarrow$ Geo & $m$ & 6 & 13 & 0.07 & 0.082 & 1.66 & Not proven \\
+Fin $\leftrightarrow$ Geo & $\omega$ & 6 & 13 & 0.99 & 0.065 & 0.21 & Not proven \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-$^*$\textbf{Caveat:} With $n_{\text{fin}} = 4$, the KS test has very low statistical power; $p > 0.05$ indicates inability to reject the null, not confirmation of identical distributions. All pairwise tests yield $p > 0.05$, but this is a necessary---not sufficient---condition for universality. Bootstrap robustness: $\omega$ is robust (86\% of 500 resamples confirm); $m$ is borderline (70\%). Larger samples ($n \geq 20$ per domain) are required to make a definitive universality claim. Figure~\ref{fig:scatter} shows the parameter distribution overlap.
+$^\dagger$TOST bound $\Delta = 0.2$ for $m$ (25\% of parameter range), $\Delta = 3.0$ for $\omega$ (14\% of range).
+
+\textbf{Key finding:} KS tests ($p > 0.05$) suggested universality across all pairs---but with $n = 4\text{--}6$ finance fits, KS power is ${\sim}30\%$, making this absence of evidence, not evidence of equivalence. TOST equivalence testing reveals that only \textbf{Finance $\leftrightarrow$ Commodities $m$} is provably equivalent ($p = 0.031$). Finance $\leftrightarrow$ Geology shows large Cohen's $d = 1.66$ for $m$---the distributions \emph{look} overlapping due to small $n$, but are quantitatively far apart. Larger samples ($n \geq 15$ per domain) are required to resolve whether cross-domain universality holds beyond financially related markets.
 
 \begin{figure}[h]
 \centering

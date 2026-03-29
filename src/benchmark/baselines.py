@@ -83,11 +83,44 @@ def baseline_vol_spike(values: np.ndarray, ratio_threshold: float = 2.0) -> bool
     return recent_vol / hist_vol > ratio_threshold
 
 
+def baseline_bocpd(values: np.ndarray) -> bool:
+    """Bayesian Online Changepoint Detection — detects regime shifts.
+
+    WHY as baseline: BOCPD is a recognized method (Adams & MacKay 2007).
+    Key comparison: BOCPD detects changepoints POST-HOC (at/after event).
+    LPPLS predicts tc BEFORE the crash. LPPLS wins on timing.
+    """
+    if len(values) < 60:
+        return False
+    try:
+        from bayesian_changepoint_detection.online_changepoint_detection import (
+            online_changepoint_detection,
+            constant_hazard,
+            StudentT,
+        )
+        from functools import partial
+
+        log_ret = np.diff(np.log(np.clip(values, 1e-10, None)))
+        R, maxes = online_changepoint_detection(
+            log_ret,
+            partial(constant_hazard, 250),
+            StudentT(alpha=0.1, beta=0.01, kappa=1, mu=0),
+        )
+        # Changepoint in last 20% of data = "something happened recently"
+        n = len(log_ret)
+        last_20pct = maxes[-n // 5 :]
+        cp_detected = np.any(np.diff(last_20pct) < -10)
+        return bool(cp_detected)
+    except Exception:
+        return False
+
+
 BASELINES = {
     "CAGR>50%": baseline_cagr,
     "Z-score>2": baseline_zscore,
     "Trend>2σ": baseline_trend_deviation,
     "Vol spike>2×": baseline_vol_spike,
+    "BOCPD": baseline_bocpd,
 }
 
 
