@@ -42,18 +42,23 @@ class HousingDataset:
     def t_last(self) -> float:
         return float(self.t[-1])
 
-    def peak_error_months(self, tc: float) -> int | None:
-        """Months between predicted tc and known peak."""
+    def peak_error_quarters(self, tc: float) -> int | None:
+        """Quarters between predicted tc and known peak (for quarterly FHFA data)."""
         if self.peak_date is None:
             return None
         predicted_idx = int(round(tc))
         if predicted_idx < len(self.dates):
             predicted = pd.Timestamp(self.dates[predicted_idx])
         else:
-            months_ahead = predicted_idx - len(self.dates) + 1
-            predicted = pd.Timestamp(self.dates[-1]) + pd.DateOffset(months=months_ahead)
+            # WHY: quarterly data → each index step = 3 months
+            steps_ahead = predicted_idx - len(self.dates) + 1
+            step_months = 3 if self.frequency == "quarterly" else 1
+            predicted = pd.Timestamp(self.dates[-1]) + pd.DateOffset(
+                months=steps_ahead * step_months
+            )
         actual = pd.Timestamp(self.peak_date)
-        return abs((predicted.year - actual.year) * 12 + predicted.month - actual.month)
+        diff_months = abs((predicted.year - actual.year) * 12 + predicted.month - actual.month)
+        return diff_months // 3 if self.frequency == "quarterly" else diff_months
 
 
 def load_fhfa_state(
@@ -196,6 +201,7 @@ def make_housing_dataset(
     region: str,
     source: str,
     peak_date: str | None = None,
+    frequency: str = "quarterly",
 ) -> HousingDataset:
     """Convert raw DataFrame to HousingDataset for LPPLS fitting."""
     values = df[value_col].values.astype(float)
@@ -212,6 +218,7 @@ def make_housing_dataset(
         dates=dates,
         values=values,
         peak_date=peak_date,
+        frequency=frequency,
     )
 
 

@@ -51,7 +51,7 @@ class TestHousingEpisodes:
     def episode_results(self) -> dict[str, dict]:
         results = {}
         all_episodes = {**HOUSING_BUBBLES, **HOUSING_CONTROLS}
-        for name in list(all_episodes.keys())[:6]:  # First 6 for speed
+        for name in all_episodes.keys():  # All episodes
             try:
                 ds = load_housing_episode(name)
                 # Fit LPPLS
@@ -65,7 +65,9 @@ class TestHousingEpisodes:
                 r2 = model.r_squared(ds.t, ds.log_price)
                 is_bubble = model.params is not None and model.params.is_bubble and r2 > 0.5
                 peak_err = (
-                    ds.peak_error_months(model.params.tc) if model.params and ds.peak_date else None
+                    ds.peak_error_quarters(model.params.tc)
+                    if model.params and ds.peak_date
+                    else None
                 )
 
                 results[name] = {
@@ -109,8 +111,28 @@ class TestHousingEpisodes:
                 continue
             exp = "BUBBLE" if r["expected_bubble"] else "CONTROL"
             bub = "YES" if r["is_bubble"] else "NO"
-            pe = f"{r['peak_error_months']}m" if r["peak_error_months"] is not None else "—"
+            pe = f"{r['peak_error_months']}q" if r["peak_error_months"] is not None else "—"
             m = f"{r['m']:.3f}" if r["m"] else "—"
             w = f"{r['omega']:.2f}" if r["omega"] else "—"
-            print(f"{name:<30} {exp:>8} {bub:>7} {r['r_squared']:>7.4f} {pe:>8} {m:>6} {w:>6}")
+            correct = (r["expected_bubble"] and r["is_bubble"]) or (
+                not r["expected_bubble"] and not r["is_bubble"]
+            )
+            print(
+                f"{name:<30} {exp:>8} {bub:>7} {r['r_squared']:>7.4f} {pe:>8} {m:>6} {w:>6} {'✓' if correct else '✗':>3}"
+            )
+
+        # Summary
+        bubbles = {
+            n: r
+            for n, r in episode_results.items()
+            if r.get("expected_bubble") and "error" not in r
+        }
+        controls = {
+            n: r
+            for n, r in episode_results.items()
+            if not r.get("expected_bubble") and "error" not in r
+        }
+        tp = sum(1 for r in bubbles.values() if r["is_bubble"])
+        fp = sum(1 for r in controls.values() if r["is_bubble"])
+        print(f"\nTP={tp}/{len(bubbles)} FP={fp}/{len(controls)}")
         print("=" * 85)
