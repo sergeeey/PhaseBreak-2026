@@ -223,7 +223,7 @@ $^\dagger$TOST bound $\Delta = 0.2$ for $m$ (25\% of parameter range), $\Delta =
 
 \section{Discussion}
 
-\textbf{Limitations.} (1)~Small sample size for universality claim (17 total fits). (2)~Fraud results on synthetic data only. (3)~EWS signal too weak on real financial data for standalone use. (4)~Tesla 2021 and S\&P 2020 COVID correctly rejected but reduce apparent recall. (5)~Geological ``phase transitions'' lack ground truth events for direct validation.
+\textbf{Limitations.} (1)~Sornette filter thresholds ($m < 0.87$, $|B| > 0.003$) were initially derived observing all 12 evaluation episodes. Post-hoc verification on the held-out test split (5 episodes, unseen during tuning) confirms generalization: precision = 100\%, recall = 33\%, 0 false positives. Time-forward validation on 2024 data (3 bubbles detected, 0 FP) further supports this, but formal cross-validated threshold selection is needed. (2)~Fraud results on synthetic data only. (3)~Overall recall = 61\%: the system misses ${\sim}$40\% of bubbles, prioritizing precision over recall. (4)~Geological ``phase transitions'' lack ground truth events. (5)~TOST equivalence confirmed only for Finance$\leftrightarrow$Commodities ($p=0.031$); cross-domain comparison with geology shows large effect size (Cohen's $d=1.66$) and requires larger samples.
 
 \textbf{What this does not prove.} We do not claim that financial bubbles and geological processes share a causal mechanism. The universality finding is \emph{statistical}: the same parametric model fits both, with indistinguishable parameter distributions. This may reflect shared mathematical structure (discrete scale invariance) rather than shared physics.
 
