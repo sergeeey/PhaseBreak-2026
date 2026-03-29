@@ -1,0 +1,187 @@
+{
+  "prediction_date": "2026-03-29",
+  "prediction_horizon": "2026-04-30",
+  "verification_date": "2026-04-30",
+  "model_version": "v2 + Hurst + MFDFA (commit 9227c2f)",
+  "status": "ACTIVE — awaiting verification",
+  "predictions": [
+    {
+      "asset": "Gold (GC=F)",
+      "verdict": "BUBBLE",
+      "quality_score": 0.61,
+      "tc_date": "2026-06-28",
+      "tc_index": 403.1,
+      "tc_interval": "[2026-06-16, 2026-07-04]",
+      "hmm_regime": "GROWTH",
+      "hurst": 0.77,
+      "mfdfa_delta_alpha": 0.242,
+      "price_at_prediction": 4524.3,
+      "data_window": "2025-01-01 to 2026-03-28",
+      "interpretation": "Super-exponential gold rally will end by summer 2026. tc=June 28 with ±2 weeks uncertainty.",
+      "verification_criteria": "CONFIRMED if gold drops >10% from peak by July 2026. REFUTED if gold continues rising through July.",
+      "april_check": "Watch for deceleration in April. If gold keeps accelerating, tc may shift later."
+    },
+    {
+      "asset": "Solana (SOL-USD)",
+      "verdict": "POSSIBLE",
+      "quality_score": 0.70,
+      "tc_date": "2026-03-28",
+      "tc_index": 300.0,
+      "tc_interval": null,
+      "hmm_regime": "BUBBLE",
+      "hurst": 0.68,
+      "mfdfa_delta_alpha": 0.112,
+      "price_at_prediction": 82.0,
+      "data_window": "2025-06-01 to 2026-03-28",
+      "interpretation": "Model sees tc in the past — crash already happening. SOL down 63% from peak. Post-crash detection.",
+      "verification_criteria": "CONFIRMED if SOL stays below $120 through April (crash ongoing). REFUTED if SOL recovers above $150.",
+      "april_check": "Already in decline phase. Monitor for stabilization or further drop."
+    },
+    {
+      "asset": "MicroStrategy (MSTR)",
+      "verdict": "POSSIBLE",
+      "quality_score": 0.56,
+      "tc_date": "far_future",
+      "tc_index": 458.0,
+      "tc_interval": null,
+      "hmm_regime": "BUBBLE",
+      "hurst": 1.01,
+      "mfdfa_delta_alpha": 0.266,
+      "price_at_prediction": 126.0,
+      "data_window": "2025-06-01 to 2026-03-28",
+      "interpretation": "Weak bubble signal. HMM=BUBBLE + narrow MFDFA but LPPLS fit failed Sornette filters. Borderline.",
+      "verification_criteria": "CONFIRMED if MSTR drops >20% in April. REFUTED if MSTR stabilizes or rises.",
+      "april_check": "Weakest of 3 signals. Low confidence."
+    },
+    {
+      "asset": "Nvidia (NVDA)",
+      "verdict": "NO_BUBBLE",
+      "quality_score": 0.27,
+      "hmm_regime": "BUBBLE",
+      "hurst": 0.67,
+      "mfdfa_delta_alpha": 0.245,
+      "price_at_prediction": 167.5,
+      "interpretation": "HMM sees BUBBLE regime but LPPLS finds no log-periodic signature. Not a classic bubble.",
+      "verification_criteria": "CONFIRMED if NVDA stays within ±15% in April. REFUTED if NVDA crashes >20%."
+    },
+    {
+      "asset": "Bitcoin (BTC-USD)",
+      "verdict": "NO_BUBBLE",
+      "quality_score": 0.38,
+      "hmm_regime": "GROWTH",
+      "hurst": 0.68,
+      "price_at_prediction": 66319.7,
+      "interpretation": "No bubble signal. Already down 44% from peak. Recovery/consolidation phase.",
+      "verification_criteria": "CONFIRMED if BTC stays range-bound in April. REFUTED if BTC crashes another >20%."
+    },
+    {
+      "asset": "S&P 500 (^GSPC)",
+      "verdict": "NO_BUBBLE",
+      "quality_score": 0.00,
+      "hmm_regime": "NORMAL",
+      "hurst": 0.65,
+      "price_at_prediction": 6368.9,
+      "interpretation": "No signal at all. Normal market regime.",
+      "verification_criteria": "CONFIRMED if no crash >10% in April."
+    },
+    {
+      "asset": "NASDAQ (^IXIC)",
+      "verdict": "NO_BUBBLE",
+      "quality_score": 0.00,
+      "hmm_regime": "NORMAL",
+      "hurst": 0.67,
+      "price_at_prediction": 20948.4,
+      "interpretation": "No signal. Normal regime.",
+      "verification_criteria": "CONFIRMED if no crash >10% in April."
+    },
+    {
+      "asset": "Tesla (TSLA)",
+      "verdict": "NO_BUBBLE",
+      "quality_score": 0.00,
+      "hmm_regime": "NORMAL",
+      "hurst": 0.63,
+      "price_at_prediction": 361.8,
+      "interpretation": "No bubble signal. Normal regime after post-peak decline.",
+      "verification_criteria": "CONFIRMED if TSLA stays within ±20% in April."
+    },
+    {
+      "asset": "Ethereum (ETH-USD)",
+      "verdict": "NO_BUBBLE",
+      "quality_score": 0.00,
+      "hmm_regime": "NORMAL",
+      "hurst": 0.68,
+      "price_at_prediction": 1992.7,
+      "interpretation": "No signal. Down 54% from peak. Post-crash.",
+      "verification_criteria": "CONFIRMED if ETH stays range-bound in April."
+    },
+    {
+      "asset": "Oil WTI (CL=F)",
+      "verdict": "NO_BUBBLE",
+      "quality_score": 0.18,
+      "hmm_regime": "GROWTH",
+      "hurst": 0.66,
+      "price_at_prediction": 99.6,
+      "interpretation": "Strong rally (+61%) but no LPPLS signature. Supply-driven, not speculative bubble.",
+      "verification_criteria": "CONFIRMED if oil stays within ±15% in April. REFUTED if oil crashes >20%."
+    },
+    {
+      "asset": "Nikkei 225 (^N225)",
+      "verdict": "NO_BUBBLE",
+      "quality_score": 0.00,
+      "hmm_regime": "NORMAL",
+      "hurst": 0.80,
+      "price_at_prediction": 53373.1,
+      "interpretation": "Rising 20% but HMM=NORMAL. Hurst=0.80 borderline but not enough for override.",
+      "verification_criteria": "CONFIRMED if Nikkei stays within ±10% in April."
+    },
+    {
+      "asset": "ARM Holdings (ARM)",
+      "verdict": "NO_BUBBLE",
+      "quality_score": 0.33,
+      "hmm_regime": "BUBBLE",
+      "hurst": 0.57,
+      "price_at_prediction": 144.1,
+      "interpretation": "HMM=BUBBLE but LPPLS fit failed. No log-periodic oscillation found.",
+      "verification_criteria": "CONFIRMED if ARM stays within ±15% in April."
+    },
+    {
+      "asset": "Broadcom (AVGO)",
+      "verdict": "NO_BUBBLE",
+      "quality_score": 0.00,
+      "hmm_regime": "NORMAL",
+      "hurst": 0.80,
+      "price_at_prediction": 300.7,
+      "interpretation": "No signal despite being AI stock. Normal regime.",
+      "verification_criteria": "CONFIRMED if AVGO stays within ±15% in April."
+    },
+    {
+      "asset": "Palantir (PLTR)",
+      "verdict": "NO_BUBBLE",
+      "quality_score": 0.21,
+      "hmm_regime": "GROWTH",
+      "hurst": 0.74,
+      "price_at_prediction": 143.1,
+      "interpretation": "Growth regime but no bubble signature. Down 23% from peak.",
+      "verification_criteria": "CONFIRMED if PLTR stays within ±20% in April."
+    },
+    {
+      "asset": "Coinbase (COIN)",
+      "verdict": "NO_BUBBLE",
+      "quality_score": 0.00,
+      "hmm_regime": "NORMAL",
+      "hurst": 0.76,
+      "price_at_prediction": 161.1,
+      "interpretation": "No signal. Down 54% from peak. Post-crash consolidation.",
+      "verification_criteria": "CONFIRMED if COIN stays range-bound in April."
+    }
+  ],
+  "summary": {
+    "total_assets": 15,
+    "bubble_signals": 1,
+    "possible_signals": 2,
+    "no_bubble": 12,
+    "key_prediction": "Gold (GC=F) is the only BUBBLE signal. tc=June 28, 2026. Watch for deceleration in April.",
+    "market_regime": "Mostly NORMAL/GROWTH. No systemic crash signal. Crypto already post-crash.",
+    "disclaimer": "These are model outputs, not financial advice. LPPLS has 80% precision on historical data — 1 in 5 bubble calls is wrong."
+  }
+}

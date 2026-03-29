@@ -1,0 +1,129 @@
+{
+  "verification_date": "2026-03-29",
+  "prediction_date": "2026-03-29",
+  "results": [
+    {
+      "asset": "Gold (GC=F)",
+      "verdict": "BUBBLE",
+      "price_prediction": 4524.3,
+      "price_current": 4524.3,
+      "change_pct": -0.0,
+      "status": "PENDING (\u00b110%)"
+    },
+    {
+      "asset": "Solana (SOL-USD)",
+      "verdict": "POSSIBLE",
+      "price_prediction": 82.0,
+      "price_current": 81.82,
+      "change_pct": -0.2,
+      "status": "PENDING"
+    },
+    {
+      "asset": "MicroStrategy (MSTR)",
+      "verdict": "POSSIBLE",
+      "price_prediction": 126.0,
+      "price_current": 126.03,
+      "change_pct": 0.0,
+      "status": "PENDING"
+    },
+    {
+      "asset": "Nvidia (NVDA)",
+      "verdict": "NO_BUBBLE",
+      "price_prediction": 167.5,
+      "price_current": 167.52,
+      "change_pct": 0.0,
+      "status": "CONFIRMED (stable)"
+    },
+    {
+      "asset": "Bitcoin (BTC-USD)",
+      "verdict": "NO_BUBBLE",
+      "price_prediction": 66319.7,
+      "price_current": 66507.94,
+      "change_pct": 0.3,
+      "status": "CONFIRMED (stable)"
+    },
+    {
+      "asset": "S&P 500 (^GSPC)",
+      "verdict": "NO_BUBBLE",
+      "price_prediction": 6368.9,
+      "price_current": 6368.85,
+      "change_pct": -0.0,
+      "status": "CONFIRMED (stable)"
+    },
+    {
+      "asset": "NASDAQ (^IXIC)",
+      "verdict": "NO_BUBBLE",
+      "price_prediction": 20948.4,
+      "price_current": 20948.36,
+      "change_pct": -0.0,
+      "status": "CONFIRMED (stable)"
+    },
+    {
+      "asset": "Tesla (TSLA)",
+      "verdict": "NO_BUBBLE",
+      "price_prediction": 361.8,
+      "price_current": 361.83,
+      "change_pct": 0.0,
+      "status": "CONFIRMED (stable)"
+    },
+    {
+      "asset": "Ethereum (ETH-USD)",
+      "verdict": "NO_BUBBLE",
+      "price_prediction": 1992.7,
+      "price_current": 1993.57,
+      "change_pct": 0.0,
+      "status": "CONFIRMED (stable)"
+    },
+    {
+      "asset": "Oil WTI (CL=F)",
+      "verdict": "NO_BUBBLE",
+      "price_prediction": 99.6,
+      "price_current": 99.64,
+      "change_pct": 0.0,
+      "status": "CONFIRMED (stable)"
+    },
+    {
+      "asset": "Nikkei 225 (^N225)",
+      "verdict": "NO_BUBBLE",
+      "price_prediction": 53373.1,
+      "price_current": 53373.07,
+      "change_pct": -0.0,
+      "status": "CONFIRMED (stable)"
+    },
+    {
+      "asset": "ARM Holdings (ARM)",
+      "verdict": "NO_BUBBLE",
+      "price_prediction": 144.1,
+      "price_current": 144.13,
+      "change_pct": 0.0,
+      "status": "CONFIRMED (stable)"
+    },
+    {
+      "asset": "Broadcom (AVGO)",
+      "verdict": "NO_BUBBLE",
+      "price_prediction": 300.7,
+      "price_current": 300.68,
+      "change_pct": -0.0,
+      "status": "CONFIRMED (stable)"
+    },
+    {
+      "asset": "Palantir (PLTR)",
+      "verdict": "NO_BUBBLE",
+      "price_prediction": 143.1,
+      "price_current": 143.06,
+      "change_pct": -0.0,
+      "status": "CONFIRMED (stable)"
+    },
+    {
+      "asset": "Coinbase (COIN)",
+      "verdict": "NO_BUBBLE",
+      "price_prediction": 161.1,
+      "price_current": 161.14,
+      "change_pct": 0.0,
+      "status": "CONFIRMED (stable)"
+    }
+  ],
+  "scoreable": 15,
+  "correct": 12,
+  "accuracy": 80.0
+}
