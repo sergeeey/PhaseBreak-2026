@@ -109,9 +109,9 @@ class TestFullAnalysis:
 
     def test_verdict_exists(self, result):
         assert result.overall_verdict in (
-            "UNIVERSAL",
-            "WEAK_UNIVERSAL",
-            "DOMAIN_SPECIFIC",
+            "NOT_REJECTED",
+            "WEAK_NOT_REJECTED",
+            "REJECTED",
             "INSUFFICIENT_DATA",
         )
 
@@ -139,7 +139,7 @@ class TestFullAnalysis:
 
         print(f"\n{'=' * 85}")
         print(f"OVERALL VERDICT: {result.overall_verdict}")
-        print(f"Universal tests: {result.n_universal}/{result.n_total_tests}")
+        print(f"Not rejected: {result.n_not_rejected}/{result.n_total_tests}")
         print(f"{'=' * 85}")
 
 

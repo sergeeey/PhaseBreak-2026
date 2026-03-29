@@ -13,4 +13,12 @@ data/fraud/*.csv
 *.joblib
 .coverage
 htmlcov/
-*.aux\n*.bbl\n*.blg\n*.log\n*.out\n*.pdf\n__pycache__/\n.pytest_cache/\n*.pyc
+*.aux
+*.bbl
+*.blg
+*.log
+*.out
+paper/*.pdf
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/

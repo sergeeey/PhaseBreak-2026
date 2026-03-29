@@ -1,12 +1,12 @@
 # PhaseBreak 2026
 
-**Universal Phase Transition Detection with Adversarial AI Validation**
+**Cross-Domain Phase Transition Detection with Log-Periodic Power Law Analysis**
 
-Cross-domain framework for detecting phase transitions (bubbles, crashes, seismic precursors, chromatin restructuring) using a unified mathematical apparatus: LPPLS + Bayesian Survival + Logistic Saturation, validated through adversarial multi-agent debate.
+Framework for detecting phase transitions in financial markets and geological spectral data using LPPLS (Sornette 2003) + Bayesian Survival analysis. Validated on real yfinance and Sentinel-2 satellite data.
 
 ## Scientific Hypothesis
 
-> Phase transitions in financial, geological, and biological systems are described by the same mathematical models (log-periodic oscillations near critical time). AI-adversarial validation improves precision of critical time `tc` prediction by 15-30% compared to classical LPPLS fitting.
+> LPPLS parameters (m, ω) from financial bubbles and geological spectral anomalies are drawn from the same distribution — preliminary evidence of universal phase transition signatures.
 
 ## Core Math: LPPLS (Sornette 2003)
 
@@ -33,26 +33,30 @@ pytest tests/ -v
 
 ## Key Contributions
 
-1. **Multi-window DS LPPLS Confidence Indicator** — fit on multiple overlapping windows, consensus = confident signal (Sornette 2015)
-2. **HMM-gated LPPLS ensemble** — Hidden Markov Model pre-screens regime → LPPLS fits only in bubble state (novel combination)
-3. **Certified convergence bounds for tc** — Richardson extrapolation validates fit stability, detects overfitting (adapted from ChernoffPy/Galkin-Remizov 2025)
-4. **Cross-domain universality** — same (m, ω) fingerprint across finance, geology, fraud?
+1. **Multi-window DS LPPLS Confidence Indicator** — fit on multiple overlapping windows, consensus = confident signal (Sornette 2015). Predicts tc with 1-19 day accuracy on known bubbles.
+2. **Tightened Sornette filters** — the critical engineering contribution: raises precision from 55% to 100%, eliminates 5/6 false positives.
+3. **HMM-gated LPPLS ensemble** — Hidden Markov Model pre-screens regime → LPPLS fits only in bubble state (novel combination, precision 80%).
+4. **Doomsday Bayesian survival** — Gott (1993) random observer assumption as Cox PH feature for fraud scheme lifetime prediction. +27% C-index on synthetic data (upper bound).
+5. **Cross-domain parameter comparison** — KS tests on (m, ω) between finance and geology: p > 0.05 (cannot reject H0, small sample).
+
+**Exploratory modules** (framework ready, not yet validated):
+- Certified convergence bounds (Richardson extrapolation, adapted from ChernoffPy)
+- Adversarial AI council (Bull/Bear/Skeptic, heuristic fallback — 0% improvement in current mode)
 
 ## Project Status
 
-- [x] LPPLS model (fit, predict, R², RMSE)
-- [x] Grid search + L-BFGS-B optimizer
-- [x] 6 known bubble datasets (BTC 2017/2021, Dot-com, Tesla, Shanghai, S&P500)
-- [x] 15 unit tests passing
-- [x] 6 negative control datasets with 0/6 false positives
-- [x] Certified convergence bounds (Richardson extrapolation)
-- [ ] Validation on known bubbles + multi-window confidence (Stage 1)
-- [ ] HMM regime detection + ensemble (Stage 1.5)
-- [ ] Cross-domain geology (Stage 2)
-- [ ] Bayesian survival for fraud (Stage 3)
-- [ ] Adversarial AI validation (Stage 4)
-- [ ] Cross-domain (m, ω) correlation (Stage 5)
-- [ ] Paper (Stage 6)
+- [x] LPPLS model + tightened Sornette filters (Stage 1)
+- [x] Multi-window confidence indicator (Stage 1)
+- [x] HMM-gated ensemble — precision 80%, recall 67% (Stage 1.5)
+- [x] Geology — LPPLS on real Sentinel-2 data, KS p>0.05 (Stage 2)
+- [x] Fraud survival — Doomsday + Cox on synthetic data (Stage 3)
+- [x] Critical Slowing Down — EWS layer (Stage 3.5)
+- [x] Adversarial AI council — framework, heuristic mode (Stage 4)
+- [x] Cross-domain correlation — KS + Mann-Whitney + bootstrap (Stage 5)
+- [x] Paper draft — 7 pages, 3 figures, compiles to PDF (Stage 6)
+- [x] Ablation study on 12 real datasets
+- [x] 3 Jupyter notebooks (finance, geology, fraud)
+- [x] **164 tests passing**
 
 ## License
 

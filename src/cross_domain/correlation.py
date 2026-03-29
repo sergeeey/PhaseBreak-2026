@@ -61,12 +61,14 @@ class PairwiseTest:
 
     @property
     def verdict(self) -> str:
+        """WHY NOT_REJECTED instead of UNIVERSAL: p>0.05 means 'cannot reject H0',
+        not 'H0 confirmed'. With n<20, KS has very low power — see paper caveat."""
         if self.ks_pvalue > 0.05 and self.mw_pvalue > 0.05:
-            return "UNIVERSAL"
+            return "NOT_REJECTED"
         elif self.ks_pvalue > 0.05 or self.mw_pvalue > 0.05:
-            return "WEAK_UNIVERSAL"
+            return "WEAK_NOT_REJECTED"
         else:
-            return "DOMAIN_SPECIFIC"
+            return "REJECTED"
 
 
 @dataclass
@@ -75,12 +77,12 @@ class CrossDomainResult:
 
     domains: list[DomainParams]
     pairwise_tests: list[PairwiseTest]
-    overall_verdict: str  # UNIVERSAL / WEAK_UNIVERSAL / DOMAIN_SPECIFIC
+    overall_verdict: str  # NOT_REJECTED / WEAK_NOT_REJECTED / REJECTED
     summary: str
 
     @property
-    def n_universal(self) -> int:
-        return sum(1 for t in self.pairwise_tests if t.verdict == "UNIVERSAL")
+    def n_not_rejected(self) -> int:
+        return sum(1 for t in self.pairwise_tests if t.verdict == "NOT_REJECTED")
 
     @property
     def n_total_tests(self) -> int:
@@ -164,16 +166,16 @@ def full_cross_domain_analysis(
             all_tests.extend(tests)
 
     # Overall verdict
-    n_universal = sum(1 for t in all_tests if t.verdict == "UNIVERSAL")
-    n_weak = sum(1 for t in all_tests if t.verdict == "WEAK_UNIVERSAL")
+    n_nr = sum(1 for t in all_tests if t.verdict == "NOT_REJECTED")
+    n_weak = sum(1 for t in all_tests if t.verdict == "WEAK_NOT_REJECTED")
     n_total = len(all_tests)
 
-    if n_universal == n_total:
-        verdict = "UNIVERSAL"
-    elif n_universal + n_weak >= n_total * 0.5:
-        verdict = "WEAK_UNIVERSAL"
+    if n_nr == n_total:
+        verdict = "NOT_REJECTED"
+    elif n_nr + n_weak >= n_total * 0.5:
+        verdict = "WEAK_NOT_REJECTED"
     else:
-        verdict = "DOMAIN_SPECIFIC"
+        verdict = "REJECTED"
 
     # Build summary
     lines = [f"Cross-domain analysis: {len(filtered)} domains, {n_total} tests"]
@@ -182,13 +184,13 @@ def full_cross_domain_analysis(
             f"  {d.name}: n={d.n}, m=[{d.m_values.min():.3f}, {d.m_values.max():.3f}], "
             f"ω=[{d.omega_values.min():.2f}, {d.omega_values.max():.2f}]"
         )
-    lines.append(f"Verdict: {verdict} ({n_universal}/{n_total} UNIVERSAL)")
+    lines.append(f"Verdict: {verdict} ({n_nr}/{n_total} not rejected)")
 
     log.info(
         "cross_domain_analysis",
         n_domains=len(filtered),
         n_tests=n_total,
-        n_universal=n_universal,
+        n_not_rejected=n_nr,
         verdict=verdict,
     )
 
