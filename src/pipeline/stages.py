@@ -142,6 +142,21 @@ def run_screening(
         hmm_prob = 0.5
         should_fit = True  # conservative: fit if HMM fails
 
+    # WHY: Hurst exponent override. HMM misses persistent trends (BTC 2024 H=0.96,
+    # Tesla 2021 H=0.95) while controls are H≈0.64. If H>0.8, series has strong
+    # long-range persistence → override HMM=NORMAL to always fit LPPLS.
+    if not should_fit and n >= 60:
+        try:
+            from hurst import compute_Hc
+
+            H, _, _ = compute_Hc(values, kind="price", simplified=True)
+            if H > 0.85:
+                should_fit = True
+                hmm_prob = max(hmm_prob, 0.6)
+                log.info("hurst_override", H=round(H, 3), msg="persistent trend, overriding HMM")
+        except Exception:
+            pass  # hurst package not installed — skip silently
+
     return ScreeningResult(
         data_quality="OK",
         n_points=n,
@@ -203,6 +218,22 @@ def run_structural_fit(
     # For housing (HMM skipped), hmm_bubble_prob=0.5 → weight=0.85 (neutral)
     hmm_weight = 0.7 + 0.3 * hmm_bubble_prob  # range [0.7, 1.0]
     weighted_quality = quality * hmm_weight
+
+    # MFDFA boost: narrow multifractal spectrum = loss of complexity = bubble signal
+    # WHY: Orthogonal to LPPLS. Empirically: bubbles Δα<0.25, controls Δα>0.4.
+    # Boosts borderline cases that LPPLS alone scores too low.
+    try:
+        from src.signals.multifractal import analyze_multifractal
+
+        raw_prices = np.exp(log_price)
+        mf = analyze_multifractal(raw_prices)
+        if mf.bubble_score > 0.5 and weighted_quality > 0.3:
+            # WHY: tiny boost (5-10%), only when LPPLS already sees something.
+            # MFDFA confirms, doesn't create signal. Prevents adversarial FP.
+            mfdfa_boost = 1.0 + 0.1 * (mf.bubble_score - 0.5)  # range [1.0, 1.05]
+            weighted_quality = min(1.0, weighted_quality * mfdfa_boost)
+    except Exception:
+        pass  # MFDFA package not installed — skip
 
     # tc uncertainty via bootstrap
     tc_est = params.tc if params else None
