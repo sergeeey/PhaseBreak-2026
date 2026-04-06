@@ -309,7 +309,51 @@ def deep_analyze(ticker: str, domain: str, run_rag: bool = False) -> dict:
         },
         rag_result,
     )
-    result["final_verdict"] = final.verdict
+
+    # ─── DS-LPPLS GATE: mandatory multi-window confirmation ─────────
+    # WHY: Single-window LPPLS overfits (NVDA POSSIBLE with DS 0/17).
+    # If DS confidence < 0.3, no multi-window agreement → downgrade to NO_BUBBLE.
+    ds_conf = result["ds_lppls"]["ds_confidence"]
+    if final.verdict in ("BUBBLE", "POSSIBLE") and ds_conf < 0.3:
+        result["ds_gate_downgrade"] = True
+        result["ds_gate_reason"] = f"DS confidence {ds_conf:.3f} < 0.3 (0 multi-window agreement)"
+        final_verdict = "NO_BUBBLE"
+    else:
+        result["ds_gate_downgrade"] = False
+        final_verdict = final.verdict
+
+    # ─── REGIME-ADAPTIVE THRESHOLDS ─────────────────────────────────
+    # WHY: When Hurst 3m ≈ 0.50 (random walk), LPPLS is unreliable.
+    # Raise quality threshold in non-trending regimes.
+    H_3m = result["hurst"]["H_3m"]
+    if H_3m < 0.45:  # mean-reverting
+        q_threshold = 0.95
+        regime_label = "MEAN_REVERTING"
+    elif H_3m < 0.55:  # random walk
+        q_threshold = 0.90
+        regime_label = "RANDOM_WALK"
+    else:  # trending
+        q_threshold = 0.75
+        regime_label = "TRENDING"
+
+    result["regime_adaptive"] = {
+        "regime": regime_label,
+        "q_threshold": q_threshold,
+        "q_actual": simple["quality_score"],
+        "passes": simple["quality_score"] >= q_threshold,
+    }
+
+    # If regime says quality too low → downgrade
+    if final_verdict in ("BUBBLE", "POSSIBLE") and simple["quality_score"] < q_threshold:
+        result["regime_downgrade"] = True
+        result["regime_reason"] = (
+            f"Q={simple['quality_score']:.2f} < {q_threshold} (regime={regime_label})"
+        )
+        final_verdict = "NO_BUBBLE"
+    else:
+        result["regime_downgrade"] = False
+
+    result["final_verdict"] = final_verdict
     result["final_reason"] = final.reason
     result["contract_violations"] = final.contract_violations
 

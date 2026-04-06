@@ -1,0 +1,46 @@
+{
+  "last_updated": "2026-04-06 15:37",
+  "capital": 100000.0,
+  "initial_capital": 100000.0,
+  "total_pnl": 0.0,
+  "total_return_pct": 0.0,
+  "n_wins": 0,
+  "n_losses": 0,
+  "max_drawdown_pct": 0.0,
+  "sharpe_ratio": 0.0,
+  "trades": [
+    {
+      "ticker": "TSLA",
+      "signal_date": "2026-04-06",
+      "signal_verdict": "POSSIBLE",
+      "signal_strength": "2/5",
+      "entry_price": 360.59,
+      "exit_price": null,
+      "exit_date": null,
+      "pnl_pct": null,
+      "status": "OPEN"
+    },
+    {
+      "ticker": "XLF",
+      "signal_date": "2026-04-06",
+      "signal_verdict": "POSSIBLE",
+      "signal_strength": "2/5",
+      "entry_price": 49.53,
+      "exit_price": null,
+      "exit_date": null,
+      "pnl_pct": null,
+      "status": "OPEN"
+    },
+    {
+      "ticker": "DBA",
+      "signal_date": "2026-04-06",
+      "signal_verdict": "POSSIBLE",
+      "signal_strength": "1/5",
+      "entry_price": 27.16,
+      "exit_price": null,
+      "exit_date": null,
+      "pnl_pct": null,
+      "status": "OPEN"
+    }
+  ]
+}
