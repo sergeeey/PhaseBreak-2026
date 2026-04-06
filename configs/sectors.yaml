@@ -1,0 +1,36 @@
+# PhaseBreak Hybrid 2.0 — Sector Definitions for Scan
+
+alert_threshold: 3  # min tickers with BUBBLE/POSSIBLE to trigger sector alert
+
+sectors:
+  tech:
+    name: "Technology"
+    tickers: ["NVDA", "AAPL", "MSFT", "GOOGL", "META", "AMZN", "CRM", "ORCL"]
+
+  semiconductors:
+    name: "Semiconductors"
+    tickers: ["NVDA", "AMD", "AVGO", "ARM", "INTC", "TSM", "QCOM", "MU"]
+
+  finance:
+    name: "Financials"
+    tickers: ["JPM", "BAC", "GS", "MS", "WFC", "C", "BLK", "SCHW"]
+
+  energy:
+    name: "Energy"
+    tickers: ["XOM", "CVX", "COP", "SLB", "EOG", "MPC", "VLO", "OXY"]
+
+  healthcare:
+    name: "Healthcare"
+    tickers: ["UNH", "JNJ", "LLY", "PFE", "ABBV", "MRK", "TMO", "ABT"]
+
+  consumer:
+    name: "Consumer"
+    tickers: ["TSLA", "NKE", "SBUX", "MCD", "HD", "LOW", "TGT", "COST"]
+
+  crypto:
+    name: "Crypto"
+    tickers: ["BTC-USD", "ETH-USD", "SOL-USD", "XRP-USD", "ADA-USD", "DOGE-USD"]
+
+  commodities:
+    name: "Commodities"
+    tickers: ["GC=F", "SI=F", "CL=F", "NG=F", "HG=F"]

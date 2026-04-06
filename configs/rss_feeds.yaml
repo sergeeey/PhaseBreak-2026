@@ -1,0 +1,156 @@
+# PhaseBreak Hybrid 2.0 — Curated RSS/Atom Feeds
+# Categories: news, analysis, macro, crypto, commodities
+
+feeds:
+  # ─── Major Financial News ─────────────────────────────────────────
+  - url: "https://feeds.bloomberg.com/markets/news.rss"
+    name: "Bloomberg Markets"
+    category: news
+    language: en
+
+  - url: "https://www.reuters.com/business/feed/"
+    name: "Reuters Business"
+    category: news
+    language: en
+
+  - url: "https://www.cnbc.com/id/100003114/device/rss/rss.html"
+    name: "CNBC Top News"
+    category: news
+    language: en
+
+  - url: "https://www.cnbc.com/id/10001147/device/rss/rss.html"
+    name: "CNBC Markets"
+    category: news
+    language: en
+
+  - url: "https://feeds.marketwatch.com/marketwatch/topstories/"
+    name: "MarketWatch Top"
+    category: news
+    language: en
+
+  - url: "https://feeds.marketwatch.com/marketwatch/marketpulse/"
+    name: "MarketWatch Pulse"
+    category: news
+    language: en
+
+  - url: "https://finance.yahoo.com/news/rssindex"
+    name: "Yahoo Finance"
+    category: news
+    language: en
+
+  - url: "https://www.ft.com/rss/home"
+    name: "Financial Times"
+    category: news
+    language: en
+
+  # WSJ — paywalled, RSS blocked (removed)
+
+  # ─── Analysis & Opinion ────────────────────────────────────────────
+  - url: "https://seekingalpha.com/market_currents.xml"
+    name: "Seeking Alpha Currents"
+    category: analysis
+    language: en
+
+  - url: "https://seekingalpha.com/feed.xml"
+    name: "Seeking Alpha Main"
+    category: analysis
+    language: en
+
+  # ZeroHedge — blocked (404, removed)
+  - url: "https://feeds.feedburner.com/TheReformedBroker"
+    name: "The Reformed Broker"
+    category: analysis
+    language: en
+
+  # Investopedia — blocked (404, removed)
+
+  # ─── Macro & Central Banks ─────────────────────────────────────────
+  - url: "https://www.federalreserve.gov/feeds/press_all.xml"
+    name: "Federal Reserve"
+    category: macro
+    language: en
+
+  - url: "https://www.ecb.europa.eu/rss/press.html"
+    name: "ECB Press"
+    category: macro
+    language: en
+
+  # IMF News — redirect (307, removed)
+  - url: "https://feeds.bbci.co.uk/news/business/rss.xml"
+    name: "BBC Business"
+    category: macro
+    language: en
+
+  - url: "https://rss.nytimes.com/services/xml/rss/nyt/Business.xml"
+    name: "NYT Business"
+    category: macro
+    language: en
+
+  # ─── Crypto ────────────────────────────────────────────────────────
+  - url: "https://www.coindesk.com/arc/outboundfeeds/rss/"
+    name: "CoinDesk"
+    category: crypto
+    language: en
+
+  - url: "https://cointelegraph.com/rss"
+    name: "CoinTelegraph"
+    category: crypto
+    language: en
+
+  - url: "https://decrypt.co/feed"
+    name: "Decrypt"
+    category: crypto
+    language: en
+
+  - url: "https://thedefiant.io/feed"
+    name: "The Defiant"
+    category: crypto
+    language: en
+
+  # ─── Commodities & Energy ──────────────────────────────────────────
+  - url: "https://oilprice.com/rss/main"
+    name: "OilPrice"
+    category: commodities
+    language: en
+
+  # Kitco Gold — blocked (404, removed)
+  - url: "https://www.mining.com/feed/"
+    name: "Mining.com"
+    category: commodities
+    language: en
+
+  # ─── Tech & AI ─────────────────────────────────────────────────────
+  - url: "https://techcrunch.com/feed/"
+    name: "TechCrunch"
+    category: news
+    language: en
+
+  - url: "https://www.theverge.com/rss/index.xml"
+    name: "The Verge"
+    category: news
+    language: en
+
+  - url: "https://feeds.arstechnica.com/arstechnica/technology-lab"
+    name: "Ars Technica"
+    category: news
+    language: en
+
+# Ticker aliases for matching
+ticker_aliases:
+  NVDA: ["nvidia", "jensen huang"]
+  AAPL: ["apple", "iphone", "tim cook"]
+  MSFT: ["microsoft", "azure", "satya nadella"]
+  GOOGL: ["google", "alphabet", "sundar pichai"]
+  META: ["meta platforms", "facebook", "zuckerberg"]
+  AMZN: ["amazon", "aws", "andy jassy"]
+  TSLA: ["tesla", "elon musk"]
+  BTC-USD: ["bitcoin", "btc"]
+  ETH-USD: ["ethereum", "eth"]
+  SOL-USD: ["solana", "sol"]
+  DOGE-USD: ["dogecoin", "doge"]
+  GME: ["gamestop"]
+  GC=F: ["gold", "gold price"]
+  SI=F: ["silver", "silver price"]
+  CL=F: ["crude oil", "oil price", "wti", "brent"]
+  JPM: ["jpmorgan", "jamie dimon"]
+  GS: ["goldman sachs"]

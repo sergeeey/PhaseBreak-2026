@@ -1,0 +1,601 @@
+{
+  "version": "1.0",
+  "created": "2026-04-05",
+  "description": "Locked evaluation set for PhaseBreak Hybrid 2.0 — calibrated LPPLS + RAG verdict validation",
+  "labels": {
+    "SPECULATIVE_BUBBLE": "Рост вызван спекулятивным хайпом, FOMO, retail frenzy. Крах неизбежен.",
+    "FUNDAMENTAL_GROWTH": "Рост вызван реальными фундаментальными причинами: выручка, продукты, контракты.",
+    "MIXED": "Присутствуют оба типа факторов. Формальное правило: ≥2 fundamental И ≥2 speculative фактора."
+  },
+  "cases": [
+    {
+      "id": "SB-01",
+      "ticker": "GME",
+      "name": "GameStop",
+      "period_start": "2020-08-01",
+      "period_end": "2021-01-27",
+      "label": "SPECULATIVE_BUBBLE",
+      "evidence": [
+        "r/WallStreetBets coordinated buying campaign",
+        "Short squeeze mechanics, not business fundamentals",
+        "GameStop reported declining revenues and ongoing losses",
+        "Stock rose 1,700% in 6 months, crashed 80% in 2 weeks"
+      ],
+      "tc_actual": "2021-01-27",
+      "crash_depth_pct": -84,
+      "domain": "finance"
+    },
+    {
+      "id": "SB-02",
+      "ticker": "BTC-USD",
+      "name": "Bitcoin 2017",
+      "period_start": "2017-01-01",
+      "period_end": "2017-12-17",
+      "label": "SPECULATIVE_BUBBLE",
+      "evidence": [
+        "ICO mania drove retail frenzy",
+        "No real adoption or institutional use",
+        "Crashed from $19,500 to $3,200 (-84%) by Dec 2018",
+        "Media hype, no fundamental use case at scale"
+      ],
+      "tc_actual": "2017-12-17",
+      "crash_depth_pct": -84,
+      "domain": "crypto"
+    },
+    {
+      "id": "SB-03",
+      "ticker": "^IXIC",
+      "name": "Dotcom Bubble 2000",
+      "period_start": "1998-01-01",
+      "period_end": "2000-03-10",
+      "label": "SPECULATIVE_BUBBLE",
+      "evidence": [
+        "Companies with no revenue went public",
+        "Any company with '.com' in name saw stock surge",
+        "NASDAQ crashed from 5,048 to 1,114 (-78%) by Oct 2002",
+        "Pure speculation on internet future"
+      ],
+      "tc_actual": "2000-03-10",
+      "crash_depth_pct": -78,
+      "domain": "finance"
+    },
+    {
+      "id": "SB-04",
+      "ticker": "000001.SS",
+      "name": "China Stock Bubble 2015",
+      "period_start": "2014-06-01",
+      "period_end": "2015-06-12",
+      "label": "SPECULATIVE_BUBBLE",
+      "evidence": [
+        "Margin trading frenzy, retail investors borrowing to buy",
+        "No fundamental economic growth supported the rally",
+        "Shanghai Composite crashed from 5,178 to 2,850 (-45%)",
+        "Government stimulus + leverage = classic bubble"
+      ],
+      "tc_actual": "2015-06-12",
+      "crash_depth_pct": -45,
+      "domain": "finance"
+    },
+    {
+      "id": "SB-05",
+      "ticker": "SI=F",
+      "name": "Silver 2011",
+      "period_start": "2010-06-01",
+      "period_end": "2011-04-28",
+      "label": "SPECULATIVE_BUBBLE",
+      "evidence": [
+        "Hunt brothers manipulation claims",
+        "Retail silver rush, no industrial demand surge",
+        "Crashed from $49 to $27 (-45%) by Oct 2011",
+        "Pure speculative commodity bubble"
+      ],
+      "tc_actual": "2011-04-28",
+      "crash_depth_pct": -45,
+      "domain": "commodities"
+    },
+    {
+      "id": "SB-06",
+      "ticker": "CL=F",
+      "name": "Oil 2008",
+      "period_start": "2007-01-01",
+      "period_end": "2008-07-03",
+      "label": "SPECULATIVE_BUBBLE",
+      "evidence": [
+        "Oil hit $147 on speculation, not supply shortage",
+        "Financialization of commodity markets",
+        "Crashed to $32 by Dec 2008 (-78%)",
+        "Demand destruction from financial crisis"
+      ],
+      "tc_actual": "2008-07-03",
+      "crash_depth_pct": -78,
+      "domain": "commodities"
+    },
+    {
+      "id": "SB-07",
+      "ticker": "TSLA",
+      "name": "Tesla 2021",
+      "period_start": "2020-06-01",
+      "period_end": "2021-11-04",
+      "label": "SPECULATIVE_BUBBLE",
+      "evidence": [
+        "Stock rose 700% in 18 months",
+        "P/E ratio exceeded 1,000 at peak",
+        "Retail frenzy, Elon Musk tweets drove price",
+        "Crashed 60% from peak by May 2022"
+      ],
+      "tc_actual": "2021-11-04",
+      "crash_depth_pct": -60,
+      "domain": "finance"
+    },
+    {
+      "id": "SB-08",
+      "ticker": "DOGE-USD",
+      "name": "Dogecoin 2021",
+      "period_start": "2021-01-01",
+      "period_end": "2021-05-08",
+      "label": "SPECULATIVE_BUBBLE",
+      "evidence": [
+        "Meme coin with no fundamental value",
+        "Elon Musk SNL appearance drove peak",
+        "Rose 15,000% in 5 months, crashed 90%",
+        "Pure retail speculation, no utility"
+      ],
+      "tc_actual": "2021-05-08",
+      "crash_depth_pct": -90,
+      "domain": "crypto"
+    },
+    {
+      "id": "FG-01",
+      "ticker": "NVDA",
+      "name": "Nvidia 2023-2024",
+      "period_start": "2023-01-01",
+      "period_end": "2024-06-20",
+      "label": "FUNDAMENTAL_GROWTH",
+      "evidence": [
+        "Data center revenue grew 262% YoY to $47.5B",
+        "Blackwell GPU architecture launch at GTC 2024",
+        "Microsoft, Meta, Google all increased AI capex",
+        "80%+ market share in AI training chips"
+      ],
+      "tc_actual": null,
+      "crash_depth_pct": null,
+      "domain": "finance"
+    },
+    {
+      "id": "FG-02",
+      "ticker": "MSFT",
+      "name": "Microsoft 2023-2024",
+      "period_start": "2023-01-01",
+      "period_end": "2024-06-20",
+      "label": "FUNDAMENTAL_GROWTH",
+      "evidence": [
+        "Azure revenue grew 30%+ YoY consistently",
+        "OpenAI partnership drove enterprise AI adoption",
+        "Cloud + AI revenue exceeded $50B annually",
+        "Steady growth, no crash, no retail frenzy"
+      ],
+      "tc_actual": null,
+      "crash_depth_pct": null,
+      "domain": "finance"
+    },
+    {
+      "id": "FG-03",
+      "ticker": "AAPL",
+      "name": "Apple 2023-2024",
+      "period_start": "2023-01-01",
+      "period_end": "2024-06-20",
+      "label": "FUNDAMENTAL_GROWTH",
+      "evidence": [
+        "Services revenue grew to $85B annually",
+        "iPhone installed base exceeded 1.5B devices",
+        "Vision Pro launch, new product category",
+        "Steady growth, no crash, no retail frenzy"
+      ],
+      "tc_actual": null,
+      "crash_depth_pct": null,
+      "domain": "finance"
+    },
+    {
+      "id": "FG-04",
+      "ticker": "AMZN",
+      "name": "Amazon 2023-2024",
+      "period_start": "2023-01-01",
+      "period_end": "2024-06-20",
+      "label": "FUNDAMENTAL_GROWTH",
+      "evidence": [
+        "AWS revenue grew 17% YoY to $90B+ annually",
+        "Advertising business exceeded $50B",
+        "Operating margin expanded from 2% to 10%",
+        "Steady growth, no crash, no retail frenzy"
+      ],
+      "tc_actual": null,
+      "crash_depth_pct": null,
+      "domain": "finance"
+    },
+    {
+      "id": "FG-05",
+      "ticker": "META",
+      "name": "Meta 2023-2024",
+      "period_start": "2023-01-01",
+      "period_end": "2024-06-20",
+      "label": "FUNDAMENTAL_GROWTH",
+      "evidence": [
+        "Revenue grew 23% YoY to $135B",
+        "AI-driven ad targeting improved ROI",
+        "Daily active users exceeded 3B across family",
+        "Steady growth, no crash, no retail frenzy"
+      ],
+      "tc_actual": null,
+      "crash_depth_pct": null,
+      "domain": "finance"
+    },
+    {
+      "id": "FG-06",
+      "ticker": "GOOGL",
+      "name": "Google 2023-2024",
+      "period_start": "2023-01-01",
+      "period_end": "2024-06-20",
+      "label": "FUNDAMENTAL_GROWTH",
+      "evidence": [
+        "Search revenue grew 13% YoY to $175B",
+        "Cloud revenue grew 25%+ to $33B",
+        "Gemini AI launch, competitive with GPT-4",
+        "Steady growth, no crash, no retail frenzy"
+      ],
+      "tc_actual": null,
+      "crash_depth_pct": null,
+      "domain": "finance"
+    },
+    {
+      "id": "FG-07",
+      "ticker": "GC=F",
+      "name": "Gold 2024-2025",
+      "period_start": "2024-01-01",
+      "period_end": "2025-12-31",
+      "label": "FUNDAMENTAL_GROWTH",
+      "evidence": [
+        "Central bank buying at record levels (1,000+ tonnes/year)",
+        "Geopolitical tensions drove safe-haven demand",
+        "Fed rate cuts reduced opportunity cost of holding gold",
+        "Steady growth driven by real demand, not speculation"
+      ],
+      "tc_actual": null,
+      "crash_depth_pct": null,
+      "domain": "commodities"
+    },
+    {
+      "id": "FG-08",
+      "ticker": "CL=F",
+      "name": "Oil 2024-2025",
+      "period_start": "2024-01-01",
+      "period_end": "2025-12-31",
+      "label": "FUNDAMENTAL_GROWTH",
+      "evidence": [
+        "OPEC+ production cuts supported prices",
+        "Global demand recovery post-pandemic",
+        "Supply constraints from underinvestment",
+        "Steady growth driven by supply/demand, not speculation"
+      ],
+      "tc_actual": null,
+      "crash_depth_pct": null,
+      "domain": "commodities"
+    },
+    {
+      "id": "MX-01",
+      "ticker": "PLTR",
+      "name": "Palantir 2024-2025",
+      "period_start": "2024-01-01",
+      "period_end": "2025-12-31",
+      "label": "MIXED",
+      "evidence": [
+        "Revenue grew 25%+ YoY (fundamental)",
+        "Government contracts expanding (fundamental)",
+        "Trades at 80x+ sales (speculative)",
+        "Retail hype around AI narrative (speculative)"
+      ],
+      "tc_actual": null,
+      "crash_depth_pct": null,
+      "domain": "finance"
+    },
+    {
+      "id": "MX-02",
+      "ticker": "MSTR",
+      "name": "MicroStrategy 2024-2025",
+      "period_start": "2024-01-01",
+      "period_end": "2025-12-31",
+      "label": "MIXED",
+      "evidence": [
+        "Bitcoin holdings appreciated (fundamental for BTC proxy)",
+        "Corporate strategy shifted to BTC treasury (fundamental)",
+        "Stock trades at 2x+ NAV premium (speculative)",
+        "Extreme volatility, retail speculation (speculative)"
+      ],
+      "tc_actual": null,
+      "crash_depth_pct": null,
+      "domain": "finance"
+    },
+    {
+      "id": "MX-03",
+      "ticker": "AVGO",
+      "name": "Broadcom 2024-2025",
+      "period_start": "2024-01-01",
+      "period_end": "2025-12-31",
+      "label": "MIXED",
+      "evidence": [
+        "AI chip revenue grew 200%+ YoY (fundamental)",
+        "VMware acquisition expanded software base (fundamental)",
+        "Stock rose 100%+ in 12 months (speculative signal)",
+        "AI hype cycle may be inflating valuation (speculative)"
+      ],
+      "tc_actual": null,
+      "crash_depth_pct": null,
+      "domain": "finance"
+    },
+    {
+      "id": "MX-04",
+      "ticker": "ETH-USD",
+      "name": "Ethereum 2024-2025",
+      "period_start": "2024-01-01",
+      "period_end": "2025-12-31",
+      "label": "MIXED",
+      "evidence": [
+        "DeFi TVL grew to $100B+ (fundamental)",
+        "ETF approval drove institutional adoption (fundamental)",
+        "Still highly correlated with BTC speculation (speculative)",
+        "Retail hype around 'flippening' narrative (speculative)"
+      ],
+      "tc_actual": null,
+      "crash_depth_pct": null,
+      "domain": "crypto"
+    },
+    {
+      "id": "SB-09",
+      "ticker": "BBBY",
+      "name": "Bed Bath & Beyond 2021",
+      "period_start": "2020-08-01",
+      "period_end": "2021-01-27",
+      "label": "SPECULATIVE_BUBBLE",
+      "evidence": [
+        "Meme stock frenzy alongside GME and AMC",
+        "Short squeeze mechanics, no fundamentals",
+        "Company was losing money, declining sales",
+        "Crashed 90% from peak within months"
+      ],
+      "tc_actual": "2021-01-27",
+      "crash_depth_pct": -90,
+      "domain": "finance"
+    },
+    {
+      "id": "SB-10",
+      "ticker": "AMC",
+      "name": "AMC Entertainment 2021",
+      "period_start": "2020-08-01",
+      "period_end": "2021-06-02",
+      "label": "SPECULATIVE_BUBBLE",
+      "evidence": [
+        "r/WallStreetBets meme stock rally",
+        "Company near bankruptcy, declining revenues",
+        "Rose 1,800% in 6 months on retail buying",
+        "Crashed 75% from peak by July 2021"
+      ],
+      "tc_actual": "2021-06-02",
+      "crash_depth_pct": -75,
+      "domain": "finance"
+    },
+    {
+      "id": "SB-11",
+      "ticker": "RBLX",
+      "name": "Roblox IPO Frenzy 2021",
+      "period_start": "2021-03-01",
+      "period_end": "2021-06-01",
+      "label": "SPECULATIVE_BUBBLE",
+      "evidence": [
+        "Direct listing hype, retail FOMO",
+        "Valuation exceeded $50B on no profits",
+        "Crashed 50% from listing day peak",
+        "No fundamental justification for IPO valuation"
+      ],
+      "tc_actual": "2021-06-01",
+      "crash_depth_pct": -50,
+      "domain": "finance"
+    },
+    {
+      "id": "SB-12",
+      "ticker": "COIN",
+      "name": "Coinbase Crypto Mania 2021",
+      "period_start": "2021-04-14",
+      "period_end": "2021-11-09",
+      "label": "SPECULATIVE_BUBBLE",
+      "evidence": [
+        "Coinbase IPO at peak of crypto mania",
+        "Stock opened at $381, peaked at $429 day 1",
+        "Revenue entirely dependent on crypto trading volume",
+        "Crashed from $350 to $40 (-89%) by Jan 2023",
+        "No durable competitive moat, pure crypto cycle play"
+      ],
+      "tc_actual": "2021-11-09",
+      "crash_depth_pct": -89,
+      "domain": "finance"
+    },
+    {
+      "ticker": "KO",
+      "name": "Coca-Cola 2023-2024",
+      "period_start": "2023-01-01",
+      "period_end": "2024-12-31",
+      "label": "FUNDAMENTAL_GROWTH",
+      "evidence": [
+        "Defensive stock, steady 3-5% annual growth",
+        "Consistent dividend payments for 60+ years",
+        "No retail frenzy, no parabolic move",
+        "Revenue driven by beverage sales, not speculation"
+      ],
+      "tc_actual": null,
+      "crash_depth_pct": null,
+      "domain": "finance"
+    },
+    {
+      "id": "FG-10",
+      "ticker": "JNJ",
+      "name": "Johnson & Johnson 2023-2024",
+      "period_start": "2023-01-01",
+      "period_end": "2024-12-31",
+      "label": "FUNDAMENTAL_GROWTH",
+      "evidence": [
+        "Healthcare diversified giant, stable growth",
+        "Pharma pipeline driving revenue",
+        "No retail frenzy, institutional ownership dominant",
+        "Dividend aristocrat with 60+ years of increases"
+      ],
+      "tc_actual": null,
+      "crash_depth_pct": null,
+      "domain": "finance"
+    },
+    {
+      "id": "FG-11",
+      "ticker": "PG",
+      "name": "Procter & Gamble 2023-2024",
+      "period_start": "2023-01-01",
+      "period_end": "2024-12-31",
+      "label": "FUNDAMENTAL_GROWTH",
+      "evidence": [
+        "Consumer staples, defensive stock",
+        "Steady 5-8% annual growth",
+        "No parabolic move, no retail frenzy",
+        "Revenue from everyday consumer products"
+      ],
+      "tc_actual": null,
+      "crash_depth_pct": null,
+      "domain": "finance"
+    },
+    {
+      "id": "NB-01",
+      "ticker": "NEE",
+      "name": "NextEra Energy 2023-2024",
+      "period_start": "2023-01-01",
+      "period_end": "2024-12-31",
+      "label": "FUNDAMENTAL_GROWTH",
+      "evidence": [
+        "Utility company with regulated returns",
+        "Renewable energy expansion driving growth",
+        "No speculation, institutional ownership",
+        "Steady 10-15% annual growth, no crash"
+      ],
+      "tc_actual": null,
+      "crash_depth_pct": null,
+      "domain": "finance"
+    },
+    {
+      "id": "NB-02",
+      "ticker": "DUK",
+      "name": "Duke Energy 2023-2024",
+      "period_start": "2023-01-01",
+      "period_end": "2024-12-31",
+      "label": "FUNDAMENTAL_GROWTH",
+      "evidence": [
+        "Regulated utility, stable returns",
+        "Dividend yield 4-5%, no speculation",
+        "No retail frenzy, no parabolic move",
+        "Revenue from electricity distribution"
+      ],
+      "tc_actual": null,
+      "crash_depth_pct": null,
+      "domain": "finance"
+    },
+    {
+      "id": "NB-03",
+      "ticker": "SO",
+      "name": "Southern Company 2023-2024",
+      "period_start": "2023-01-01",
+      "period_end": "2024-12-31",
+      "label": "FUNDAMENTAL_GROWTH",
+      "evidence": [
+        "Regulated utility, low volatility",
+        "Steady dividend payments, no speculation",
+        "No retail frenzy, no media hype",
+        "Revenue from electricity generation and distribution"
+      ],
+      "tc_actual": null,
+      "crash_depth_pct": null,
+      "domain": "finance"
+    },
+    {
+      "id": "AB-01",
+      "ticker": "WMT",
+      "name": "Walmart 2023-2024",
+      "period_start": "2023-01-01",
+      "period_end": "2024-12-31",
+      "label": "FUNDAMENTAL_GROWTH",
+      "evidence": [
+        "Retail giant with steady e-commerce growth",
+        "Revenue $600B+, no speculation",
+        "No parabolic move, gradual uptrend",
+        "Fundamental growth from market share gains"
+      ],
+      "tc_actual": null,
+      "crash_depth_pct": null,
+      "domain": "finance"
+    },
+    {
+      "id": "AB-02",
+      "ticker": "XOM",
+      "name": "Exxon Mobil 2023-2024",
+      "period_start": "2023-01-01",
+      "period_end": "2024-12-31",
+      "label": "FUNDAMENTAL_GROWTH",
+      "evidence": [
+        "Oil major benefiting from high energy prices",
+        "Revenue driven by commodity prices, not speculation",
+        "Record profits from actual oil sales",
+        "No retail frenzy, institutional ownership"
+      ],
+      "tc_actual": null,
+      "crash_depth_pct": null,
+      "domain": "commodities"
+    },
+    {
+      "id": "AB-03",
+      "ticker": "USO",
+      "name": "Oil Fund ETF 2023",
+      "period_start": "2023-01-01",
+      "period_end": "2023-12-31",
+      "label": "FUNDAMENTAL_GROWTH",
+      "evidence": [
+        "Commodity ETF tracking oil prices",
+        "Driven by supply/demand fundamentals",
+        "No super-exponential growth pattern",
+        "Gradual rise with normal volatility"
+      ],
+      "tc_actual": null,
+      "crash_depth_pct": null,
+      "domain": "commodities"
+    },
+    {
+      "id": "AB-04",
+      "ticker": "GLD",
+      "name": "Gold ETF 2023",
+      "period_start": "2023-01-01",
+      "period_end": "2023-12-31",
+      "label": "FUNDAMENTAL_GROWTH",
+      "evidence": [
+        "Gold steady rise driven by central bank buying",
+        "Geopolitical tensions drove safe-haven demand",
+        "No retail frenzy or parabolic move",
+        "Gradual growth, no crash"
+      ],
+      "tc_actual": null,
+      "crash_depth_pct": null,
+      "domain": "commodities"
+    }
+  ],
+  "summary": {
+    "total_cases": 34,
+    "speculative_bubble": 12,
+    "fundamental_growth": 18,
+    "mixed": 4,
+    "domains": {
+      "commodities": 7,
+      "crypto": 3,
+      "finance": 24
+    }
+  }
+}
