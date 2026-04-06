@@ -357,9 +357,37 @@ def deep_analyze(ticker: str, domain: str, run_rag: bool = False) -> dict:
     result["final_reason"] = final.reason
     result["contract_violations"] = final.contract_violations
 
-    # 10. Signal strength (composite)
+    # 10. New signals: Global Liquidity, Breadth Divergence, FOMO Velocity
+    try:
+        from src.signals.global_liquidity import get_m2_growth
+
+        result["liquidity"] = get_m2_growth()
+    except Exception:
+        result["liquidity"] = {"regime": "UNKNOWN", "supports_bubble": True}
+
+    # Breadth divergence (run once, cache for all tickers)
+    if not hasattr(deep_analyze, "_breadth_cache"):
+        try:
+            from src.signals.breadth_divergence import compute_breadth_divergence
+
+            deep_analyze._breadth_cache = compute_breadth_divergence()
+        except Exception:
+            deep_analyze._breadth_cache = {"divergence": False, "severity": "UNKNOWN"}
+    result["breadth"] = deep_analyze._breadth_cache
+
+    # FOMO velocity (per ticker, may fail if pytrends not installed)
+    try:
+        from src.signals.fomo_velocity import compute_fomo_velocity
+
+        result["fomo"] = compute_fomo_velocity(ticker)
+    except Exception:
+        result["fomo"] = {"fomo_alert": False, "available": False}
+
+    # 11. Signal strength (composite — now /8)
     signals_yes = 0
     signals_total = 0
+
+    # Core signals (5)
     if simple["verdict"] in ("BUBBLE", "POSSIBLE"):
         signals_yes += 1
     signals_total += 1
@@ -373,6 +401,17 @@ def deep_analyze(ticker: str, domain: str, run_rag: bool = False) -> dict:
         signals_yes += 1
     signals_total += 1
     if result["ews"]["var_trend"] == "INCREASING":
+        signals_yes += 1
+    signals_total += 1
+
+    # New signals (3)
+    if result["liquidity"].get("regime") in ("SURGE", "EXPANDING"):
+        signals_yes += 1
+    signals_total += 1
+    if result["breadth"].get("divergence"):
+        signals_yes += 1
+    signals_total += 1
+    if result["fomo"].get("fomo_alert"):
         signals_yes += 1
     signals_total += 1
 
