@@ -109,27 +109,47 @@ class RAGEngine:
     _llm_cache: dict[str, tuple[float, dict]] = {}  # {cache_key: (timestamp, response_dict)}
     _CACHE_TTL = 86400  # 24 hours
 
+    # Default LLM routing: Ollama (free) for drafts, OpenAI for polish
+    OLLAMA_URL = "http://localhost:11434/v1"
+    OLLAMA_MODELS = {
+        "draft": "gemma4:26b",  # Best for structured JSON analysis
+        "fast": "qwen2.5:14b",  # Quick context summaries
+        "reasoning": "qwq:32b",  # Complex chain-of-thought
+    }
+
     def __init__(
         self,
         openai_api_key: str | None = None,
         openai_base_url: str | None = None,
-        model: str = "gpt-4o",
+        model: str | None = None,
         use_free_search: bool = True,
         skip_llm: bool = False,
         rss_provider: Any | None = None,
+        use_ollama: bool = True,  # Default: use local Ollama
+        ollama_model: str = "draft",  # draft/fast/reasoning
     ):
         """
         Args:
             openai_api_key: OpenAI API key (or set OPENAI_API_KEY env var)
-            openai_base_url: Custom base URL (for compatible APIs like Ollama, Together)
-            model: LLM model name
+            openai_base_url: Custom base URL (for compatible APIs)
+            model: LLM model name (overrides auto-selection)
             use_free_search: If True, use free web search for context collection
             skip_llm: If True, skip LLM calls (for mock testing)
-            rss_provider: RSS feed provider (auto-created if None and feedparser available)
+            rss_provider: RSS feed provider
+            use_ollama: If True, route to local Ollama (free). False = OpenAI API.
+            ollama_model: Which Ollama model: "draft" (gemma4:26b), "fast" (qwen2.5:14b), "reasoning" (qwq:32b)
         """
-        self.model = model
+        self.use_ollama = use_ollama
         self.use_free_search = use_free_search
         self.skip_llm = skip_llm
+
+        # Model selection
+        if model:
+            self.model = model
+        elif use_ollama:
+            self.model = self.OLLAMA_MODELS.get(ollama_model, self.OLLAMA_MODELS["draft"])
+        else:
+            self.model = "gpt-4o"
 
         # RSS provider (primary search)
         self._rss = rss_provider
@@ -142,22 +162,36 @@ class RAGEngine:
                 log.info("rss_provider_not_available", reason=str(e))
                 self._rss = None
 
-        # OpenAI client (supports compatible APIs)
+        # LLM client — Ollama or OpenAI, both via OpenAI SDK
         self.client = None
         if not skip_llm:
-            client_kwargs: dict[str, Any] = {}
-            if openai_api_key:
-                client_kwargs["api_key"] = openai_api_key
-            if openai_base_url:
-                client_kwargs["base_url"] = openai_base_url
-            self.client = OpenAI(**client_kwargs) if client_kwargs else OpenAI()
+            if use_ollama:
+                # Ollama exposes OpenAI-compatible API at /v1
+                try:
+                    self.client = OpenAI(
+                        base_url=self.OLLAMA_URL,
+                        api_key="ollama",  # Ollama doesn't need real key
+                    )
+                    log.info("ollama_client_initialized", model=self.model, url=self.OLLAMA_URL)
+                except Exception as e:
+                    log.warning("ollama_init_failed", error=str(e), fallback="openai")
+                    self.client = OpenAI()
+                    self.model = "gpt-4o"
+                    self.use_ollama = False
+            else:
+                client_kwargs: dict[str, Any] = {}
+                if openai_api_key:
+                    client_kwargs["api_key"] = openai_api_key
+                if openai_base_url:
+                    client_kwargs["base_url"] = openai_base_url
+                self.client = OpenAI(**client_kwargs) if client_kwargs else OpenAI()
 
         log.info(
             "rag_engine_initialized",
-            model=model,
+            model=self.model,
+            backend="ollama" if self.use_ollama else "openai",
             search_enabled=use_free_search,
             rss_enabled=self._rss is not None,
-            custom_url=bool(openai_base_url),
             skip_llm=skip_llm,
         )
 
@@ -395,16 +429,24 @@ class RAGEngine:
             )
 
         try:
-            log.info("calling_llm", model=self.model, prompt_length=len(prompt))
-            response = self.client.chat.completions.create(
+            log.info(
+                "calling_llm",
                 model=self.model,
-                messages=[
+                backend="ollama" if self.use_ollama else "openai",
+                prompt_length=len(prompt),
+            )
+            create_kwargs: dict[str, Any] = {
+                "model": self.model,
+                "messages": [
                     {"role": "system", "content": SYSTEM_PROMPT},
                     {"role": "user", "content": prompt},
                 ],
-                temperature=0.1,  # Low temperature for factual analysis
-                response_format={"type": "json_object"},  # Force JSON output
-            )
+                "temperature": 0.1,
+            }
+            # json_object mode: only for OpenAI API (Ollama models may not support it)
+            if not self.use_ollama:
+                create_kwargs["response_format"] = {"type": "json_object"}
+            response = self.client.chat.completions.create(**create_kwargs)
 
             raw = response.choices[0].message.content or ""
             log.info("llm_response_received", response_length=len(raw))
