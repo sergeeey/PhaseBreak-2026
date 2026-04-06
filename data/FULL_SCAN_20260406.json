@@ -1,0 +1,410 @@
+{
+  "prediction_date": "2026-04-06 13:30",
+  "model": "PhaseBreak Unified (LPPLS + HMM + Hurst)",
+  "total_scanned": 41,
+  "total_failed": 0,
+  "failed_tickers": [],
+  "signals": [
+    {
+      "ticker": "TSLA",
+      "domain": "Finance",
+      "verdict": "POSSIBLE",
+      "quality": 0.85,
+      "hurst": 0.7262,
+      "hmm_regime": "NORMAL",
+      "tc_date": "2026-08-02",
+      "price": 360.5899963378906
+    },
+    {
+      "ticker": "XLF",
+      "domain": "Sector ETFs",
+      "verdict": "POSSIBLE",
+      "quality": 0.8,
+      "hurst": 0.5982,
+      "hmm_regime": "BUBBLE",
+      "tc_date": "2026-04-19",
+      "price": 49.529998779296875
+    },
+    {
+      "ticker": "DBA",
+      "domain": "Sector ETFs",
+      "verdict": "POSSIBLE",
+      "quality": 0.8,
+      "hurst": 0.4794,
+      "hmm_regime": "GROWTH",
+      "tc_date": "2026-04-07",
+      "price": 27.15999984741211
+    }
+  ],
+  "all_results": [
+    {
+      "ticker": "NVDA",
+      "domain": "Finance",
+      "verdict": "NO_BUBBLE",
+      "quality": 0.8,
+      "hurst": 0.633,
+      "hmm_regime": "GROWTH",
+      "price": 177.38999938964844
+    },
+    {
+      "ticker": "AAPL",
+      "domain": "Finance",
+      "verdict": "NO_BUBBLE",
+      "quality": 1.0,
+      "hurst": 0.571,
+      "hmm_regime": "GROWTH",
+      "price": 255.9199981689453
+    },
+    {
+      "ticker": "MSFT",
+      "domain": "Finance",
+      "verdict": "NO_BUBBLE",
+      "quality": 0.5,
+      "hurst": 0.5485,
+      "hmm_regime": "GROWTH",
+      "price": 373.4599914550781
+    },
+    {
+      "ticker": "GOOGL",
+      "domain": "Finance",
+      "verdict": "NO_BUBBLE",
+      "quality": 0.9,
+      "hurst": 0.6086,
+      "hmm_regime": "NORMAL",
+      "price": 295.7699890136719
+    },
+    {
+      "ticker": "META",
+      "domain": "Finance",
+      "verdict": "NO_BUBBLE",
+      "quality": 0.35,
+      "hurst": 0.5632,
+      "hmm_regime": "GROWTH",
+      "price": 574.4600219726562
+    },
+    {
+      "ticker": "AMZN",
+      "domain": "Finance",
+      "verdict": "NO_BUBBLE",
+      "quality": 0.5,
+      "hurst": 0.522,
+      "hmm_regime": "BUBBLE",
+      "price": 209.77000427246094
+    },
+    {
+      "ticker": "TSLA",
+      "domain": "Finance",
+      "verdict": "POSSIBLE",
+      "quality": 0.85,
+      "hurst": 0.7262,
+      "hmm_regime": "NORMAL",
+      "price": 360.5899963378906
+    },
+    {
+      "ticker": "ARM",
+      "domain": "Finance",
+      "verdict": "NO_BUBBLE",
+      "quality": 0.5,
+      "hurst": 0.488,
+      "hmm_regime": "BUBBLE",
+      "price": 149.11000061035156
+    },
+    {
+      "ticker": "AVGO",
+      "domain": "Finance",
+      "verdict": "NO_BUBBLE",
+      "quality": 0.9,
+      "hurst": 0.6944,
+      "hmm_regime": "GROWTH",
+      "price": 314.54998779296875
+    },
+    {
+      "ticker": "PLTR",
+      "domain": "Finance",
+      "verdict": "NO_BUBBLE",
+      "quality": 0.65,
+      "hurst": 1.0155,
+      "hmm_regime": "GROWTH",
+      "price": 148.4600067138672
+    },
+    {
+      "ticker": "MSTR",
+      "domain": "Finance",
+      "verdict": "NO_BUBBLE",
+      "quality": 0.5,
+      "hurst": 0.7614,
+      "hmm_regime": "BUBBLE",
+      "price": 119.83000183105469
+    },
+    {
+      "ticker": "COIN",
+      "domain": "Finance",
+      "verdict": "NO_BUBBLE",
+      "quality": 0.0,
+      "hurst": 0.5807,
+      "hmm_regime": "NORMAL",
+      "price": 171.4600067138672
+    },
+    {
+      "ticker": "^GSPC",
+      "domain": "Indices",
+      "verdict": "NO_BUBBLE",
+      "quality": 0.9,
+      "hurst": 0.5587,
+      "hmm_regime": "BUBBLE",
+      "price": 6582.68994140625
+    },
+    {
+      "ticker": "^IXIC",
+      "domain": "Indices",
+      "verdict": "NO_BUBBLE",
+      "quality": 0.9,
+      "hurst": 0.5694,
+      "hmm_regime": "BUBBLE",
+      "price": 21879.1796875
+    },
+    {
+      "ticker": "^DJI",
+      "domain": "Indices",
+      "verdict": "NO_BUBBLE",
+      "quality": 1.0,
+      "hurst": 0.503,
+      "hmm_regime": "BUBBLE",
+      "price": 46504.671875
+    },
+    {
+      "ticker": "^N225",
+      "domain": "Indices",
+      "verdict": "NO_BUBBLE",
+      "quality": 1.0,
+      "hurst": 0.5922,
+      "hmm_regime": "GROWTH",
+      "price": 53413.6796875
+    },
+    {
+      "ticker": "^GDAXI",
+      "domain": "Indices",
+      "verdict": "NO_BUBBLE",
+      "quality": 0.8,
+      "hurst": 0.6177,
+      "hmm_regime": "NORMAL",
+      "price": 23168.080078125
+    },
+    {
+      "ticker": "^FTSE",
+      "domain": "Indices",
+      "verdict": "NO_BUBBLE",
+      "quality": 0.75,
+      "hurst": 0.5694,
+      "hmm_regime": "GROWTH",
+      "price": 10436.2998046875
+    },
+    {
+      "ticker": "BTC-USD",
+      "domain": "Crypto",
+      "verdict": "NO_BUBBLE",
+      "quality": 0.4,
+      "hurst": 0.6242,
+      "hmm_regime": "NORMAL",
+      "price": 69137.53125
+    },
+    {
+      "ticker": "ETH-USD",
+      "domain": "Crypto",
+      "verdict": "NO_BUBBLE",
+      "quality": 0.35,
+      "hurst": 0.6522,
+      "hmm_regime": "GROWTH",
+      "price": 2135.4755859375
+    },
+    {
+      "ticker": "SOL-USD",
+      "domain": "Crypto",
+      "verdict": "NO_BUBBLE",
+      "quality": 0.15,
+      "hurst": 0.555,
+      "hmm_regime": "NORMAL",
+      "price": 81.90640258789062
+    },
+    {
+      "ticker": "XRP-USD",
+      "domain": "Crypto",
+      "verdict": "NO_BUBBLE",
+      "quality": 0.4,
+      "hurst": 0.9088,
+      "hmm_regime": "NORMAL",
+      "price": 1.3441205024719238
+    },
+    {
+      "ticker": "DOGE-USD",
+      "domain": "Crypto",
+      "verdict": "NO_BUBBLE",
+      "quality": 0.25,
+      "hurst": 0.7254,
+      "hmm_regime": "GROWTH",
+      "price": 0.09219179302453995
+    },
+    {
+      "ticker": "ADA-USD",
+      "domain": "Crypto",
+      "verdict": "NO_BUBBLE",
+      "quality": 0.15,
+      "hurst": 0.6764,
+      "hmm_regime": "GROWTH",
+      "price": 0.2558050751686096
+    },
+    {
+      "ticker": "GC=F",
+      "domain": "Commodities",
+      "verdict": "NO_BUBBLE",
+      "quality": 0.75,
+      "hurst": 0.7442,
+      "hmm_regime": "BUBBLE",
+      "price": 4715.7001953125
+    },
+    {
+      "ticker": "SI=F",
+      "domain": "Commodities",
+      "verdict": "NO_BUBBLE",
+      "quality": 0.65,
+      "hurst": 0.6717,
+      "hmm_regime": "BUBBLE",
+      "price": 72.83000183105469
+    },
+    {
+      "ticker": "CL=F",
+      "domain": "Commodities",
+      "verdict": "NO_BUBBLE",
+      "quality": 0.15,
+      "hurst": 0.5862,
+      "hmm_regime": "GROWTH",
+      "price": 109.7300033569336
+    },
+    {
+      "ticker": "NG=F",
+      "domain": "Commodities",
+      "verdict": "NO_BUBBLE",
+      "quality": 0.5,
+      "hurst": 0.6595,
+      "hmm_regime": "NORMAL",
+      "price": 2.7899999618530273
+    },
+    {
+      "ticker": "HG=F",
+      "domain": "Commodities",
+      "verdict": "NO_BUBBLE",
+      "quality": 0.65,
+      "hurst": 0.4957,
+      "hmm_regime": "GROWTH",
+      "price": 5.616499900817871
+    },
+    {
+      "ticker": "ZW=F",
+      "domain": "Commodities",
+      "verdict": "NO_BUBBLE",
+      "quality": 0.15,
+      "hurst": 0.5065,
+      "hmm_regime": "GROWTH",
+      "price": 589.5
+    },
+    {
+      "ticker": "ZC=F",
+      "domain": "Commodities",
+      "verdict": "NO_BUBBLE",
+      "quality": 0.35,
+      "hurst": 0.559,
+      "hmm_regime": "GROWTH",
+      "price": 450.5
+    },
+    {
+      "ticker": "PL=F",
+      "domain": "Commodities",
+      "verdict": "NO_BUBBLE",
+      "quality": 0.9,
+      "hurst": 0.6993,
+      "hmm_regime": "NORMAL",
+      "price": 1989.4000244140625
+    },
+    {
+      "ticker": "XLE",
+      "domain": "Sector ETFs",
+      "verdict": "NO_BUBBLE",
+      "quality": 0.35,
+      "hurst": 0.498,
+      "hmm_regime": "BUBBLE",
+      "price": 59.25
+    },
+    {
+      "ticker": "XLF",
+      "domain": "Sector ETFs",
+      "verdict": "POSSIBLE",
+      "quality": 0.8,
+      "hurst": 0.5982,
+      "hmm_regime": "BUBBLE",
+      "price": 49.529998779296875
+    },
+    {
+      "ticker": "XLK",
+      "domain": "Sector ETFs",
+      "verdict": "NO_BUBBLE",
+      "quality": 0.9,
+      "hurst": 0.5691,
+      "hmm_regime": "NORMAL",
+      "price": 135.99000549316406
+    },
+    {
+      "ticker": "XLV",
+      "domain": "Sector ETFs",
+      "verdict": "NO_BUBBLE",
+      "quality": 0.8,
+      "hurst": 0.4692,
+      "hmm_regime": "GROWTH",
+      "price": 146.80999755859375
+    },
+    {
+      "ticker": "ARKK",
+      "domain": "Sector ETFs",
+      "verdict": "NO_BUBBLE",
+      "quality": 0.65,
+      "hurst": 0.6295,
+      "hmm_regime": "NORMAL",
+      "price": 68.55999755859375
+    },
+    {
+      "ticker": "GDX",
+      "domain": "Sector ETFs",
+      "verdict": "NO_BUBBLE",
+      "quality": 0.85,
+      "hurst": 0.7262,
+      "hmm_regime": "NORMAL",
+      "price": 94.58999633789062
+    },
+    {
+      "ticker": "SLV",
+      "domain": "Sector ETFs",
+      "verdict": "NO_BUBBLE",
+      "quality": 0.8,
+      "hurst": 0.6828,
+      "hmm_regime": "NORMAL",
+      "price": 65.79000091552734
+    },
+    {
+      "ticker": "TLT",
+      "domain": "Sector ETFs",
+      "verdict": "NO_BUBBLE",
+      "quality": 0.5,
+      "hurst": 0.4424,
+      "hmm_regime": "BUBBLE",
+      "price": 86.79000091552734
+    },
+    {
+      "ticker": "DBA",
+      "domain": "Sector ETFs",
+      "verdict": "POSSIBLE",
+      "quality": 0.8,
+      "hurst": 0.4794,
+      "hmm_regime": "GROWTH",
+      "price": 27.15999984741211
+    }
+  ]
+}
