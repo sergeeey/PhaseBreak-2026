@@ -5,6 +5,7 @@ __pycache__/
 dist/
 build/
 .env
+.evn.txt
 data/finance/*.csv
 data/geology/*.tif
 data/fraud/*.csv

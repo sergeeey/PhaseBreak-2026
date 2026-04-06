@@ -117,17 +117,19 @@ def _format_lppls_context(
     """Format LPPLS fit results as context for agents."""
     if params is None:
         return "No valid LPPLS fit found. All parameters failed Sornette filters."
+    # WHY: raw values only — no directional annotations, no is_bubble verdict.
+    # Each agent's system prompt already contains interpretation criteria.
+    # Leaking is_bubble or hints like "(negative = bubble)" creates confirmation bias.
     return (
         f"LPPLS Fit Results:\n"
-        f"  tc = {params.tc:.1f} (predicted critical time)\n"
-        f"  m = {params.m:.4f} (power law exponent, valid: 0.1-0.9)\n"
-        f"  ω = {params.omega:.4f} (log-frequency, valid: 6-13)\n"
-        f"  B = {params.B:.6f} (negative = bubble)\n"
-        f"  |B|/|C| = {params.damping:.2f} (damping ratio, want > 0.5)\n"
-        f"  R² = {r_squared:.4f}\n"
-        f"  Durbin-Watson = {durbin_watson:.3f} (≈2 = good, <1.5 = autocorrelation)\n"
-        f"  N observations = {n_observations}\n"
-        f"  is_bubble = {params.is_bubble}"
+        f"  tc = {params.tc:.1f}\n"
+        f"  m = {params.m:.4f}\n"
+        f"  omega = {params.omega:.4f}\n"
+        f"  B = {params.B:.6f}\n"
+        f"  |B|/|C| = {params.damping:.2f}\n"
+        f"  R_squared = {r_squared:.4f}\n"
+        f"  Durbin_Watson = {durbin_watson:.3f}\n"
+        f"  N_observations = {n_observations}"
     )
 
 
@@ -171,20 +173,27 @@ def _parse_agent_response(raw: str, role: AgentRole) -> AgentOpinion:
         end = raw.rfind("}") + 1
         if start >= 0 and end > start:
             data = json.loads(raw[start:end])
+            # WHY: LLM self-reported confidence is uncalibrated.
+            # Clamp to [0.3, 0.8] to prevent any single agent from dominating.
+            raw_conf = float(data.get("confidence", 0.5))
+            clamped_conf = max(0.3, min(0.8, raw_conf))
             return AgentOpinion(
                 role=role,
                 verdict=data.get("verdict", "UNCERTAIN"),
-                confidence=float(data.get("confidence", 0.5)),
+                confidence=clamped_conf,
                 reasoning=data.get("reasoning", ""),
                 key_arguments=data.get("arguments", []),
             )
     except (json.JSONDecodeError, ValueError):
         pass
 
-    # Fallback: extract verdict from text
+    # WHY: old fallback was BUBBLE-biased — "this is not a bubble" matched "bubble".
+    # Now check negation patterns first, default to UNCERTAIN (not BUBBLE).
     raw_lower = raw.lower()
-    if "no_bubble" in raw_lower or "not a bubble" in raw_lower:
+    if "no_bubble" in raw_lower or "not a bubble" in raw_lower or "no bubble" in raw_lower:
         verdict = "NO_BUBBLE"
+    elif "uncertain" in raw_lower:
+        verdict = "UNCERTAIN"
     elif "bubble" in raw_lower:
         verdict = "BUBBLE"
     else:

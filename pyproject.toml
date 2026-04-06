@@ -8,7 +8,6 @@ dependencies = [
     "scipy>=1.12",
     "pandas>=2.2",
     "matplotlib>=3.8",
-    "plotly>=5.18",
     "yfinance>=0.2.36",
     "fredapi>=0.5.2",
     "scikit-learn>=1.4",

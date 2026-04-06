@@ -23,15 +23,22 @@ LPPLS: `ln(p(t)) = A + B(tc-t)^m + C(tc-t)^m * cos(ω*ln(tc-t) + φ)`
 OLS for linear (A,B,C1,C2), grid+L-BFGS-B for nonlinear (tc,m,ω).
 
 ## Constraints (Sornette filters)
-- m ∈ (0.1, 0.9), ω ∈ (6, 13) for finance
+- m ∈ (0.1, 0.9), ω ∈ (6, 13) for finance (optimizer bounds; post-filter accepts 5.0–13.5 to avoid boundary artifacts)
 - B < 0 for bubble detection
 - damping |B|/|C| > 0.5
 
-## 4 Contributions
+## Design Principles (Feynman-inspired)
+- Seek INVARIANTS, not entities — compare conserved ratios across domains, not raw values
+- Detect SYMMETRY BREAKING — stationarity loss (variance↑, AC1↑) signals regime change
+- Hidden states are COMPUTABLE — latent "stress" recovered from observable traces
+- No physics jargon without math — "energy" metaphors stay out, equations stay in
+
+## 5 Contributions
 1. Multi-window DS LPPLS Confidence Indicator (Sornette 2015, validated)
 2. HMM-gated LPPLS ensemble (novel, not in literature)
 3. Certified convergence bounds for tc via Richardson extrapolation (ChernoffPy, novel)
-4. Cross-domain phase transition universality (main thesis)
+4. Critical slowing down layer (independent EWS, model-free)
+5. Cross-domain phase transition universality (main thesis)
 
 ## Commands
 ```bash
@@ -40,5 +47,7 @@ python -m notebooks/01_btc_2017     # first experiment
 ```
 
 ## Current stage
-Этап 1: LPPLS baseline + multi-window CI + negative controls → GO/NO-GO.
-Next: Этап 1.2 validation on known bubbles, Этап 1.3 multi-window confidence.
+Stage 1 + 1.5: DONE. Gate 1 GO, Gate 1.5 KEEP. Precision 80%, Recall 67%.
+Stage 2: IN PROGRESS (geology, Sentinel-2 temporal LPPLS).
+Next: Stage 3 (fraud survival) + Stage 3.5 (critical slowing down).
+Full TZ: docs/TZ_STAGES_3-6.md

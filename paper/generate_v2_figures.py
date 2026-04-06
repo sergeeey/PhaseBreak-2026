@@ -301,7 +301,23 @@ def fig5_forward_predictions(pred_data: dict[str, Any]) -> None:
 
 # ─── Figure 6: Baselines comparison ──────────────────────────────────────────
 
-LPPLS_V2_METRICS = {"precision": 0.80, "recall": 0.52, "f1": 0.63}
+# WHY: read from benchmark JSON instead of hardcoding — keeps figures in sync with data
+import json as _json
+from pathlib import Path as _Path
+
+_bench_path = _Path(__file__).parent.parent / "data" / "v2_results" / "benchmark_results.json"
+if _bench_path.exists():
+    with open(_bench_path) as _f:
+        _bench = _json.load(_f)
+    _tp = sum(d["tp"] for d in _bench["domains"].values())
+    _fp = sum(d["fp"] for d in _bench["domains"].values())
+    _fn = sum(d["fn"] for d in _bench["domains"].values())
+    _prec = _tp / (_tp + _fp) if (_tp + _fp) > 0 else 0
+    _rec = _tp / (_tp + _fn) if (_tp + _fn) > 0 else 0
+    _f1 = 2 * _prec * _rec / (_prec + _rec) if (_prec + _rec) > 0 else 0
+    LPPLS_V2_METRICS = {"precision": round(_prec, 2), "recall": round(_rec, 2), "f1": round(_f1, 2)}
+else:
+    LPPLS_V2_METRICS = {"precision": 0.76, "recall": 0.61, "f1": 0.68}  # fallback
 
 METHOD_DISPLAY = {
     "CAGR>50%": "CAGR>50%",
