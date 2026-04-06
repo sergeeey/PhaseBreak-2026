@@ -1,0 +1,2049 @@
+{
+  "scan_date": "2026-04-06 14:34",
+  "model": "PhaseBreak Deep Analysis (all modules)",
+  "elapsed_seconds": 935.1,
+  "total_scanned": 34,
+  "signals": 3,
+  "results": [
+    {
+      "ticker": "NVDA",
+      "domain": "Finance",
+      "timestamp": "2026-04-06 14:19",
+      "price": 177.39,
+      "data_points": 502,
+      "lppls_simple": {
+        "verdict": "NO_BUBBLE",
+        "quality": 0.8,
+        "r_squared": 0.8807,
+        "m": 0.9,
+        "omega": 9.3948,
+        "damping": 5.9206,
+        "oscillations": 1.99,
+        "tc_date": "2026-10-03",
+        "B": -0.4828
+      },
+      "academic": {
+        "verdict": "UNAVAILABLE",
+        "error": "'ScreeningResult' object has no attribute 'regime'",
+        "available": false
+      },
+      "ds_lppls": {
+        "ds_confidence": 0.0,
+        "ds_verdict": "NO_BUBBLE",
+        "valid_windows": 0,
+        "total_windows": 17,
+        "ds_median_tc": null,
+        "ds_tc_std": null,
+        "sornette_pass": false
+      },
+      "hmm": {
+        "should_fit": true,
+        "regime": "GROWTH",
+        "bubble_prob": 0.123,
+        "growth_prob": 0.877
+      },
+      "hurst": {
+        "H_2y": 0.633,
+        "H_3m": 0.5,
+        "verdict": "RANDOM_WALK",
+        "supports_bubble": false
+      },
+      "mfdfa": {
+        "delta_alpha": 0.0552,
+        "available": true
+      },
+      "ews": {
+        "var_trend": "DECREASING",
+        "ac1_trend": "INCREASING",
+        "var_slope": -5.2e-06,
+        "ac1_slope": 0.000544
+      },
+      "sornette_pass": false,
+      "final_verdict": "NO_BUBBLE",
+      "final_reason": "LPPLS verdict: NO_BUBBLE",
+      "contract_violations": [],
+      "signal_strength": "0/5",
+      "signal_score": 0.0
+    },
+    {
+      "ticker": "AAPL",
+      "domain": "Finance",
+      "timestamp": "2026-04-06 14:19",
+      "price": 255.92,
+      "data_points": 502,
+      "lppls_simple": {
+        "verdict": "NO_BUBBLE",
+        "quality": 1.0,
+        "r_squared": 0.8942,
+        "m": 0.5796,
+        "omega": 7.8848,
+        "damping": 4.085,
+        "oscillations": 1.889,
+        "tc_date": "2026-08-26",
+        "B": -3.6657
+      },
+      "academic": {
+        "verdict": "UNAVAILABLE",
+        "error": "'ScreeningResult' object has no attribute 'regime'",
+        "available": false
+      },
+      "ds_lppls": {
+        "ds_confidence": 0.0,
+        "ds_verdict": "NO_BUBBLE",
+        "valid_windows": 0,
+        "total_windows": 17,
+        "ds_median_tc": null,
+        "ds_tc_std": null,
+        "sornette_pass": false
+      },
+      "hmm": {
+        "should_fit": true,
+        "regime": "GROWTH",
+        "bubble_prob": 0.035,
+        "growth_prob": 0.965
+      },
+      "hurst": {
+        "H_2y": 0.571,
+        "H_3m": 0.5,
+        "verdict": "RANDOM_WALK",
+        "supports_bubble": false
+      },
+      "mfdfa": {
+        "delta_alpha": 0.4104,
+        "available": true
+      },
+      "ews": {
+        "var_trend": "DECREASING",
+        "ac1_trend": "INCREASING",
+        "var_slope": -3.73e-06,
+        "ac1_slope": 0.000705
+      },
+      "sornette_pass": false,
+      "final_verdict": "NO_BUBBLE",
+      "final_reason": "LPPLS verdict: NO_BUBBLE",
+      "contract_violations": [],
+      "signal_strength": "0/5",
+      "signal_score": 0.0
+    },
+    {
+      "ticker": "MSFT",
+      "domain": "Finance",
+      "timestamp": "2026-04-06 14:20",
+      "price": 373.46,
+      "data_points": 502,
+      "lppls_simple": {
+        "verdict": "NO_BUBBLE",
+        "quality": 0.6,
+        "r_squared": 0.597,
+        "m": 0.1,
+        "omega": 7.1024,
+        "damping": 8.724,
+        "oscillations": 1.504,
+        "tc_date": "2026-10-03",
+        "B": -221.2139
+      },
+      "academic": {
+        "verdict": "UNAVAILABLE",
+        "error": "'ScreeningResult' object has no attribute 'regime'",
+        "available": false
+      },
+      "ds_lppls": {
+        "ds_confidence": 0.0,
+        "ds_verdict": "NO_BUBBLE",
+        "valid_windows": 0,
+        "total_windows": 17,
+        "ds_median_tc": null,
+        "ds_tc_std": null,
+        "sornette_pass": false
+      },
+      "hmm": {
+        "should_fit": true,
+        "regime": "GROWTH",
+        "bubble_prob": 0.0,
+        "growth_prob": 1.0
+      },
+      "hurst": {
+        "H_2y": 0.5485,
+        "H_3m": 0.5,
+        "verdict": "RANDOM_WALK",
+        "supports_bubble": false
+      },
+      "mfdfa": {
+        "delta_alpha": 0.165,
+        "available": true
+      },
+      "ews": {
+        "var_trend": "STABLE",
+        "ac1_trend": "INCREASING",
+        "var_slope": -1.9e-07,
+        "ac1_slope": 0.001083
+      },
+      "sornette_pass": false,
+      "final_verdict": "NO_BUBBLE",
+      "final_reason": "LPPLS verdict: NO_BUBBLE",
+      "contract_violations": [],
+      "signal_strength": "0/5",
+      "signal_score": 0.0
+    },
+    {
+      "ticker": "GOOGL",
+      "domain": "Finance",
+      "timestamp": "2026-04-06 14:20",
+      "price": 295.77,
+      "data_points": 502,
+      "lppls_simple": {
+        "verdict": "NO_BUBBLE",
+        "quality": 0.9,
+        "r_squared": 0.9524,
+        "m": 0.1002,
+        "omega": 6.8476,
+        "damping": 41.3746,
+        "oscillations": 1.45,
+        "tc_date": "2026-10-03",
+        "B": -850.3209
+      },
+      "academic": {
+        "verdict": "UNAVAILABLE",
+        "error": "'ScreeningResult' object has no attribute 'regime'",
+        "available": false
+      },
+      "ds_lppls": {
+        "ds_confidence": 0.0,
+        "ds_verdict": "NO_BUBBLE",
+        "valid_windows": 0,
+        "total_windows": 17,
+        "ds_median_tc": null,
+        "ds_tc_std": null,
+        "sornette_pass": false
+      },
+      "hmm": {
+        "should_fit": false,
+        "regime": "NORMAL",
+        "bubble_prob": 0.0,
+        "growth_prob": 0.0
+      },
+      "hurst": {
+        "H_2y": 0.6086,
+        "H_3m": 0.5,
+        "verdict": "RANDOM_WALK",
+        "supports_bubble": false
+      },
+      "mfdfa": {
+        "delta_alpha": 0.3561,
+        "available": true
+      },
+      "ews": {
+        "var_trend": "DECREASING",
+        "ac1_trend": "INCREASING",
+        "var_slope": -1.61e-06,
+        "ac1_slope": 0.000554
+      },
+      "sornette_pass": false,
+      "final_verdict": "NO_BUBBLE",
+      "final_reason": "LPPLS verdict: NO_BUBBLE",
+      "contract_violations": [],
+      "signal_strength": "0/5",
+      "signal_score": 0.0
+    },
+    {
+      "ticker": "META",
+      "domain": "Finance",
+      "timestamp": "2026-04-06 14:21",
+      "price": 574.46,
+      "data_points": 502,
+      "lppls_simple": {
+        "verdict": "NO_BUBBLE",
+        "quality": 0.7,
+        "r_squared": 0.704,
+        "m": 0.2701,
+        "omega": 5.3926,
+        "damping": 5.4335,
+        "oscillations": 1.187,
+        "tc_date": "2026-09-20",
+        "B": -73.7817
+      },
+      "academic": {
+        "verdict": "UNAVAILABLE",
+        "error": "'ScreeningResult' object has no attribute 'regime'",
+        "available": false
+      },
+      "ds_lppls": {
+        "ds_confidence": 0.0,
+        "ds_verdict": "NO_BUBBLE",
+        "valid_windows": 0,
+        "total_windows": 17,
+        "ds_median_tc": null,
+        "ds_tc_std": null,
+        "sornette_pass": false
+      },
+      "hmm": {
+        "should_fit": true,
+        "regime": "GROWTH",
+        "bubble_prob": 0.01,
+        "growth_prob": 0.99
+      },
+      "hurst": {
+        "H_2y": 0.5632,
+        "H_3m": 0.5,
+        "verdict": "RANDOM_WALK",
+        "supports_bubble": false
+      },
+      "mfdfa": {
+        "delta_alpha": 0.3635,
+        "available": true
+      },
+      "ews": {
+        "var_trend": "DECREASING",
+        "ac1_trend": "INCREASING",
+        "var_slope": -2.5e-06,
+        "ac1_slope": 0.000721
+      },
+      "sornette_pass": false,
+      "final_verdict": "NO_BUBBLE",
+      "final_reason": "LPPLS verdict: NO_BUBBLE",
+      "contract_violations": [],
+      "signal_strength": "0/5",
+      "signal_score": 0.0
+    },
+    {
+      "ticker": "AMZN",
+      "domain": "Finance",
+      "timestamp": "2026-04-06 14:21",
+      "price": 209.77,
+      "data_points": 502,
+      "lppls_simple": {
+        "verdict": "NO_BUBBLE",
+        "quality": 0.5,
+        "r_squared": 0.6285,
+        "m": 0.9,
+        "omega": 9.7252,
+        "damping": 1.9094,
+        "oscillations": 4.36,
+        "tc_date": "2026-05-07",
+        "B": -0.1435
+      },
+      "academic": {
+        "verdict": "UNAVAILABLE",
+        "error": "'ScreeningResult' object has no attribute 'regime'",
+        "available": false
+      },
+      "ds_lppls": {
+        "ds_confidence": 0.0,
+        "ds_verdict": "NO_BUBBLE",
+        "valid_windows": 0,
+        "total_windows": 17,
+        "ds_median_tc": null,
+        "ds_tc_std": null,
+        "sornette_pass": false
+      },
+      "hmm": {
+        "should_fit": true,
+        "regime": "BUBBLE",
+        "bubble_prob": 0.583,
+        "growth_prob": 0.005
+      },
+      "hurst": {
+        "H_2y": 0.522,
+        "H_3m": 0.5,
+        "verdict": "RANDOM_WALK",
+        "supports_bubble": false
+      },
+      "mfdfa": {
+        "delta_alpha": 0.3788,
+        "available": true
+      },
+      "ews": {
+        "var_trend": "DECREASING",
+        "ac1_trend": "INCREASING",
+        "var_slope": -2.01e-06,
+        "ac1_slope": 0.001694
+      },
+      "sornette_pass": false,
+      "final_verdict": "NO_BUBBLE",
+      "final_reason": "LPPLS verdict: NO_BUBBLE",
+      "contract_violations": [],
+      "signal_strength": "1/5",
+      "signal_score": 0.2
+    },
+    {
+      "ticker": "TSLA",
+      "domain": "Finance",
+      "timestamp": "2026-04-06 14:22",
+      "price": 360.59,
+      "data_points": 502,
+      "lppls_simple": {
+        "verdict": "POSSIBLE",
+        "quality": 0.85,
+        "r_squared": 0.7877,
+        "m": 0.5801,
+        "omega": 8.2678,
+        "damping": 6.1566,
+        "oscillations": 2.178,
+        "tc_date": "2026-08-02",
+        "B": -10.104
+      },
+      "academic": {
+        "verdict": "UNAVAILABLE",
+        "error": "'ScreeningResult' object has no attribute 'regime'",
+        "available": false
+      },
+      "ds_lppls": {
+        "ds_confidence": 0.0,
+        "ds_verdict": "NO_BUBBLE",
+        "valid_windows": 0,
+        "total_windows": 17,
+        "ds_median_tc": null,
+        "ds_tc_std": null,
+        "sornette_pass": false
+      },
+      "hmm": {
+        "should_fit": false,
+        "regime": "NORMAL",
+        "bubble_prob": 0.0,
+        "growth_prob": 0.003
+      },
+      "hurst": {
+        "H_2y": 0.7262,
+        "H_3m": 0.5,
+        "verdict": "PERSISTENT",
+        "supports_bubble": true
+      },
+      "mfdfa": {
+        "delta_alpha": 0.4023,
+        "available": true
+      },
+      "ews": {
+        "var_trend": "DECREASING",
+        "ac1_trend": "DECREASING",
+        "var_slope": -1.146e-05,
+        "ac1_slope": -0.00074
+      },
+      "sornette_pass": false,
+      "final_verdict": "POSSIBLE",
+      "final_reason": "LPPLS verdict: POSSIBLE",
+      "contract_violations": [],
+      "signal_strength": "2/5",
+      "signal_score": 0.4
+    },
+    {
+      "ticker": "ARM",
+      "domain": "Finance",
+      "timestamp": "2026-04-06 14:22",
+      "price": 149.11,
+      "data_points": 502,
+      "lppls_simple": {
+        "verdict": "NO_BUBBLE",
+        "quality": 0.5,
+        "r_squared": 0.2498,
+        "m": 0.1,
+        "omega": 8.6191,
+        "damping": 2.3325,
+        "oscillations": 2.271,
+        "tc_date": "2026-08-02",
+        "B": -19.3939
+      },
+      "academic": {
+        "verdict": "UNAVAILABLE",
+        "error": "'ScreeningResult' object has no attribute 'regime'",
+        "available": false
+      },
+      "ds_lppls": {
+        "ds_confidence": 0.0,
+        "ds_verdict": "NO_BUBBLE",
+        "valid_windows": 0,
+        "total_windows": 17,
+        "ds_median_tc": null,
+        "ds_tc_std": null,
+        "sornette_pass": false
+      },
+      "hmm": {
+        "should_fit": true,
+        "regime": "BUBBLE",
+        "bubble_prob": 0.905,
+        "growth_prob": 0.001
+      },
+      "hurst": {
+        "H_2y": 0.488,
+        "H_3m": 0.5,
+        "verdict": "RANDOM_WALK",
+        "supports_bubble": false
+      },
+      "mfdfa": {
+        "delta_alpha": 0.2105,
+        "available": true
+      },
+      "ews": {
+        "var_trend": "DECREASING",
+        "ac1_trend": "INCREASING",
+        "var_slope": -6.3e-06,
+        "ac1_slope": 0.001198
+      },
+      "sornette_pass": false,
+      "final_verdict": "NO_BUBBLE",
+      "final_reason": "LPPLS verdict: NO_BUBBLE",
+      "contract_violations": [],
+      "signal_strength": "1/5",
+      "signal_score": 0.2
+    },
+    {
+      "ticker": "AVGO",
+      "domain": "Finance",
+      "timestamp": "2026-04-06 14:23",
+      "price": 314.55,
+      "data_points": 502,
+      "lppls_simple": {
+        "verdict": "NO_BUBBLE",
+        "quality": 0.8,
+        "r_squared": 0.9091,
+        "m": 0.9,
+        "omega": 8.2496,
+        "damping": 9.896,
+        "oscillations": 1.747,
+        "tc_date": "2026-10-03",
+        "B": -1.2007
+      },
+      "academic": {
+        "verdict": "UNAVAILABLE",
+        "error": "'ScreeningResult' object has no attribute 'regime'",
+        "available": false
+      },
+      "ds_lppls": {
+        "ds_confidence": 0.0,
+        "ds_verdict": "NO_BUBBLE",
+        "valid_windows": 0,
+        "total_windows": 17,
+        "ds_median_tc": null,
+        "ds_tc_std": null,
+        "sornette_pass": false
+      },
+      "hmm": {
+        "should_fit": true,
+        "regime": "GROWTH",
+        "bubble_prob": 0.002,
+        "growth_prob": 0.991
+      },
+      "hurst": {
+        "H_2y": 0.6944,
+        "H_3m": 0.5,
+        "verdict": "RANDOM_WALK",
+        "supports_bubble": true
+      },
+      "mfdfa": {
+        "delta_alpha": 0.5688,
+        "available": true
+      },
+      "ews": {
+        "var_trend": "DECREASING",
+        "ac1_trend": "INCREASING",
+        "var_slope": -3.35e-06,
+        "ac1_slope": 0.001105
+      },
+      "sornette_pass": false,
+      "final_verdict": "NO_BUBBLE",
+      "final_reason": "LPPLS verdict: NO_BUBBLE",
+      "contract_violations": [],
+      "signal_strength": "1/5",
+      "signal_score": 0.2
+    },
+    {
+      "ticker": "PLTR",
+      "domain": "Finance",
+      "timestamp": "2026-04-06 14:23",
+      "price": 148.46,
+      "data_points": 502,
+      "lppls_simple": {
+        "verdict": "NO_BUBBLE",
+        "quality": 0.65,
+        "r_squared": 0.9638,
+        "m": 0.1,
+        "omega": 4.5088,
+        "damping": 22.1011,
+        "oscillations": 1.159,
+        "tc_date": "2026-08-08",
+        "B": -487.2605
+      },
+      "academic": {
+        "verdict": "UNAVAILABLE",
+        "error": "'ScreeningResult' object has no attribute 'regime'",
+        "available": false
+      },
+      "ds_lppls": {
+        "ds_confidence": 0.0,
+        "ds_verdict": "NO_BUBBLE",
+        "valid_windows": 0,
+        "total_windows": 17,
+        "ds_median_tc": null,
+        "ds_tc_std": null,
+        "sornette_pass": false
+      },
+      "hmm": {
+        "should_fit": true,
+        "regime": "GROWTH",
+        "bubble_prob": 0.005,
+        "growth_prob": 0.993
+      },
+      "hurst": {
+        "H_2y": 1.0155,
+        "H_3m": 0.5,
+        "verdict": "PERSISTENT",
+        "supports_bubble": true
+      },
+      "mfdfa": {
+        "delta_alpha": 0.5032,
+        "available": true
+      },
+      "ews": {
+        "var_trend": "DECREASING",
+        "ac1_trend": "INCREASING",
+        "var_slope": -8.53e-06,
+        "ac1_slope": 0.000925
+      },
+      "sornette_pass": false,
+      "final_verdict": "NO_BUBBLE",
+      "final_reason": "LPPLS verdict: NO_BUBBLE",
+      "contract_violations": [],
+      "signal_strength": "1/5",
+      "signal_score": 0.2
+    },
+    {
+      "ticker": "^GSPC",
+      "domain": "Indices",
+      "timestamp": "2026-04-06 14:24",
+      "price": 6582.69,
+      "data_points": 502,
+      "lppls_simple": {
+        "verdict": "NO_BUBBLE",
+        "quality": 0.9,
+        "r_squared": 0.9076,
+        "m": 0.8244,
+        "omega": 8.7476,
+        "damping": 7.754,
+        "oscillations": 1.888,
+        "tc_date": "2026-09-26",
+        "B": -14.2061
+      },
+      "academic": {
+        "verdict": "UNAVAILABLE",
+        "error": "'ScreeningResult' object has no attribute 'regime'",
+        "available": false
+      },
+      "ds_lppls": {
+        "ds_confidence": 0.0,
+        "ds_verdict": "NO_BUBBLE",
+        "valid_windows": 0,
+        "total_windows": 17,
+        "ds_median_tc": null,
+        "ds_tc_std": null,
+        "sornette_pass": false
+      },
+      "hmm": {
+        "should_fit": true,
+        "regime": "BUBBLE",
+        "bubble_prob": 0.874,
+        "growth_prob": 0.082
+      },
+      "hurst": {
+        "H_2y": 0.5587,
+        "H_3m": 0.5,
+        "verdict": "RANDOM_WALK",
+        "supports_bubble": false
+      },
+      "mfdfa": {
+        "delta_alpha": 0.2768,
+        "available": true
+      },
+      "ews": {
+        "var_trend": "DECREASING",
+        "ac1_trend": "INCREASING",
+        "var_slope": -1.46e-06,
+        "ac1_slope": 0.000416
+      },
+      "sornette_pass": false,
+      "final_verdict": "NO_BUBBLE",
+      "final_reason": "LPPLS verdict: NO_BUBBLE",
+      "contract_violations": [],
+      "signal_strength": "1/5",
+      "signal_score": 0.2
+    },
+    {
+      "ticker": "^IXIC",
+      "domain": "Indices",
+      "timestamp": "2026-04-06 14:24",
+      "price": 21879.18,
+      "data_points": 502,
+      "lppls_simple": {
+        "verdict": "NO_BUBBLE",
+        "quality": 0.9,
+        "r_squared": 0.8872,
+        "m": 0.885,
+        "omega": 8.6758,
+        "damping": 6.8813,
+        "oscillations": 1.837,
+        "tc_date": "2026-10-03",
+        "B": -40.1936
+      },
+      "academic": {
+        "verdict": "UNAVAILABLE",
+        "error": "'ScreeningResult' object has no attribute 'regime'",
+        "available": false
+      },
+      "ds_lppls": {
+        "ds_confidence": 0.0,
+        "ds_verdict": "NO_BUBBLE",
+        "valid_windows": 0,
+        "total_windows": 17,
+        "ds_median_tc": null,
+        "ds_tc_std": null,
+        "sornette_pass": false
+      },
+      "hmm": {
+        "should_fit": true,
+        "regime": "BUBBLE",
+        "bubble_prob": 0.911,
+        "growth_prob": 0.069
+      },
+      "hurst": {
+        "H_2y": 0.5694,
+        "H_3m": 0.5,
+        "verdict": "RANDOM_WALK",
+        "supports_bubble": false
+      },
+      "mfdfa": {
+        "delta_alpha": 0.2824,
+        "available": true
+      },
+      "ews": {
+        "var_trend": "DECREASING",
+        "ac1_trend": "INCREASING",
+        "var_slope": -2.13e-06,
+        "ac1_slope": 0.000764
+      },
+      "sornette_pass": false,
+      "final_verdict": "NO_BUBBLE",
+      "final_reason": "LPPLS verdict: NO_BUBBLE",
+      "contract_violations": [],
+      "signal_strength": "1/5",
+      "signal_score": 0.2
+    },
+    {
+      "ticker": "^DJI",
+      "domain": "Indices",
+      "timestamp": "2026-04-06 14:25",
+      "price": 46504.67,
+      "data_points": 502,
+      "lppls_simple": {
+        "verdict": "NO_BUBBLE",
+        "quality": 1.0,
+        "r_squared": 0.884,
+        "m": 0.5868,
+        "omega": 8.2042,
+        "damping": 9.055,
+        "oscillations": 1.843,
+        "tc_date": "2026-09-14",
+        "B": -441.4623
+      },
+      "academic": {
+        "verdict": "UNAVAILABLE",
+        "error": "'ScreeningResult' object has no attribute 'regime'",
+        "available": false
+      },
+      "ds_lppls": {
+        "ds_confidence": 0.0,
+        "ds_verdict": "NO_BUBBLE",
+        "valid_windows": 0,
+        "total_windows": 17,
+        "ds_median_tc": null,
+        "ds_tc_std": null,
+        "sornette_pass": false
+      },
+      "hmm": {
+        "should_fit": true,
+        "regime": "BUBBLE",
+        "bubble_prob": 0.964,
+        "growth_prob": 0.003
+      },
+      "hurst": {
+        "H_2y": 0.503,
+        "H_3m": 0.5,
+        "verdict": "RANDOM_WALK",
+        "supports_bubble": false
+      },
+      "mfdfa": {
+        "delta_alpha": 0.6266,
+        "available": true
+      },
+      "ews": {
+        "var_trend": "DECREASING",
+        "ac1_trend": "STABLE",
+        "var_slope": -1.01e-06,
+        "ac1_slope": -1.7e-05
+      },
+      "sornette_pass": false,
+      "final_verdict": "NO_BUBBLE",
+      "final_reason": "LPPLS verdict: NO_BUBBLE",
+      "contract_violations": [],
+      "signal_strength": "1/5",
+      "signal_score": 0.2
+    },
+    {
+      "ticker": "BTC-USD",
+      "domain": "Crypto",
+      "timestamp": "2026-04-06 14:25",
+      "price": 70132.99,
+      "data_points": 731,
+      "lppls_simple": {
+        "verdict": "NO_BUBBLE",
+        "quality": 0.55,
+        "r_squared": 0.7862,
+        "m": 0.2003,
+        "omega": 4.682,
+        "damping": 0.1122,
+        "oscillations": 1.208,
+        "tc_date": "2026-10-03",
+        "B": -752.0118
+      },
+      "academic": {
+        "verdict": "UNAVAILABLE",
+        "error": "'ScreeningResult' object has no attribute 'regime'",
+        "available": false
+      },
+      "ds_lppls": {
+        "ds_confidence": 0.0,
+        "ds_verdict": "NO_BUBBLE",
+        "valid_windows": 0,
+        "total_windows": 27,
+        "ds_median_tc": null,
+        "ds_tc_std": null,
+        "sornette_pass": false
+      },
+      "hmm": {
+        "should_fit": false,
+        "regime": "NORMAL",
+        "bubble_prob": 0.256,
+        "growth_prob": 0.0
+      },
+      "hurst": {
+        "H_2y": 0.6242,
+        "H_3m": 0.5,
+        "verdict": "RANDOM_WALK",
+        "supports_bubble": false
+      },
+      "mfdfa": {
+        "delta_alpha": 0.2317,
+        "available": true
+      },
+      "ews": {
+        "var_trend": "INCREASING",
+        "ac1_trend": "INCREASING",
+        "var_slope": 1.16e-06,
+        "ac1_slope": 0.000242
+      },
+      "sornette_pass": false,
+      "final_verdict": "NO_BUBBLE",
+      "final_reason": "LPPLS verdict: NO_BUBBLE",
+      "contract_violations": [],
+      "signal_strength": "1/5",
+      "signal_score": 0.2
+    },
+    {
+      "ticker": "ETH-USD",
+      "domain": "Crypto",
+      "timestamp": "2026-04-06 14:26",
+      "price": 2167.12,
+      "data_points": 731,
+      "lppls_simple": {
+        "verdict": "NO_BUBBLE",
+        "quality": 0.35,
+        "r_squared": 0.3352,
+        "m": 0.1,
+        "omega": 7.4699,
+        "damping": 0.0,
+        "oscillations": 1.927,
+        "tc_date": "2026-10-03",
+        "B": -0.0058
+      },
+      "academic": {
+        "verdict": "UNAVAILABLE",
+        "error": "'ScreeningResult' object has no attribute 'regime'",
+        "available": false
+      },
+      "ds_lppls": {
+        "ds_confidence": 0.0,
+        "ds_verdict": "NO_BUBBLE",
+        "valid_windows": 0,
+        "total_windows": 27,
+        "ds_median_tc": null,
+        "ds_tc_std": null,
+        "sornette_pass": false
+      },
+      "hmm": {
+        "should_fit": true,
+        "regime": "BUBBLE",
+        "bubble_prob": 0.71,
+        "growth_prob": 0.004
+      },
+      "hurst": {
+        "H_2y": 0.6522,
+        "H_3m": 0.5,
+        "verdict": "RANDOM_WALK",
+        "supports_bubble": true
+      },
+      "mfdfa": {
+        "delta_alpha": 0.4705,
+        "available": true
+      },
+      "ews": {
+        "var_trend": "DECREASING",
+        "ac1_trend": "INCREASING",
+        "var_slope": -1.25e-06,
+        "ac1_slope": 0.000273
+      },
+      "sornette_pass": false,
+      "final_verdict": "NO_BUBBLE",
+      "final_reason": "LPPLS verdict: NO_BUBBLE",
+      "contract_violations": [],
+      "signal_strength": "2/5",
+      "signal_score": 0.4
+    },
+    {
+      "ticker": "SOL-USD",
+      "domain": "Crypto",
+      "timestamp": "2026-04-06 14:26",
+      "price": 82.83,
+      "data_points": 731,
+      "lppls_simple": {
+        "verdict": "NO_BUBBLE",
+        "quality": 0.15,
+        "r_squared": 0.2356,
+        "m": 0.1,
+        "omega": 8.9567,
+        "damping": 0.0,
+        "oscillations": 3.382,
+        "tc_date": "2026-06-20",
+        "B": 0.0
+      },
+      "academic": {
+        "verdict": "UNAVAILABLE",
+        "error": "'ScreeningResult' object has no attribute 'regime'",
+        "available": false
+      },
+      "ds_lppls": {
+        "ds_confidence": 0.0,
+        "ds_verdict": "NO_BUBBLE",
+        "valid_windows": 0,
+        "total_windows": 27,
+        "ds_median_tc": null,
+        "ds_tc_std": null,
+        "sornette_pass": false
+      },
+      "hmm": {
+        "should_fit": false,
+        "regime": "NORMAL",
+        "bubble_prob": 0.398,
+        "growth_prob": 0.002
+      },
+      "hurst": {
+        "H_2y": 0.555,
+        "H_3m": 0.5,
+        "verdict": "RANDOM_WALK",
+        "supports_bubble": false
+      },
+      "mfdfa": {
+        "delta_alpha": 0.2633,
+        "available": true
+      },
+      "ews": {
+        "var_trend": "DECREASING",
+        "ac1_trend": "INCREASING",
+        "var_slope": -1.48e-06,
+        "ac1_slope": 0.00014
+      },
+      "sornette_pass": false,
+      "final_verdict": "NO_BUBBLE",
+      "final_reason": "LPPLS verdict: NO_BUBBLE",
+      "contract_violations": [],
+      "signal_strength": "0/5",
+      "signal_score": 0.0
+    },
+    {
+      "ticker": "XRP-USD",
+      "domain": "Crypto",
+      "timestamp": "2026-04-06 14:26",
+      "price": 1.35,
+      "data_points": 731,
+      "lppls_simple": {
+        "verdict": "NO_BUBBLE",
+        "quality": 0.4,
+        "r_squared": 0.5882,
+        "m": 0.9,
+        "omega": 8.3049,
+        "damping": 0.8657,
+        "oscillations": 6.123,
+        "tc_date": "2026-04-13",
+        "B": -0.0028
+      },
+      "academic": {
+        "verdict": "UNAVAILABLE",
+        "error": "'ScreeningResult' object has no attribute 'regime'",
+        "available": false
+      },
+      "ds_lppls": {
+        "ds_confidence": 0.0,
+        "ds_verdict": "NO_BUBBLE",
+        "valid_windows": 0,
+        "total_windows": 27,
+        "ds_median_tc": null,
+        "ds_tc_std": null,
+        "sornette_pass": false
+      },
+      "hmm": {
+        "should_fit": false,
+        "regime": "NORMAL",
+        "bubble_prob": 0.0,
+        "growth_prob": 0.0
+      },
+      "hurst": {
+        "H_2y": 0.9088,
+        "H_3m": 0.5,
+        "verdict": "PERSISTENT",
+        "supports_bubble": true
+      },
+      "mfdfa": {
+        "delta_alpha": 0.2697,
+        "available": true
+      },
+      "ews": {
+        "var_trend": "STABLE",
+        "ac1_trend": "INCREASING",
+        "var_slope": -3.5e-07,
+        "ac1_slope": 0.000125
+      },
+      "sornette_pass": false,
+      "final_verdict": "NO_BUBBLE",
+      "final_reason": "LPPLS verdict: NO_BUBBLE",
+      "contract_violations": [],
+      "signal_strength": "1/5",
+      "signal_score": 0.2
+    },
+    {
+      "ticker": "DOGE-USD",
+      "domain": "Crypto",
+      "timestamp": "2026-04-06 14:27",
+      "price": 0.09,
+      "data_points": 731,
+      "lppls_simple": {
+        "verdict": "NO_BUBBLE",
+        "quality": 0.25,
+        "r_squared": 0.4237,
+        "m": 0.9,
+        "omega": 10.4523,
+        "damping": 0.0,
+        "oscillations": 3.436,
+        "tc_date": "2026-07-20",
+        "B": 0.0
+      },
+      "academic": {
+        "verdict": "UNAVAILABLE",
+        "error": "'ScreeningResult' object has no attribute 'regime'",
+        "available": false
+      },
+      "ds_lppls": {
+        "ds_confidence": 0.0,
+        "ds_verdict": "NO_BUBBLE",
+        "valid_windows": 0,
+        "total_windows": 27,
+        "ds_median_tc": null,
+        "ds_tc_std": null,
+        "sornette_pass": false
+      },
+      "hmm": {
+        "should_fit": true,
+        "regime": "GROWTH",
+        "bubble_prob": 0.0,
+        "growth_prob": 1.0
+      },
+      "hurst": {
+        "H_2y": 0.7254,
+        "H_3m": 0.5,
+        "verdict": "PERSISTENT",
+        "supports_bubble": true
+      },
+      "mfdfa": {
+        "delta_alpha": 0.5115,
+        "available": true
+      },
+      "ews": {
+        "var_trend": "DECREASING",
+        "ac1_trend": "DECREASING",
+        "var_slope": -2.23e-06,
+        "ac1_slope": -0.000261
+      },
+      "sornette_pass": false,
+      "final_verdict": "NO_BUBBLE",
+      "final_reason": "LPPLS verdict: NO_BUBBLE",
+      "contract_violations": [],
+      "signal_strength": "1/5",
+      "signal_score": 0.2
+    },
+    {
+      "ticker": "GC=F",
+      "domain": "Commodities",
+      "timestamp": "2026-04-06 14:27",
+      "price": 4727.8,
+      "data_points": 502,
+      "lppls_simple": {
+        "verdict": "NO_BUBBLE",
+        "quality": 0.75,
+        "r_squared": 0.9683,
+        "m": 0.1828,
+        "omega": 5.4052,
+        "damping": 78.6293,
+        "oscillations": 1.324,
+        "tc_date": "2026-08-20",
+        "B": -3794.6617
+      },
+      "academic": {
+        "verdict": "UNAVAILABLE",
+        "error": "'ScreeningResult' object has no attribute 'regime'",
+        "available": false
+      },
+      "ds_lppls": {
+        "ds_confidence": 0.0526,
+        "ds_verdict": "NO_BUBBLE",
+        "valid_windows": 1,
+        "total_windows": 19,
+        "ds_median_tc": 553.1428571428571,
+        "ds_tc_std": null,
+        "sornette_pass": false
+      },
+      "hmm": {
+        "should_fit": true,
+        "regime": "BUBBLE",
+        "bubble_prob": 1.0,
+        "growth_prob": 0.0
+      },
+      "hurst": {
+        "H_2y": 0.7442,
+        "H_3m": 0.5,
+        "verdict": "PERSISTENT",
+        "supports_bubble": true
+      },
+      "mfdfa": {
+        "delta_alpha": 0.2256,
+        "available": true
+      },
+      "ews": {
+        "var_trend": "INCREASING",
+        "ac1_trend": "DECREASING",
+        "var_slope": 1.64e-06,
+        "ac1_slope": -0.000448
+      },
+      "sornette_pass": false,
+      "final_verdict": "NO_BUBBLE",
+      "final_reason": "LPPLS verdict: NO_BUBBLE",
+      "contract_violations": [],
+      "signal_strength": "3/5",
+      "signal_score": 0.6
+    },
+    {
+      "ticker": "SI=F",
+      "domain": "Commodities",
+      "timestamp": "2026-04-06 14:29",
+      "price": 73.53,
+      "data_points": 502,
+      "lppls_simple": {
+        "verdict": "NO_BUBBLE",
+        "quality": 0.65,
+        "r_squared": 0.9112,
+        "m": 0.1,
+        "omega": 5.0516,
+        "damping": 37.3781,
+        "oscillations": 1.487,
+        "tc_date": "2026-07-08",
+        "B": -216.1779
+      },
+      "academic": {
+        "verdict": "UNAVAILABLE",
+        "error": "'ScreeningResult' object has no attribute 'regime'",
+        "available": false
+      },
+      "ds_lppls": {
+        "ds_confidence": 0.0,
+        "ds_verdict": "NO_BUBBLE",
+        "valid_windows": 0,
+        "total_windows": 19,
+        "ds_median_tc": null,
+        "ds_tc_std": null,
+        "sornette_pass": false
+      },
+      "hmm": {
+        "should_fit": true,
+        "regime": "BUBBLE",
+        "bubble_prob": 0.988,
+        "growth_prob": 0.0
+      },
+      "hurst": {
+        "H_2y": 0.6717,
+        "H_3m": 0.5,
+        "verdict": "RANDOM_WALK",
+        "supports_bubble": true
+      },
+      "mfdfa": {
+        "delta_alpha": 0.5694,
+        "available": true
+      },
+      "ews": {
+        "var_trend": "INCREASING",
+        "ac1_trend": "DECREASING",
+        "var_slope": 2.012e-05,
+        "ac1_slope": -0.001881
+      },
+      "sornette_pass": false,
+      "final_verdict": "NO_BUBBLE",
+      "final_reason": "LPPLS verdict: NO_BUBBLE",
+      "contract_violations": [],
+      "signal_strength": "3/5",
+      "signal_score": 0.6
+    },
+    {
+      "ticker": "CL=F",
+      "domain": "Commodities",
+      "timestamp": "2026-04-06 14:30",
+      "price": 109.39,
+      "data_points": 502,
+      "lppls_simple": {
+        "verdict": "NO_BUBBLE",
+        "quality": 0.15,
+        "r_squared": 0.2342,
+        "m": 0.1,
+        "omega": 8.2961,
+        "damping": 0.0,
+        "oscillations": 2.243,
+        "tc_date": "2026-07-27",
+        "B": 0.0
+      },
+      "academic": {
+        "verdict": "UNAVAILABLE",
+        "error": "'ScreeningResult' object has no attribute 'regime'",
+        "available": false
+      },
+      "ds_lppls": {
+        "ds_confidence": 0.0,
+        "ds_verdict": "NO_BUBBLE",
+        "valid_windows": 0,
+        "total_windows": 19,
+        "ds_median_tc": null,
+        "ds_tc_std": null,
+        "sornette_pass": false
+      },
+      "hmm": {
+        "should_fit": true,
+        "regime": "GROWTH",
+        "bubble_prob": 0.011,
+        "growth_prob": 0.989
+      },
+      "hurst": {
+        "H_2y": 0.5862,
+        "H_3m": 0.5,
+        "verdict": "RANDOM_WALK",
+        "supports_bubble": false
+      },
+      "mfdfa": {
+        "delta_alpha": 0.1673,
+        "available": true
+      },
+      "ews": {
+        "var_trend": "STABLE",
+        "ac1_trend": "DECREASING",
+        "var_slope": 7.4e-07,
+        "ac1_slope": -0.000413
+      },
+      "sornette_pass": false,
+      "final_verdict": "NO_BUBBLE",
+      "final_reason": "LPPLS verdict: NO_BUBBLE",
+      "contract_violations": [],
+      "signal_strength": "0/5",
+      "signal_score": 0.0
+    },
+    {
+      "ticker": "NG=F",
+      "domain": "Commodities",
+      "timestamp": "2026-04-06 14:30",
+      "price": 2.83,
+      "data_points": 502,
+      "lppls_simple": {
+        "verdict": "NO_BUBBLE",
+        "quality": 0.5,
+        "r_squared": 0.6567,
+        "m": 0.1,
+        "omega": 8.4577,
+        "damping": 8.9192,
+        "oscillations": 2.35,
+        "tc_date": "2026-07-20",
+        "B": -3.53
+      },
+      "academic": {
+        "verdict": "UNAVAILABLE",
+        "error": "'ScreeningResult' object has no attribute 'regime'",
+        "available": false
+      },
+      "ds_lppls": {
+        "ds_confidence": 0.0,
+        "ds_verdict": "NO_BUBBLE",
+        "valid_windows": 0,
+        "total_windows": 19,
+        "ds_median_tc": null,
+        "ds_tc_std": null,
+        "sornette_pass": false
+      },
+      "hmm": {
+        "should_fit": false,
+        "regime": "NORMAL",
+        "bubble_prob": 0.247,
+        "growth_prob": 0.0
+      },
+      "hurst": {
+        "H_2y": 0.6595,
+        "H_3m": 0.5,
+        "verdict": "RANDOM_WALK",
+        "supports_bubble": true
+      },
+      "mfdfa": {
+        "delta_alpha": 0.7535,
+        "available": true
+      },
+      "ews": {
+        "var_trend": "INCREASING",
+        "ac1_trend": "INCREASING",
+        "var_slope": 4.954e-05,
+        "ac1_slope": 0.000813
+      },
+      "sornette_pass": false,
+      "final_verdict": "NO_BUBBLE",
+      "final_reason": "LPPLS verdict: NO_BUBBLE",
+      "contract_violations": [],
+      "signal_strength": "2/5",
+      "signal_score": 0.4
+    },
+    {
+      "ticker": "HG=F",
+      "domain": "Commodities",
+      "timestamp": "2026-04-06 14:31",
+      "price": 5.69,
+      "data_points": 502,
+      "lppls_simple": {
+        "verdict": "NO_BUBBLE",
+        "quality": 0.65,
+        "r_squared": 0.7707,
+        "m": 0.1,
+        "omega": 8.7947,
+        "damping": 33.434,
+        "oscillations": 2.513,
+        "tc_date": "2026-07-14",
+        "B": -5.3171
+      },
+      "academic": {
+        "verdict": "UNAVAILABLE",
+        "error": "'ScreeningResult' object has no attribute 'regime'",
+        "available": false
+      },
+      "ds_lppls": {
+        "ds_confidence": 0.0,
+        "ds_verdict": "NO_BUBBLE",
+        "valid_windows": 0,
+        "total_windows": 19,
+        "ds_median_tc": null,
+        "ds_tc_std": null,
+        "sornette_pass": false
+      },
+      "hmm": {
+        "should_fit": true,
+        "regime": "GROWTH",
+        "bubble_prob": 0.004,
+        "growth_prob": 0.995
+      },
+      "hurst": {
+        "H_2y": 0.4956,
+        "H_3m": 0.5,
+        "verdict": "RANDOM_WALK",
+        "supports_bubble": false
+      },
+      "mfdfa": {
+        "delta_alpha": 0.7565,
+        "available": true
+      },
+      "ews": {
+        "var_trend": "DECREASING",
+        "ac1_trend": "DECREASING",
+        "var_slope": -1.51e-06,
+        "ac1_slope": -0.003079
+      },
+      "sornette_pass": false,
+      "final_verdict": "NO_BUBBLE",
+      "final_reason": "LPPLS verdict: NO_BUBBLE",
+      "contract_violations": [],
+      "signal_strength": "0/5",
+      "signal_score": 0.0
+    },
+    {
+      "ticker": "ZW=F",
+      "domain": "Commodities",
+      "timestamp": "2026-04-06 14:32",
+      "price": 591.25,
+      "data_points": 501,
+      "lppls_simple": {
+        "verdict": "NO_BUBBLE",
+        "quality": 0.15,
+        "r_squared": 0.1221,
+        "m": 0.9,
+        "omega": 7.6867,
+        "damping": 0.0,
+        "oscillations": 7.605,
+        "tc_date": "2026-04-07",
+        "B": 0.0
+      },
+      "academic": {
+        "verdict": "UNAVAILABLE",
+        "error": "'ScreeningResult' object has no attribute 'regime'",
+        "available": false
+      },
+      "ds_lppls": {
+        "ds_confidence": 0.0,
+        "ds_verdict": "NO_BUBBLE",
+        "valid_windows": 0,
+        "total_windows": 19,
+        "ds_median_tc": null,
+        "ds_tc_std": null,
+        "sornette_pass": false
+      },
+      "hmm": {
+        "should_fit": true,
+        "regime": "GROWTH",
+        "bubble_prob": 0.0,
+        "growth_prob": 1.0
+      },
+      "hurst": {
+        "H_2y": 0.5065,
+        "H_3m": 0.5,
+        "verdict": "RANDOM_WALK",
+        "supports_bubble": false
+      },
+      "mfdfa": {
+        "delta_alpha": 0.2226,
+        "available": true
+      },
+      "ews": {
+        "var_trend": "STABLE",
+        "ac1_trend": "INCREASING",
+        "var_slope": -3.2e-07,
+        "ac1_slope": 0.000235
+      },
+      "sornette_pass": false,
+      "final_verdict": "NO_BUBBLE",
+      "final_reason": "LPPLS verdict: NO_BUBBLE",
+      "contract_violations": [],
+      "signal_strength": "0/5",
+      "signal_score": 0.0
+    },
+    {
+      "ticker": "PL=F",
+      "domain": "Commodities",
+      "timestamp": "2026-04-06 14:32",
+      "price": 2009.0,
+      "data_points": 502,
+      "lppls_simple": {
+        "verdict": "NO_BUBBLE",
+        "quality": 0.65,
+        "r_squared": 0.9144,
+        "m": 0.1,
+        "omega": 5.3729,
+        "damping": 47.0169,
+        "oscillations": 1.348,
+        "tc_date": "2026-08-14",
+        "B": -5479.2073
+      },
+      "academic": {
+        "verdict": "UNAVAILABLE",
+        "error": "'ScreeningResult' object has no attribute 'regime'",
+        "available": false
+      },
+      "ds_lppls": {
+        "ds_confidence": 0.0,
+        "ds_verdict": "NO_BUBBLE",
+        "valid_windows": 0,
+        "total_windows": 19,
+        "ds_median_tc": null,
+        "ds_tc_std": null,
+        "sornette_pass": false
+      },
+      "hmm": {
+        "should_fit": false,
+        "regime": "NORMAL",
+        "bubble_prob": 0.43,
+        "growth_prob": 0.036
+      },
+      "hurst": {
+        "H_2y": 0.6992,
+        "H_3m": 0.5,
+        "verdict": "RANDOM_WALK",
+        "supports_bubble": true
+      },
+      "mfdfa": {
+        "delta_alpha": 0.414,
+        "available": true
+      },
+      "ews": {
+        "var_trend": "INCREASING",
+        "ac1_trend": "DECREASING",
+        "var_slope": 1.16e-05,
+        "ac1_slope": -0.001802
+      },
+      "sornette_pass": false,
+      "final_verdict": "NO_BUBBLE",
+      "final_reason": "LPPLS verdict: NO_BUBBLE",
+      "contract_violations": [],
+      "signal_strength": "2/5",
+      "signal_score": 0.4
+    },
+    {
+      "ticker": "XLF",
+      "domain": "Sector ETFs",
+      "timestamp": "2026-04-06 14:33",
+      "price": 49.53,
+      "data_points": 502,
+      "lppls_simple": {
+        "verdict": "POSSIBLE",
+        "quality": 0.8,
+        "r_squared": 0.8592,
+        "m": 0.9,
+        "omega": 8.6996,
+        "damping": 3.4292,
+        "oscillations": 5.056,
+        "tc_date": "2026-04-19",
+        "B": -0.0449
+      },
+      "academic": {
+        "verdict": "UNAVAILABLE",
+        "error": "'ScreeningResult' object has no attribute 'regime'",
+        "available": false
+      },
+      "ds_lppls": {
+        "ds_confidence": 0.0,
+        "ds_verdict": "NO_BUBBLE",
+        "valid_windows": 0,
+        "total_windows": 17,
+        "ds_median_tc": null,
+        "ds_tc_std": null,
+        "sornette_pass": false
+      },
+      "hmm": {
+        "should_fit": true,
+        "regime": "BUBBLE",
+        "bubble_prob": 0.902,
+        "growth_prob": 0.026
+      },
+      "hurst": {
+        "H_2y": 0.5982,
+        "H_3m": 0.5,
+        "verdict": "RANDOM_WALK",
+        "supports_bubble": false
+      },
+      "mfdfa": {
+        "delta_alpha": 0.3132,
+        "available": true
+      },
+      "ews": {
+        "var_trend": "DECREASING",
+        "ac1_trend": "INCREASING",
+        "var_slope": -1.15e-06,
+        "ac1_slope": 0.000193
+      },
+      "sornette_pass": false,
+      "final_verdict": "POSSIBLE",
+      "final_reason": "LPPLS verdict: POSSIBLE",
+      "contract_violations": [],
+      "signal_strength": "2/5",
+      "signal_score": 0.4
+    },
+    {
+      "ticker": "XLE",
+      "domain": "Sector ETFs",
+      "timestamp": "2026-04-06 14:33",
+      "price": 59.25,
+      "data_points": 502,
+      "lppls_simple": {
+        "verdict": "NO_BUBBLE",
+        "quality": 0.5,
+        "r_squared": 0.5835,
+        "m": 0.1,
+        "omega": 7.8417,
+        "damping": 73.5719,
+        "oscillations": 7.761,
+        "tc_date": "2026-04-07",
+        "B": -21.6319
+      },
+      "academic": {
+        "verdict": "UNAVAILABLE",
+        "error": "'ScreeningResult' object has no attribute 'regime'",
+        "available": false
+      },
+      "ds_lppls": {
+        "ds_confidence": 0.0,
+        "ds_verdict": "NO_BUBBLE",
+        "valid_windows": 0,
+        "total_windows": 17,
+        "ds_median_tc": null,
+        "ds_tc_std": null,
+        "sornette_pass": true
+      },
+      "hmm": {
+        "should_fit": true,
+        "regime": "BUBBLE",
+        "bubble_prob": 1.0,
+        "growth_prob": 0.0
+      },
+      "hurst": {
+        "H_2y": 0.498,
+        "H_3m": 0.5,
+        "verdict": "RANDOM_WALK",
+        "supports_bubble": false
+      },
+      "mfdfa": {
+        "delta_alpha": 0.1855,
+        "available": true
+      },
+      "ews": {
+        "var_trend": "DECREASING",
+        "ac1_trend": "DECREASING",
+        "var_slope": -1.94e-06,
+        "ac1_slope": -0.001167
+      },
+      "sornette_pass": true,
+      "final_verdict": "NO_BUBBLE",
+      "final_reason": "LPPLS verdict: NO_BUBBLE",
+      "contract_violations": [],
+      "signal_strength": "1/5",
+      "signal_score": 0.2
+    },
+    {
+      "ticker": "XLK",
+      "domain": "Sector ETFs",
+      "timestamp": "2026-04-06 14:33",
+      "price": 135.99,
+      "data_points": 502,
+      "lppls_simple": {
+        "verdict": "NO_BUBBLE",
+        "quality": 0.9,
+        "r_squared": 0.8837,
+        "m": 0.7473,
+        "omega": 8.47,
+        "damping": 6.9197,
+        "oscillations": 1.794,
+        "tc_date": "2026-10-03",
+        "B": -0.7103
+      },
+      "academic": {
+        "verdict": "UNAVAILABLE",
+        "error": "'ScreeningResult' object has no attribute 'regime'",
+        "available": false
+      },
+      "ds_lppls": {
+        "ds_confidence": 0.0,
+        "ds_verdict": "NO_BUBBLE",
+        "valid_windows": 0,
+        "total_windows": 17,
+        "ds_median_tc": null,
+        "ds_tc_std": null,
+        "sornette_pass": false
+      },
+      "hmm": {
+        "should_fit": false,
+        "regime": "NORMAL",
+        "bubble_prob": 0.169,
+        "growth_prob": 0.142
+      },
+      "hurst": {
+        "H_2y": 0.5691,
+        "H_3m": 0.5,
+        "verdict": "RANDOM_WALK",
+        "supports_bubble": false
+      },
+      "mfdfa": {
+        "delta_alpha": 0.1775,
+        "available": true
+      },
+      "ews": {
+        "var_trend": "DECREASING",
+        "ac1_trend": "INCREASING",
+        "var_slope": -2.25e-06,
+        "ac1_slope": 0.000512
+      },
+      "sornette_pass": false,
+      "final_verdict": "NO_BUBBLE",
+      "final_reason": "LPPLS verdict: NO_BUBBLE",
+      "contract_violations": [],
+      "signal_strength": "0/5",
+      "signal_score": 0.0
+    },
+    {
+      "ticker": "XLV",
+      "domain": "Sector ETFs",
+      "timestamp": "2026-04-06 14:33",
+      "price": 146.81,
+      "data_points": 502,
+      "lppls_simple": {
+        "verdict": "NO_BUBBLE",
+        "quality": 0.8,
+        "r_squared": 0.8157,
+        "m": 0.1,
+        "omega": 7.021,
+        "damping": 12.046,
+        "oscillations": 1.516,
+        "tc_date": "2026-09-26",
+        "B": -66.5521
+      },
+      "academic": {
+        "verdict": "UNAVAILABLE",
+        "error": "'ScreeningResult' object has no attribute 'regime'",
+        "available": false
+      },
+      "ds_lppls": {
+        "ds_confidence": 0.0,
+        "ds_verdict": "NO_BUBBLE",
+        "valid_windows": 0,
+        "total_windows": 17,
+        "ds_median_tc": null,
+        "ds_tc_std": null,
+        "sornette_pass": false
+      },
+      "hmm": {
+        "should_fit": true,
+        "regime": "GROWTH",
+        "bubble_prob": 0.005,
+        "growth_prob": 0.995
+      },
+      "hurst": {
+        "H_2y": 0.4692,
+        "H_3m": 0.5,
+        "verdict": "RANDOM_WALK",
+        "supports_bubble": false
+      },
+      "mfdfa": {
+        "delta_alpha": 0.3251,
+        "available": true
+      },
+      "ews": {
+        "var_trend": "STABLE",
+        "ac1_trend": "INCREASING",
+        "var_slope": -6.6e-07,
+        "ac1_slope": 0.00073
+      },
+      "sornette_pass": false,
+      "final_verdict": "NO_BUBBLE",
+      "final_reason": "LPPLS verdict: NO_BUBBLE",
+      "contract_violations": [],
+      "signal_strength": "0/5",
+      "signal_score": 0.0
+    },
+    {
+      "ticker": "GDX",
+      "domain": "Sector ETFs",
+      "timestamp": "2026-04-06 14:33",
+      "price": 94.59,
+      "data_points": 502,
+      "lppls_simple": {
+        "verdict": "NO_BUBBLE",
+        "quality": 0.85,
+        "r_squared": 0.9605,
+        "m": 0.3896,
+        "omega": 5.3242,
+        "damping": 16.1759,
+        "oscillations": 1.149,
+        "tc_date": "2026-09-26",
+        "B": -14.8027
+      },
+      "academic": {
+        "verdict": "UNAVAILABLE",
+        "error": "'ScreeningResult' object has no attribute 'regime'",
+        "available": false
+      },
+      "ds_lppls": {
+        "ds_confidence": 0.0,
+        "ds_verdict": "NO_BUBBLE",
+        "valid_windows": 0,
+        "total_windows": 17,
+        "ds_median_tc": null,
+        "ds_tc_std": null,
+        "sornette_pass": false
+      },
+      "hmm": {
+        "should_fit": false,
+        "regime": "NORMAL",
+        "bubble_prob": 0.0,
+        "growth_prob": 0.0
+      },
+      "hurst": {
+        "H_2y": 0.7262,
+        "H_3m": 0.5,
+        "verdict": "PERSISTENT",
+        "supports_bubble": true
+      },
+      "mfdfa": {
+        "delta_alpha": 0.4413,
+        "available": true
+      },
+      "ews": {
+        "var_trend": "INCREASING",
+        "ac1_trend": "DECREASING",
+        "var_slope": 2.64e-06,
+        "ac1_slope": -0.000247
+      },
+      "sornette_pass": false,
+      "final_verdict": "NO_BUBBLE",
+      "final_reason": "LPPLS verdict: NO_BUBBLE",
+      "contract_violations": [],
+      "signal_strength": "2/5",
+      "signal_score": 0.4
+    },
+    {
+      "ticker": "SLV",
+      "domain": "Sector ETFs",
+      "timestamp": "2026-04-06 14:34",
+      "price": 65.79,
+      "data_points": 502,
+      "lppls_simple": {
+        "verdict": "NO_BUBBLE",
+        "quality": 0.8,
+        "r_squared": 0.8868,
+        "m": 0.1,
+        "omega": 6.4669,
+        "damping": 43.8826,
+        "oscillations": 1.483,
+        "tc_date": "2026-09-08",
+        "B": -230.2665
+      },
+      "academic": {
+        "verdict": "UNAVAILABLE",
+        "error": "'ScreeningResult' object has no attribute 'regime'",
+        "available": false
+      },
+      "ds_lppls": {
+        "ds_confidence": 0.0,
+        "ds_verdict": "NO_BUBBLE",
+        "valid_windows": 0,
+        "total_windows": 17,
+        "ds_median_tc": null,
+        "ds_tc_std": null,
+        "sornette_pass": false
+      },
+      "hmm": {
+        "should_fit": false,
+        "regime": "NORMAL",
+        "bubble_prob": 0.0,
+        "growth_prob": 0.0
+      },
+      "hurst": {
+        "H_2y": 0.6828,
+        "H_3m": 0.5,
+        "verdict": "RANDOM_WALK",
+        "supports_bubble": true
+      },
+      "mfdfa": {
+        "delta_alpha": 0.5516,
+        "available": true
+      },
+      "ews": {
+        "var_trend": "INCREASING",
+        "ac1_trend": "DECREASING",
+        "var_slope": 1.669e-05,
+        "ac1_slope": -0.000755
+      },
+      "sornette_pass": false,
+      "final_verdict": "NO_BUBBLE",
+      "final_reason": "LPPLS verdict: NO_BUBBLE",
+      "contract_violations": [],
+      "signal_strength": "2/5",
+      "signal_score": 0.4
+    },
+    {
+      "ticker": "DBA",
+      "domain": "Sector ETFs",
+      "timestamp": "2026-04-06 14:34",
+      "price": 27.16,
+      "data_points": 502,
+      "lppls_simple": {
+        "verdict": "POSSIBLE",
+        "quality": 0.8,
+        "r_squared": 0.8133,
+        "m": 0.9,
+        "omega": 7.5541,
+        "damping": 1.2928,
+        "oscillations": 7.476,
+        "tc_date": "2026-04-07",
+        "B": -0.0094
+      },
+      "academic": {
+        "verdict": "UNAVAILABLE",
+        "error": "'ScreeningResult' object has no attribute 'regime'",
+        "available": false
+      },
+      "ds_lppls": {
+        "ds_confidence": 0.0,
+        "ds_verdict": "NO_BUBBLE",
+        "valid_windows": 0,
+        "total_windows": 17,
+        "ds_median_tc": null,
+        "ds_tc_std": null,
+        "sornette_pass": false
+      },
+      "hmm": {
+        "should_fit": true,
+        "regime": "GROWTH",
+        "bubble_prob": 0.0,
+        "growth_prob": 1.0
+      },
+      "hurst": {
+        "H_2y": 0.4794,
+        "H_3m": 0.5,
+        "verdict": "RANDOM_WALK",
+        "supports_bubble": false
+      },
+      "mfdfa": {
+        "delta_alpha": 0.4075,
+        "available": true
+      },
+      "ews": {
+        "var_trend": "STABLE",
+        "ac1_trend": "INCREASING",
+        "var_slope": -3.9e-07,
+        "ac1_slope": 0.000298
+      },
+      "sornette_pass": false,
+      "final_verdict": "POSSIBLE",
+      "final_reason": "LPPLS verdict: POSSIBLE",
+      "contract_violations": [],
+      "signal_strength": "1/5",
+      "signal_score": 0.2
+    },
+    {
+      "ticker": "TLT",
+      "domain": "Sector ETFs",
+      "timestamp": "2026-04-06 14:34",
+      "price": 86.79,
+      "data_points": 502,
+      "lppls_simple": {
+        "verdict": "NO_BUBBLE",
+        "quality": 0.5,
+        "r_squared": 0.4566,
+        "m": 0.9,
+        "omega": 7.59,
+        "damping": 1.1962,
+        "oscillations": 2.0,
+        "tc_date": "2026-08-02",
+        "B": -0.0181
+      },
+      "academic": {
+        "verdict": "UNAVAILABLE",
+        "error": "'ScreeningResult' object has no attribute 'regime'",
+        "available": false
+      },
+      "ds_lppls": {
+        "ds_confidence": 0.0,
+        "ds_verdict": "NO_BUBBLE",
+        "valid_windows": 0,
+        "total_windows": 17,
+        "ds_median_tc": null,
+        "ds_tc_std": null,
+        "sornette_pass": false
+      },
+      "hmm": {
+        "should_fit": true,
+        "regime": "BUBBLE",
+        "bubble_prob": 0.683,
+        "growth_prob": 0.317
+      },
+      "hurst": {
+        "H_2y": 0.4424,
+        "H_3m": 0.5,
+        "verdict": "RANDOM_WALK",
+        "supports_bubble": false
+      },
+      "mfdfa": {
+        "delta_alpha": 0.1618,
+        "available": true
+      },
+      "ews": {
+        "var_trend": "STABLE",
+        "ac1_trend": "DECREASING",
+        "var_slope": -3.3e-07,
+        "ac1_slope": -0.0008
+      },
+      "sornette_pass": false,
+      "final_verdict": "NO_BUBBLE",
+      "final_reason": "LPPLS verdict: NO_BUBBLE",
+      "contract_violations": [],
+      "signal_strength": "1/5",
+      "signal_score": 0.2
+    },
+    {
+      "ticker": "ARKK",
+      "domain": "Sector ETFs",
+      "timestamp": "2026-04-06 14:34",
+      "price": 68.56,
+      "data_points": 502,
+      "lppls_simple": {
+        "verdict": "NO_BUBBLE",
+        "quality": 0.65,
+        "r_squared": 0.8232,
+        "m": 0.1,
+        "omega": 5.1027,
+        "damping": 24.8548,
+        "oscillations": 1.28,
+        "tc_date": "2026-08-14",
+        "B": -125.518
+      },
+      "academic": {
+        "verdict": "UNAVAILABLE",
+        "error": "'ScreeningResult' object has no attribute 'regime'",
+        "available": false
+      },
+      "ds_lppls": {
+        "ds_confidence": 0.0,
+        "ds_verdict": "NO_BUBBLE",
+        "valid_windows": 0,
+        "total_windows": 17,
+        "ds_median_tc": null,
+        "ds_tc_std": null,
+        "sornette_pass": false
+      },
+      "hmm": {
+        "should_fit": false,
+        "regime": "NORMAL",
+        "bubble_prob": 0.066,
+        "growth_prob": 0.0
+      },
+      "hurst": {
+        "H_2y": 0.6295,
+        "H_3m": 0.5,
+        "verdict": "RANDOM_WALK",
+        "supports_bubble": false
+      },
+      "mfdfa": {
+        "delta_alpha": 0.2115,
+        "available": true
+      },
+      "ews": {
+        "var_trend": "DECREASING",
+        "ac1_trend": "INCREASING",
+        "var_slope": -4.23e-06,
+        "ac1_slope": 0.001006
+      },
+      "sornette_pass": false,
+      "final_verdict": "NO_BUBBLE",
+      "final_reason": "LPPLS verdict: NO_BUBBLE",
+      "contract_violations": [],
+      "signal_strength": "0/5",
+      "signal_score": 0.0
+    }
+  ]
+}

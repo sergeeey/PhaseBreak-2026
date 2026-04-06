@@ -1,0 +1,69 @@
+{
+  "scan_date": "2026-04-06 13:55",
+  "model": "PhaseBreak Deep Analysis (all modules)",
+  "elapsed_seconds": 34.6,
+  "total_scanned": 1,
+  "signals": 1,
+  "results": [
+    {
+      "ticker": "TSLA",
+      "domain": "Custom",
+      "timestamp": "2026-04-06 13:55",
+      "price": 360.59,
+      "data_points": 502,
+      "lppls_simple": {
+        "verdict": "POSSIBLE",
+        "quality": 0.85,
+        "r_squared": 0.7877,
+        "m": 0.5801,
+        "omega": 8.2678,
+        "damping": 6.1566,
+        "oscillations": 2.178,
+        "tc_date": "2026-08-02",
+        "B": -10.104
+      },
+      "academic": {
+        "verdict": "UNAVAILABLE",
+        "error": "'ScreeningResult' object has no attribute 'regime'",
+        "available": false
+      },
+      "ds_lppls": {
+        "ds_confidence": 0.0,
+        "ds_verdict": "NO_BUBBLE",
+        "valid_windows": 0,
+        "total_windows": 17,
+        "ds_median_tc": null,
+        "ds_tc_std": null,
+        "sornette_pass": false
+      },
+      "hmm": {
+        "should_fit": false,
+        "regime": "NORMAL",
+        "bubble_prob": 0.0,
+        "growth_prob": 0.003
+      },
+      "hurst": {
+        "H_2y": 0.7262,
+        "H_3m": 0.5,
+        "verdict": "PERSISTENT",
+        "supports_bubble": true
+      },
+      "mfdfa": {
+        "delta_alpha": 0.4023,
+        "available": true
+      },
+      "ews": {
+        "var_trend": "DECREASING",
+        "ac1_trend": "DECREASING",
+        "var_slope": -1.146e-05,
+        "ac1_slope": -0.00074
+      },
+      "sornette_pass": false,
+      "final_verdict": "POSSIBLE",
+      "final_reason": "LPPLS verdict: POSSIBLE",
+      "contract_violations": [],
+      "signal_strength": "2/5",
+      "signal_score": 0.4
+    }
+  ]
+}
