@@ -48,6 +48,44 @@ Layer C: Scientific Inference → cross-domain KS, universality (offline only)
 - `run_legacy_pipeline()` — backward-compatible path
 - `HMMLPPLSEnsemble.analyze()` — legacy ensemble
 
+## Web API & Dashboard (NEW)
+
+**FastAPI Server** — REST API for LPPLS detection:
+```bash
+pip install fastapi uvicorn[standard]
+python -m service.server.main
+# API: http://localhost:8000
+# Docs: http://localhost:8000/docs
+```
+
+**React Dashboard** — Visual interface with real-time scanning:
+```bash
+cd service/frontend
+npm install && npm start
+# Dashboard: http://localhost:3000
+```
+
+**API Endpoints:**
+- `POST /api/v1/scan` — Scan multiple tickers
+- `GET /api/v1/scan/{ticker}` — Scan single ticker
+- `GET /api/v1/scorecard` — Get current predictions
+- `GET /api/v1/domains` — List available domains
+- `GET /api/v1/benchmark` — Get benchmark summary
+
+See `service/README.md` for full documentation.
+
+## One-Command Replication
+
+```bash
+# Linux / macOS / Git Bash
+bash reproduce.sh
+
+# Windows PowerShell
+powershell -ExecutionPolicy Bypass -File reproduce.ps1
+```
+
+Creates a virtual environment, installs all dependencies, runs 268 tests, then reproduces the full v2 benchmark (58 episodes), ablation study, and baseline comparisons. Results saved to `data/v2_results/`.
+
 ## Quick Start
 
 ```bash
@@ -111,7 +149,7 @@ python -m src.benchmark.v2_ablation        # run ablation study
 - [x] v2 ablation — layer-by-layer evaluation
 - [x] 5 domains validated (finance, commodities, housing, geology, fraud)
 - [x] Forward validation 2024-2025: Nvidia/Nikkei/BTC detected, 0 FP
-- [x] **253 tests passing**
+- [x] **268+ tests passing**
 
 ## License
 
