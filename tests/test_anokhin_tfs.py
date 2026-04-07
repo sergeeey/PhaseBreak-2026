@@ -17,14 +17,14 @@ import sys
 PROJECT_ROOT = Path(__file__).parent.parent
 sys.path.insert(0, str(PROJECT_ROOT))
 
-from src.pipeline.acceptor import (
+from src.pipeline.acceptor import (  # noqa: E402
     create_acceptor,
     compare_with_acceptor,
     run_tfs_pipeline_iteration,
     AcceptorPrediction,
     DOMAIN_ACCEPTOR_PRIORS,
 )
-from src.pipeline.stages import run_full_pipeline
+from src.pipeline.stages import run_full_pipeline  # noqa: E402
 
 
 # ---------------------------------------------------------------------------
@@ -280,7 +280,6 @@ class TestTFSPipeline:
         n = 200
         t = np.arange(n, dtype=float)
         # Create bubble-like data: exponential growth + oscillations
-        tc = n + 30
         values = np.exp(0.01 * t) + 0.1 * np.sin(0.5 * t) + 0.05 * np.random.randn(n)
         values = values * 100
 

@@ -29,14 +29,13 @@ import structlog
 import yfinance as yf
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse
 from pydantic import BaseModel, Field
 
 # Add project root to path
 PROJECT_ROOT = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(PROJECT_ROOT))
 
-from src.pipeline.stages import run_full_pipeline
+from src.pipeline.stages import run_full_pipeline  # noqa: E402
 
 log = structlog.get_logger()
 
