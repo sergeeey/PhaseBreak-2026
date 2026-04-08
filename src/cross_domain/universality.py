@@ -161,6 +161,64 @@ def run_full_equivalence(
     return results
 
 
+@dataclass
+class SensitivityRow:
+    """One row of TOST sensitivity analysis."""
+
+    m_bound: float
+    omega_bound: float
+    m_tost_p: float | None
+    m_equivalent: bool
+    omega_tost_p: float | None
+    omega_equivalent: bool
+
+
+def tost_sensitivity_analysis(
+    domain_a: DomainParams,
+    domain_b: DomainParams,
+    m_bounds: list[float] | None = None,
+    omega_bounds: list[float] | None = None,
+) -> list[SensitivityRow]:
+    """Run TOST equivalence at multiple bound levels.
+
+    Shows how the equivalence conclusion changes as margins tighten.
+    Useful for reviewers who question the default bounds.
+    """
+    if m_bounds is None:
+        m_bounds = [0.10, 0.15, 0.20, 0.25, 0.30]
+    if omega_bounds is None:
+        omega_bounds = [1.0, 2.0, 3.0, 4.0]
+
+    rows: list[SensitivityRow] = []
+    for mb in m_bounds:
+        for ob in omega_bounds:
+            results = run_full_equivalence(domain_a, domain_b, m_bound=mb, omega_bound=ob)
+            m_res = next((r for r in results if r.parameter == "m"), None)
+            o_res = next((r for r in results if r.parameter == "omega"), None)
+            rows.append(
+                SensitivityRow(
+                    m_bound=mb,
+                    omega_bound=ob,
+                    m_tost_p=m_res.tost_p if m_res else None,
+                    m_equivalent=m_res.is_equivalent if m_res else False,
+                    omega_tost_p=o_res.tost_p if o_res else None,
+                    omega_equivalent=o_res.is_equivalent if o_res else False,
+                )
+            )
+
+    # Log summary
+    m_equiv_bounds = [r.m_bound for r in rows if r.m_equivalent]
+    o_equiv_bounds = [r.omega_bound for r in rows if r.omega_equivalent]
+    log.info(
+        "tost_sensitivity",
+        domains=f"{domain_a.name}↔{domain_b.name}",
+        m_equivalent_at=sorted(set(m_equiv_bounds)) if m_equiv_bounds else "none",
+        omega_equivalent_at=sorted(set(o_equiv_bounds)) if o_equiv_bounds else "none",
+        total_combos=len(rows),
+    )
+    return rows
+
+
 def bootstrap_ks_test(
     a: NDArray,
     b: NDArray,

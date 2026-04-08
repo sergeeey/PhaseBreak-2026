@@ -39,12 +39,22 @@ class LPPLSOptimizer:
         omega_range: tuple[float, float] = (6.0, 13.0),
         grid_size: int = 10,
         n_best: int = 5,
+        *,
+        filter_m_interior: tuple[float, float] | None = None,
+        filter_omega_interior: tuple[float, float] | None = None,
+        min_abs_B: float = 0.003,
+        min_damping: float = 0.5,
     ) -> None:
         self.tc_range = tc_range
         self.m_range = m_range
         self.omega_range = omega_range
         self.grid_size = grid_size
         self.n_best = n_best
+        # Post-fit interior checks (reject boundary-stuck optima). Defaults match legacy behavior.
+        self._filter_m = filter_m_interior if filter_m_interior is not None else (0.1, 0.87)
+        self._filter_omega = filter_omega_interior if filter_omega_interior is not None else (5.0, 13.5)
+        self._min_abs_B = min_abs_B
+        self._min_damping = min_damping
 
     def fit(self, t: NDArray, log_price: NDArray) -> LPPLS:
         """Fit LPPLS model to time series.
@@ -76,7 +86,7 @@ class LPPLSOptimizer:
         for tc0, m0, omega0, sse0 in best_candidates:
             try:
                 params, sse = self._polish(t, log_price, tc0, m0, omega0, tc_lo, tc_hi)
-                if sse < best_sse and self._passes_filters(params):
+                if sse < best_sse and self._passes_filters_impl(params):
                     best_sse = sse
                     best_params = params
             except Exception:
@@ -92,7 +102,7 @@ class LPPLSOptimizer:
             A, B, C1, C2 = LPPLS.solve_linear(t, log_price, tc0, m0, omega0)
             fallback = LPPLSParams(tc=tc0, m=m0, omega=omega0, A=A, B=B, C1=C1, C2=C2)
 
-            if not self._passes_filters(fallback):
+            if not self._passes_filters_impl(fallback):
                 # Force B positive → is_bubble = False
                 best_params = LPPLSParams(
                     tc=tc0, m=m0, omega=omega0, A=A, B=abs(B) + 1e-5, C1=C1, C2=C2
@@ -180,9 +190,10 @@ class LPPLSOptimizer:
         )
         return params, float(result.fun)
 
-    @staticmethod
-    def _passes_filters(params: LPPLSParams) -> bool:
+    def _passes_filters_impl(self, params: LPPLSParams) -> bool:
         """Sornette filter conditions for valid LPPLS fit.
+
+        Damping is canonical |B|/|C| (see LPPLSParams.damping).
 
         WHY tighter than standard: vanilla Sornette filters produce 80%+
         false positive rate on non-bubble data. Key fixes:
@@ -190,18 +201,16 @@ class LPPLSOptimizer:
         - |B| too small = no real super-exponential growth
         - omega at boundaries = likely overfitting
         """
-        # m must be interior (boundary = optimizer stuck)
-        if not (0.1 < params.m < 0.87):
+        m_lo, m_hi = self._filter_m
+        w_lo, w_hi = self._filter_omega
+        if not (m_lo < params.m < m_hi):
             return False
-        # omega must be interior and in Sornette range
-        if not (5.0 < params.omega < 13.5):
+        if not (w_lo < params.omega < w_hi):
             return False
-        # B < 0 for bubble AND |B| must be meaningful
         if params.B >= 0:
             return False
-        if abs(params.B) < 0.003:
+        if abs(params.B) < self._min_abs_B:
             return False
-        # damping: oscillations should not dominate power law
-        if params.damping < 0.5:
+        if params.damping < self._min_damping:
             return False
         return True

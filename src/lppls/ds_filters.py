@@ -13,7 +13,119 @@ from __future__ import annotations
 import numpy as np
 import structlog
 
+from src.lppls.model import LPPLS, LPPLSParams
+from src.lppls.optimizer import LPPLSOptimizer
+
 log = structlog.get_logger()
+
+
+def _log_prices(prices: np.ndarray) -> np.ndarray:
+    """Natural log of prices; LPPLS is defined on ln(p(t)), not p(t)."""
+    return np.log(np.clip(np.asarray(prices, dtype=float), 1e-300, None))
+
+
+def _make_optimizer(
+    t: np.ndarray,
+    *,
+    domain: str,
+    grid_size: int,
+    n_best: int,
+    tc_horizon: float,
+) -> LPPLSOptimizer:
+    """Grid + L-BFGS-B optimizer on ln(price), domain-specific ω search box."""
+    t_last = float(t[-1])
+    tc_lo = t_last + 1.0
+    tc_hi = t_last + float(tc_horizon)
+    if domain == "housing":
+        omega_range = (4.0, 15.0)
+        filter_omega_interior = (4.05, 14.95)
+    else:
+        omega_range = (6.0, 13.0)
+        filter_omega_interior = (5.0, 13.5)
+    return LPPLSOptimizer(
+        tc_range=(tc_lo, tc_hi),
+        m_range=(0.1, 0.9),
+        omega_range=omega_range,
+        grid_size=grid_size,
+        n_best=n_best,
+        filter_m_interior=(0.1, 0.87),
+        filter_omega_interior=filter_omega_interior,
+    )
+
+
+def _fit_lppls_log_price(
+    t: np.ndarray,
+    prices: np.ndarray,
+    *,
+    domain: str = "finance",
+    grid_size: int = 10,
+    n_best: int = 5,
+    tc_horizon: float = 180.0,
+) -> tuple[LPPLS | None, float]:
+    """Fit LPPLS on ln(price). Returns (model, r²) or (None, 0)."""
+    t = np.asarray(t, dtype=float)
+    if len(prices) < 30:
+        return None, 0.0
+    log_price = _log_prices(prices)
+    opt = _make_optimizer(
+        t, domain=domain, grid_size=grid_size, n_best=n_best, tc_horizon=tc_horizon
+    )
+    try:
+        model = opt.fit(t, log_price)
+    except Exception:
+        return None, 0.0
+    r2 = model.r_squared(t, log_price)
+    return model, r2
+
+
+def _quality_score_lppls(p: LPPLSParams, r_squared: float, domain: str) -> float:
+    """Heuristic 0–1 score (legacy structure, ln-price R²)."""
+    quality = 0.0
+    if r_squared > 0.8:
+        quality += 0.3
+    elif r_squared > 0.7:
+        quality += 0.15
+    if p.B < 0:
+        quality += 0.2
+    if 0.2 < p.m < 0.7:
+        quality += 0.2
+    elif 0.1 < p.m < 0.9:
+        quality += 0.1
+    if domain == "housing":
+        if 6.0 < p.omega < 13.0:
+            quality += 0.15
+        elif 4.0 < p.omega < 15.0:
+            quality += 0.08
+    elif 6.0 < p.omega < 13.0:
+        quality += 0.15
+    damp = p.damping
+    if damp > 1.0:
+        quality += 0.15
+    elif damp > 0.5:
+        quality += 0.05
+    return float(min(quality, 1.0))
+
+
+def _dict_for_ds_window(model: LPPLS, t: np.ndarray, prices: np.ndarray, domain: str) -> dict | None:
+    """One-window result for calculate_ds_lppls_confidence."""
+    p = model.params
+    if p is None:
+        return None
+    log_price = _log_prices(prices)
+    r2 = model.r_squared(t, log_price)
+    q = _quality_score_lppls(p, r2, domain)
+    verdict = "BUBBLE" if q > 0.5 else "NO_BUBBLE"
+    return {
+        "tc": float(p.tc),
+        "m": float(p.m),
+        "omega": float(p.omega),
+        "a": float(p.A),
+        "b": float(p.B),
+        "c": float(p.C),
+        "r_squared": float(r2),
+        "quality_score": q,
+        "verdict": verdict,
+    }
 
 
 def passes_sornette_filters(
@@ -80,12 +192,13 @@ def passes_sornette_filters(
     except (ValueError, ZeroDivisionError):
         return False
 
-    # 4. Условие затухания (Damping condition)
-    # Гарантирует, что крах (сингулярность) не перекрывается амплитудой колебаний
+    # 4. Условие затухания — каноника как в LPPLSParams.damping: |B|/|C|
+    # (c = совместная амплитуда лог-периодического члена в параметризации A,B,C,φ)
     try:
-        damping = (m * abs(b)) / (omega * abs(c)) if abs(c) > 1e-10 else np.inf
-
-        # Housing: ниже порог (более шумные данные)
+        c_abs = abs(c)
+        if c_abs <= 1e-10:
+            return False
+        damping = abs(b) / c_abs
         min_damping = 0.5 if domain == "housing" else 0.8
         if damping < min_damping:
             return False
@@ -206,97 +319,39 @@ def calculate_ds_lppls_confidence(
     }
 
 
-def fit_lppls_simple(t: np.ndarray, prices: np.ndarray) -> dict:
-    """Fast single-window LPPLS fit (original version)."""
-    from scipy.optimize import minimize
-
+def fit_lppls_simple(t: np.ndarray, prices: np.ndarray, domain: str = "finance") -> dict:
+    """Single-window LPPLS on ln(price): grid search + L-BFGS-B (canonical LPPLS)."""
+    t = np.asarray(t, dtype=float)
     n = len(prices)
     if n < 30:
         return {"verdict": "NO_BUBBLE", "quality_score": 0.0, "r_squared": 0.0}
 
-    def lppls_func(params, t, tc):
-        A, B, m, C, omega, phi = params
-        dt = tc - t
-        dt = np.clip(dt, 0.01, None)
-        return A + B * dt**m + C * dt**m * np.cos(omega * np.log(dt) + phi)
-
-    def sse_for_tc(tc, t, prices):
-        A0 = prices[-1]
-        B0 = -(prices[-1] - prices[0]) / max((tc - t[0]) ** 0.5, 0.01)
-        m0 = 0.5
-        C0 = (prices[-1] - prices[0]) / 10
-        omega0 = 8.0
-        phi0 = 0.0
-        try:
-            result = minimize(
-                lambda params: np.sum((lppls_func(params, t, tc) - prices) ** 2),
-                [A0, B0, m0, C0, omega0, phi0],
-                method="L-BFGS-B",
-                bounds=[
-                    (-1e10, 1e10),
-                    (-1e10, 0),
-                    (0.1, 0.9),
-                    (-1e10, 1e10),
-                    (4.0, 25.0),
-                    (-np.pi, np.pi),
-                ],
-            )
-            return result.fun, result.x
-        except Exception:
-            return np.inf, None
-
-    tc_candidates = np.linspace(t[-1] + 1, t[-1] + 180, 30)
-    best_sse, best_params, best_tc = np.inf, None, None
-
-    for tc in tc_candidates:
-        sse, params = sse_for_tc(tc, t, prices)
-        if sse < best_sse:
-            best_sse, best_params, best_tc = sse, params, tc
-
-    if best_params is None:
+    model, _ = _fit_lppls_log_price(
+        t, prices, domain=domain, grid_size=10, n_best=5, tc_horizon=180.0
+    )
+    if model is None or model.params is None:
         return {"verdict": "NO_BUBBLE", "quality_score": 0.0, "r_squared": 0.0}
 
-    ss_tot = np.sum((prices - np.mean(prices)) ** 2)
-    r_squared = 1 - best_sse / ss_tot if ss_tot > 0 else 0.0
-    A, B, m, C, omega, phi = best_params
+    p = model.params
+    log_price = _log_prices(prices)
+    r_squared = float(model.r_squared(t, log_price))
 
-    # Calculate oscillations count
     try:
-        dt_start = best_tc - t[0]
-        dt_end = max(best_tc - t[-1], 0.01)
-        oscillations = (omega / (2 * np.pi)) * np.log(dt_start / dt_end)
+        dt_start = p.tc - t[0]
+        dt_end = max(p.tc - t[-1], 0.01)
+        oscillations = (p.omega / (2 * np.pi)) * np.log(dt_start / dt_end)
     except Exception:
         oscillations = 0.0
 
-    # Calculate damping ratio
-    damping = abs(B) / max(abs(C), 1e-10)
+    damping = p.damping
+    quality = _quality_score_lppls(p, r_squared, domain)
 
-    # STRICT quality scoring — proven FP rate 7% on random walks
-    # WHY: relaxing these thresholds (attempted 2026-04-05) increased FP from 7% to 35%
-    # and dropped eval accuracy from 68% to 56%. Meme stocks need RAG, not looser math.
-    quality = 0.0
-    if r_squared > 0.8:
-        quality += 0.3
-    elif r_squared > 0.7:
-        quality += 0.15
-    if B < 0:
-        quality += 0.2
-    if 0.2 < m < 0.7:
-        quality += 0.2
-    elif 0.1 < m < 0.9:
-        quality += 0.1
-    if 6.0 < omega < 13.0:
-        quality += 0.15
-    if damping > 1.0:
-        quality += 0.15
-    elif damping > 0.5:
-        quality += 0.05
+    omega_ok = (6.0 < p.omega < 13.0) if domain != "housing" else (4.0 < p.omega < 15.0)
 
-    # STRICT verdict thresholds
     is_bubble = (
-        B < 0
-        and 0.2 < m < 0.7
-        and 6.0 < omega < 13.0
+        p.B < 0
+        and 0.2 < p.m < 0.7
+        and omega_ok
         and damping > 1.0
         and r_squared > 0.8
         and oscillations >= 2.5
@@ -305,10 +360,10 @@ def fit_lppls_simple(t: np.ndarray, prices: np.ndarray) -> dict:
 
     is_possible = (
         quality > 0.75
-        and B < 0
+        and p.B < 0
         and r_squared > 0.75
         and oscillations >= 2.0
-        and m > 0.1  # WHY: m=0.1 exactly = optimizer stuck at boundary = noise
+        and p.m > 0.1
     )
 
     verdict = "BUBBLE" if is_bubble else ("POSSIBLE" if is_possible else "NO_BUBBLE")
@@ -317,20 +372,20 @@ def fit_lppls_simple(t: np.ndarray, prices: np.ndarray) -> dict:
 
     tc_date_str = None
     try:
-        tc_date_str = (datetime.now() + timedelta(days=int(best_tc - t[-1]))).strftime("%Y-%m-%d")
+        tc_date_str = (datetime.now() + timedelta(days=int(p.tc - t[-1]))).strftime("%Y-%m-%d")
     except Exception:
-        tc_date_str = f"index_{best_tc:.0f}"
+        tc_date_str = f"index_{p.tc:.0f}"
 
     return {
-        "tc_estimate": float(best_tc),
+        "tc_estimate": float(p.tc),
         "tc_date_str": tc_date_str,
         "quality_score": round(quality, 4),
         "r_squared": round(r_squared, 4),
-        "m": round(float(m), 4),
-        "omega": round(float(omega), 4),
-        "B": round(float(B), 4),
-        "C": round(float(C), 4),
-        "A": round(float(A), 4),
+        "m": round(float(p.m), 4),
+        "omega": round(float(p.omega), 4),
+        "B": round(float(p.B), 4),
+        "C": round(float(p.C), 4),
+        "A": round(float(p.A), 4),
         "damping": round(float(damping), 4),
         "oscillations": round(float(oscillations), 3),
         "verdict": verdict,
@@ -342,7 +397,7 @@ def fit_lppls_with_ds(
     prices: np.ndarray,
     domain: str = "finance",
 ) -> dict:
-    """Full LPPLS fit with DS-LPPLS confidence calculation.
+    """Full LPPLS fit with DS-LPPLS confidence (ln-price, LPPLSOptimizer).
 
     This is the production-ready replacement for fit_lppls_simple.
 
@@ -354,8 +409,7 @@ def fit_lppls_with_ds(
     Returns:
         Dict with all LPPLS params + DS confidence metrics
     """
-    from scipy.optimize import minimize
-
+    t = np.asarray(t, dtype=float)
     n = len(prices)
     if n < 30:
         return {
@@ -366,54 +420,10 @@ def fit_lppls_with_ds(
             "ds_verdict": "NO_BUBBLE",
         }
 
-    # ─── Single-window fit ────────────────────────────────────────────
-
-    def lppls_func(params, t, tc):
-        A, B, m, C, omega, phi = params
-        dt = tc - t
-        dt = np.clip(dt, 0.01, None)
-        return A + B * dt**m + C * dt**m * np.cos(omega * np.log(dt) + phi)
-
-    def sse_for_tc(tc, t, prices):
-        A0 = prices[-1]
-        B0 = -(prices[-1] - prices[0]) / max((tc - t[0]) ** 0.5, 0.01)
-        m0 = 0.5
-        C0 = (prices[-1] - prices[0]) / 10
-        omega0 = 8.0
-        phi0 = 0.0
-
-        try:
-            result = minimize(
-                lambda params: np.sum((lppls_func(params, t, tc) - prices) ** 2),
-                [A0, B0, m0, C0, omega0, phi0],
-                method="L-BFGS-B",
-                bounds=[
-                    (-1e10, 1e10),
-                    (-1e10, 0),
-                    (0.1, 0.9),
-                    (-1e10, 1e10),
-                    (4.0, 25.0),
-                    (-np.pi, np.pi),
-                ],
-            )
-            return result.fun, result.x
-        except Exception:
-            return np.inf, None
-
-    tc_candidates = np.linspace(t[-1] + 1, t[-1] + 180, 30)
-
-    best_sse = np.inf
-    best_params = None
-    best_tc = None
-
-    for tc in tc_candidates:
-        sse, params = sse_for_tc(tc, t, prices)
-        if sse < best_sse:
-            best_sse = sse
-            best_params = params
-            best_tc = tc
-
-    if best_params is None or best_tc is None:
+    model, _ = _fit_lppls_log_price(
+        t, prices, domain=domain, grid_size=10, n_best=5, tc_horizon=180.0
+    )
+    if model is None or model.params is None:
         return {
             "verdict": "NO_BUBBLE",
             "quality_score": 0.0,
@@ -422,57 +432,22 @@ def fit_lppls_with_ds(
             "ds_verdict": "NO_BUBBLE",
         }
 
-    ss_tot = np.sum((prices - np.mean(prices)) ** 2)
-    r_squared = 1 - best_sse / ss_tot if ss_tot > 0 else 0.0
+    p = model.params
+    r_squared = float(model.r_squared(t, _log_prices(prices)))
+    best_tc = float(p.tc)
 
-    # Optimizer order: [A, B, m, C, omega, phi]
-    A, B, m, C, omega, phi = best_params
-
-    # ─── DS-LPPLS Confidence ──────────────────────────────────────────
-
-    def simple_fit_func(t_win, p_win):
-        """Wrapper for DS confidence calculation."""
-        # Quick fit on this window — fewer candidates for speed
-        tc_cands = np.linspace(t_win[-1] + 1, t_win[-1] + 180, 8)
-        best_s = np.inf
-        best_p = None
-        best_t = None
-
-        for tc in tc_cands:
-            s, p = sse_for_tc(tc, t_win, p_win)
-            if s < best_s:
-                best_s = s
-                best_p = p
-                best_t = tc
-
-        if best_p is None:
+    def simple_fit_func(t_win: np.ndarray, p_win: np.ndarray):
+        mloc, _ = _fit_lppls_log_price(
+            t_win,
+            p_win,
+            domain=domain,
+            grid_size=8,
+            n_best=3,
+            tc_horizon=180.0,
+        )
+        if mloc is None or mloc.params is None:
             return None
-
-        ss_t = np.sum((p_win - np.mean(p_win)) ** 2)
-        r2 = 1 - best_s / ss_t if ss_t > 0 else 0.0
-        q = 0.0
-        if r2 > 0.7:
-            q += 0.3
-        if best_p[1] < 0:
-            q += 0.2
-        if 0.1 < best_p[2] < 0.9:
-            q += 0.2
-        if 4.0 < best_p[4] < 25.0:
-            q += 0.15
-        if abs(best_p[1]) / max(abs(best_p[3]), 1e-10) > 0.3:
-            q += 0.15
-
-        return {
-            "tc": best_t,
-            "m": best_p[2],
-            "omega": best_p[4],
-            "a": best_p[0],
-            "b": best_p[1],
-            "c": best_p[3],
-            "r_squared": r2,
-            "quality_score": q,
-            "verdict": "BUBBLE" if q > 0.5 else "NO_BUBBLE",
-        }
+        return _dict_for_ds_window(mloc, t_win, p_win, domain)
 
     ds_result = calculate_ds_lppls_confidence(
         t=t,
@@ -483,56 +458,36 @@ def fit_lppls_with_ds(
         domain=domain,
     )
 
-    # ─── Final verdict (combine single + DS) ──────────────────────────
+    quality = _quality_score_lppls(p, r_squared, domain)
 
-    # Single-window quality — STRICT thresholds (synced with fit_lppls_simple)
-    quality = 0.0
-    if r_squared > 0.8:
-        quality += 0.3
-    elif r_squared > 0.7:
-        quality += 0.15
-    if B < 0:
-        quality += 0.2
-    if 0.2 < m < 0.7:
-        quality += 0.2
-    elif 0.1 < m < 0.9:
-        quality += 0.1
-    if 6.0 < omega < 13.0:
-        quality += 0.15
-    damping = abs(B) / max(abs(C), 1e-10)
-    if damping > 1.0:
-        quality += 0.15
-    elif damping > 0.5:
-        quality += 0.05
-
-    # Verdict — synced with fit_lppls_simple thresholds
-    oscillations = (omega / (2 * np.pi)) * np.log(
+    oscillations = (p.omega / (2 * np.pi)) * np.log(
         max(best_tc - t[0], 1.0) / max(best_tc - t[-1], 0.01)
     )
+
+    omega_ok = (6.0 < p.omega < 13.0) if domain != "housing" else (4.0 < p.omega < 15.0)
+
     is_bubble = (
-        B < 0
-        and 0.2 < m < 0.7
-        and 6.0 < omega < 13.0
-        and damping > 1.0
+        p.B < 0
+        and 0.2 < p.m < 0.7
+        and omega_ok
+        and p.damping > 1.0
         and r_squared > 0.8
         and oscillations >= 2.5
         and quality > 0.85
     )
 
-    # DS confidence boost
     if ds_result["ds_confidence"] > 0.6:
         quality = min(quality + 0.2, 1.0)
     elif ds_result["ds_confidence"] > 0.3:
         quality = min(quality + 0.1, 1.0)
 
-    # Combined verdict
     sornette_pass = passes_sornette_filters(
         tc=best_tc,
-        m=m,
-        omega=omega,
-        a=A,
-        b=B,
-        c=C,
+        m=p.m,
+        omega=p.omega,
+        a=p.A,
+        b=p.B,
+        c=p.C,
         t_start=t[0],
         t_end=t[-1],
         domain=domain,
@@ -540,12 +495,11 @@ def fit_lppls_with_ds(
 
     if sornette_pass and ds_result["ds_verdict"] == "BUBBLE" and quality > 0.7 and is_bubble:
         verdict = "BUBBLE"
-    elif quality > 0.75 and B < 0 and r_squared > 0.8 and is_bubble:
+    elif quality > 0.75 and p.B < 0 and r_squared > 0.8 and is_bubble:
         verdict = "POSSIBLE"
     else:
         verdict = "NO_BUBBLE"
 
-    # tc date
     from datetime import datetime, timedelta
 
     tc_date_str = None
@@ -558,17 +512,16 @@ def fit_lppls_with_ds(
         tc_date_str = f"index_{best_tc:.0f}"
 
     return {
-        "tc_estimate": float(best_tc),
+        "tc_estimate": best_tc,
         "tc_date_str": tc_date_str,
         "quality_score": round(quality, 4),
         "r_squared": round(r_squared, 4),
-        "m": round(float(m), 4),
-        "omega": round(float(omega), 4),
-        "B": round(float(B), 4),
-        "C": round(float(C), 4),
-        "A": round(float(A), 4),
+        "m": round(float(p.m), 4),
+        "omega": round(float(p.omega), 4),
+        "B": round(float(p.B), 4),
+        "C": round(float(p.C), 4),
+        "A": round(float(p.A), 4),
         "verdict": verdict,
-        # DS-LPPLS metrics
         "ds_confidence": ds_result["ds_confidence"],
         "ds_verdict": ds_result["ds_verdict"],
         "ds_median_tc": ds_result["median_tc"],

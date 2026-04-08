@@ -10,7 +10,7 @@ from src.lppls.scoring import (
     score_omega,
     get_score_breakdown,
 )
-from src.lppls.uncertainty import bootstrap_tc_uncertainty
+from src.lppls.uncertainty import subsample_tc_uncertainty as bootstrap_tc_uncertainty
 from src.pipeline.stages import run_screening, run_structural_fit, run_full_pipeline
 from src.validation.splits import get_split, SplitProtocol
 from src.validation.adversarial_controls import (

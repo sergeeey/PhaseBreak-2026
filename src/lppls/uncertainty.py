@@ -1,4 +1,4 @@
-"""tc uncertainty via bootstrap and perturbation.
+"""tc uncertainty via ordered subsampling (not IID bootstrap).
 
 PRIMARY uncertainty method for PhaseBreak v2.
 Chosen over conformal prediction because:
@@ -9,10 +9,10 @@ Chosen over conformal prediction because:
 Conformal prediction (conformal.py) is SECONDARY — requires calibration errors
 from known bubbles, which limits it to domains with ground truth.
 
-Produces tc distribution without full Bayesian LPPLS:
-- Bootstrap over random subsets of windows/data
-- Perturbation of initial conditions
-- Summary: median, p10, p90 interval
+Implementation note: each replicate draws a contiguous-time-ordered subset of
+points without replacement (m-out-of-n subsampling). Classical bootstrap uses
+sampling with replacement; we keep the legacy name `bootstrap_tc_uncertainty`
+as a thin alias for API stability.
 """
 
 from __future__ import annotations
@@ -26,7 +26,7 @@ from src.lppls.optimizer import LPPLSOptimizer
 log = structlog.get_logger()
 
 
-def bootstrap_tc_uncertainty(
+def subsample_tc_uncertainty(
     t: NDArray,
     log_price: NDArray,
     n_bootstrap: int = 100,
@@ -36,11 +36,11 @@ def bootstrap_tc_uncertainty(
     omega_range: tuple = (6.0, 13.0),
     grid_size: int = 8,
 ) -> dict:
-    """Estimate tc uncertainty via bootstrap resampling.
+    """Estimate tc uncertainty via m-out-of-n subsampling without replacement.
 
-    For each bootstrap iteration:
-    1. Subsample 80% of data points (preserving order)
-    2. Fit LPPLS
+    For each replicate:
+    1. Draw a random subset of indices (sorted to preserve time order)
+    2. Fit LPPLS on ln(price)
     3. Collect tc estimates
 
     Returns dict with tc distribution summary.
@@ -94,10 +94,15 @@ def bootstrap_tc_uncertainty(
     }
 
     log.info(
-        "tc_uncertainty",
+        "tc_uncertainty_subsample",
         n_valid=len(tc_values),
         n_total=n_bootstrap,
         tc_median=round(result["tc_median"], 1),
         tc_range=f"[{result['tc_p10']:.1f}, {result['tc_p90']:.1f}]",
     )
     return result
+
+
+def bootstrap_tc_uncertainty(*args, **kwargs) -> dict:
+    """Backward-compatible alias for :func:`subsample_tc_uncertainty`."""
+    return subsample_tc_uncertainty(*args, **kwargs)

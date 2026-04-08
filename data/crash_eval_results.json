@@ -1,0 +1,355 @@
+{
+  "eval_date": "2026-04-06 09:26",
+  "total_cases": 34,
+  "tp": 3,
+  "fp": 3,
+  "fn": 10,
+  "tn": 18,
+  "crash_precision": 0.5,
+  "crash_recall": 0.2308,
+  "f1": 0.3158,
+  "accuracy": 0.6176,
+  "use_hmm": false,
+  "results": [
+    {
+      "id": "SB-01",
+      "ticker": "GME",
+      "predicted_crash": false,
+      "actual_crash": true,
+      "actual_drawdown": -84,
+      "match": "FN",
+      "verdict": "NO_BUBBLE",
+      "quality": 0.5
+    },
+    {
+      "id": "SB-02",
+      "ticker": "BTC-USD",
+      "predicted_crash": true,
+      "actual_crash": true,
+      "actual_drawdown": -84,
+      "match": "TP",
+      "verdict": "BUBBLE",
+      "quality": 1.0
+    },
+    {
+      "id": "SB-03",
+      "ticker": "^IXIC",
+      "predicted_crash": false,
+      "actual_crash": true,
+      "actual_drawdown": -78,
+      "match": "FN",
+      "verdict": "NO_BUBBLE",
+      "quality": 0.8
+    },
+    {
+      "id": "SB-04",
+      "ticker": "000001.SS",
+      "predicted_crash": true,
+      "actual_crash": true,
+      "actual_drawdown": -45,
+      "match": "TP",
+      "verdict": "BUBBLE",
+      "quality": 1.0
+    },
+    {
+      "id": "SB-05",
+      "ticker": "SI=F",
+      "predicted_crash": true,
+      "actual_crash": true,
+      "actual_drawdown": -45,
+      "match": "TP",
+      "verdict": "POSSIBLE",
+      "quality": 0.9
+    },
+    {
+      "id": "SB-06",
+      "ticker": "CL=F",
+      "predicted_crash": false,
+      "actual_crash": true,
+      "actual_drawdown": -78,
+      "match": "FN",
+      "verdict": "NO_BUBBLE",
+      "quality": 0.8
+    },
+    {
+      "id": "SB-07",
+      "ticker": "TSLA",
+      "predicted_crash": false,
+      "actual_crash": true,
+      "actual_drawdown": -60,
+      "match": "FN",
+      "verdict": "NO_BUBBLE",
+      "quality": 1.0
+    },
+    {
+      "id": "SB-08",
+      "ticker": "DOGE-USD",
+      "predicted_crash": false,
+      "actual_crash": true,
+      "actual_drawdown": -90,
+      "match": "FN",
+      "verdict": "NO_BUBBLE",
+      "quality": 0.9
+    },
+    {
+      "id": "FG-01",
+      "ticker": "NVDA",
+      "predicted_crash": false,
+      "actual_crash": false,
+      "actual_drawdown": -24.4,
+      "match": "TN",
+      "verdict": "NO_BUBBLE",
+      "quality": 0.8
+    },
+    {
+      "id": "FG-02",
+      "ticker": "MSFT",
+      "predicted_crash": true,
+      "actual_crash": false,
+      "actual_drawdown": -11.3,
+      "match": "FP",
+      "verdict": "POSSIBLE",
+      "quality": 0.8
+    },
+    {
+      "id": "FG-03",
+      "ticker": "AAPL",
+      "predicted_crash": false,
+      "actual_crash": false,
+      "actual_drawdown": -1.2,
+      "match": "TN",
+      "verdict": "NO_BUBBLE",
+      "quality": 0.65
+    },
+    {
+      "id": "FG-04",
+      "ticker": "AMZN",
+      "predicted_crash": true,
+      "actual_crash": false,
+      "actual_drawdown": -13.5,
+      "match": "FP",
+      "verdict": "POSSIBLE",
+      "quality": 1.0
+    },
+    {
+      "id": "FG-05",
+      "ticker": "META",
+      "predicted_crash": false,
+      "actual_crash": false,
+      "actual_drawdown": -9.6,
+      "match": "TN",
+      "verdict": "NO_BUBBLE",
+      "quality": 0.8
+    },
+    {
+      "id": "FG-06",
+      "ticker": "GOOGL",
+      "predicted_crash": false,
+      "actual_crash": false,
+      "actual_drawdown": -15.6,
+      "match": "TN",
+      "verdict": "NO_BUBBLE",
+      "quality": 1.0
+    },
+    {
+      "id": "FG-07",
+      "ticker": "GC=F",
+      "predicted_crash": true,
+      "actual_crash": false,
+      "actual_drawdown": -0.3,
+      "match": "FP",
+      "verdict": "POSSIBLE",
+      "quality": 0.9
+    },
+    {
+      "id": "FG-08",
+      "ticker": "CL=F",
+      "predicted_crash": false,
+      "actual_crash": false,
+      "actual_drawdown": -2.5,
+      "match": "TN",
+      "verdict": "NO_BUBBLE",
+      "quality": 0.0
+    },
+    {
+      "id": "MX-01",
+      "ticker": "PLTR",
+      "predicted_crash": false,
+      "actual_crash": false,
+      "actual_drawdown": -27.5,
+      "match": "TN",
+      "verdict": "NO_BUBBLE",
+      "quality": 1.0
+    },
+    {
+      "id": "MX-02",
+      "ticker": "MSTR",
+      "predicted_crash": false,
+      "actual_crash": false,
+      "actual_drawdown": -29.6,
+      "match": "TN",
+      "verdict": "NO_BUBBLE",
+      "quality": 0.65
+    },
+    {
+      "id": "MX-03",
+      "ticker": "AVGO",
+      "predicted_crash": false,
+      "actual_crash": false,
+      "actual_drawdown": -15.0,
+      "match": "TN",
+      "verdict": "NO_BUBBLE",
+      "quality": 0.9
+    },
+    {
+      "id": "MX-04",
+      "ticker": "ETH-USD",
+      "predicted_crash": false,
+      "actual_crash": true,
+      "actual_drawdown": -38.6,
+      "match": "FN",
+      "verdict": "NO_BUBBLE",
+      "quality": 0.5
+    },
+    {
+      "id": "SB-09",
+      "ticker": "BBBY",
+      "predicted_crash": false,
+      "actual_crash": true,
+      "actual_drawdown": -90,
+      "match": "FN",
+      "verdict": "NO_BUBBLE",
+      "quality": 0.45
+    },
+    {
+      "id": "SB-10",
+      "ticker": "AMC",
+      "predicted_crash": false,
+      "actual_crash": true,
+      "actual_drawdown": -75,
+      "match": "FN",
+      "verdict": "NO_BUBBLE",
+      "quality": 0.5
+    },
+    {
+      "id": "SB-11",
+      "ticker": "RBLX",
+      "predicted_crash": false,
+      "actual_crash": true,
+      "actual_drawdown": -50,
+      "match": "FN",
+      "verdict": "NO_BUBBLE",
+      "quality": 0.6
+    },
+    {
+      "id": "SB-12",
+      "ticker": "COIN",
+      "predicted_crash": false,
+      "actual_crash": true,
+      "actual_drawdown": -89,
+      "match": "FN",
+      "verdict": "NO_BUBBLE",
+      "quality": 0.7
+    },
+    {
+      "id": "FG-09",
+      "ticker": "KO",
+      "predicted_crash": false,
+      "actual_crash": false,
+      "actual_drawdown": -2.3,
+      "match": "TN",
+      "verdict": "NO_BUBBLE",
+      "quality": 0.8
+    },
+    {
+      "id": "FG-10",
+      "ticker": "JNJ",
+      "predicted_crash": false,
+      "actual_crash": false,
+      "actual_drawdown": -1.8,
+      "match": "TN",
+      "verdict": "NO_BUBBLE",
+      "quality": 0.5
+    },
+    {
+      "id": "FG-11",
+      "ticker": "PG",
+      "predicted_crash": false,
+      "actual_crash": false,
+      "actual_drawdown": -5.4,
+      "match": "TN",
+      "verdict": "NO_BUBBLE",
+      "quality": 0.9
+    },
+    {
+      "id": "NB-01",
+      "ticker": "NEE",
+      "predicted_crash": false,
+      "actual_crash": false,
+      "actual_drawdown": -9.8,
+      "match": "TN",
+      "verdict": "NO_BUBBLE",
+      "quality": 0.9
+    },
+    {
+      "id": "NB-02",
+      "ticker": "DUK",
+      "predicted_crash": false,
+      "actual_crash": false,
+      "actual_drawdown": -1.7,
+      "match": "TN",
+      "verdict": "NO_BUBBLE",
+      "quality": 0.8
+    },
+    {
+      "id": "NB-03",
+      "ticker": "SO",
+      "predicted_crash": false,
+      "actual_crash": false,
+      "actual_drawdown": -1.7,
+      "match": "TN",
+      "verdict": "NO_BUBBLE",
+      "quality": 0.9
+    },
+    {
+      "id": "AB-01",
+      "ticker": "WMT",
+      "predicted_crash": false,
+      "actual_crash": false,
+      "actual_drawdown": -9.2,
+      "match": "TN",
+      "verdict": "NO_BUBBLE",
+      "quality": 0.65
+    },
+    {
+      "id": "AB-02",
+      "ticker": "XOM",
+      "predicted_crash": false,
+      "actual_crash": false,
+      "actual_drawdown": -6.3,
+      "match": "TN",
+      "verdict": "NO_BUBBLE",
+      "quality": 0.5
+    },
+    {
+      "id": "AB-03",
+      "ticker": "USO",
+      "predicted_crash": false,
+      "actual_crash": false,
+      "actual_drawdown": 0,
+      "match": "TN",
+      "verdict": "NO_BUBBLE",
+      "quality": 0.5
+    },
+    {
+      "id": "AB-04",
+      "ticker": "GLD",
+      "predicted_crash": false,
+      "actual_crash": false,
+      "actual_drawdown": -3.3,
+      "match": "TN",
+      "verdict": "NO_BUBBLE",
+      "quality": 0.6
+    }
+  ]
+}

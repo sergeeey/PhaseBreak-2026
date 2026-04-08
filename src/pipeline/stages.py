@@ -193,7 +193,7 @@ def run_structural_fit(
     - Domain-specific soft scoring weights
     """
     from src.lppls.scoring import compute_quality_score
-    from src.lppls.uncertainty import bootstrap_tc_uncertainty
+    from src.lppls.uncertainty import subsample_tc_uncertainty as bootstrap_tc_uncertainty
 
     # v2: adaptive windows
     windows_used: list[int] = []

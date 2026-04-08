@@ -93,12 +93,10 @@ def run_academic_pipeline(ticker: str, t, prices):
             "verdict": result.final_verdict,
             "confidence": result.final_confidence,
             "path": result.path,
-            "fit_m": result.fit.m if result.fit and hasattr(result.fit, "m") else None,
-            "fit_omega": result.fit.omega if result.fit and hasattr(result.fit, "omega") else None,
-            "fit_quality": result.fit.quality
-            if result.fit and hasattr(result.fit, "quality")
-            else None,
-            "screening_regime": result.screening.regime if result.screening else None,
+            "fit_m": result.fit.params.m if result.fit and result.fit.params else None,
+            "fit_omega": result.fit.params.omega if result.fit and result.fit.params else None,
+            "fit_quality": result.fit.quality_score if result.fit else None,
+            "screening_regime": result.screening.hmm_regime if result.screening else None,
             "available": True,
         }
     except Exception as e:

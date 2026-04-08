@@ -23,7 +23,7 @@ import structlog
 from src.lppls.data import KNOWN_BUBBLES, NEGATIVE_CONTROLS, load_yfinance
 from src.lppls.optimizer import LPPLSOptimizer
 from src.lppls.scoring import compute_quality_score
-from src.lppls.uncertainty import bootstrap_tc_uncertainty
+from src.lppls.uncertainty import subsample_tc_uncertainty as bootstrap_tc_uncertainty
 from src.lppls.windowing import select_adaptive_windows
 from src.pipeline.stages import run_full_pipeline
 

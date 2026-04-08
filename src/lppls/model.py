@@ -45,7 +45,10 @@ class LPPLSParams:
 
     @property
     def damping(self) -> float:
-        """Damping ratio |B| / |C|. Higher = stronger power law vs oscillation."""
+        """Power-law vs log-periodic strength: |B|/|C|, C = sqrt(C1²+C2²).
+
+        Used consistently in optimizer post-filters and DS-LPPLS (see ds_filters).
+        """
         c = self.C
         if c < 1e-10:
             return float("inf")

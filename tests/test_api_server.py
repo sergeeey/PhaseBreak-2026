@@ -108,15 +108,26 @@ class TestPipelineIntegration:
 
     def test_full_pipeline_valid_series(self):
         """Test full pipeline with valid series length."""
-        from src.pipeline.stages import run_full_pipeline
+        from unittest.mock import patch
 
-        # Generate synthetic data (random walk)
+        from src.pipeline.stages import ScreeningResult, run_full_pipeline
+
         np.random.seed(42)
         n = 100
         t = np.arange(n, dtype=float)
         prices = np.random.randn(n).cumsum() + 100
 
-        result = run_full_pipeline(t, prices, domain="finance")
+        # Deterministic Layer A: avoid environment-specific HMM / hmmlearn availability.
+        fake_screening = ScreeningResult(
+            data_quality="OK",
+            n_points=n,
+            hmm_regime="BUBBLE",
+            hmm_bubble_prob=0.8,
+            should_fit_lppls=True,
+            reason="mock screening for integration test",
+        )
+        with patch("src.pipeline.stages.run_screening", return_value=fake_screening):
+            result = run_full_pipeline(t, prices, domain="finance")
         assert result.final_verdict in ["BUBBLE", "POSSIBLE", "NO_BUBBLE"]
         assert result.fit is not None
         assert 0 <= result.fit.quality_score <= 1
