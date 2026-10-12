@@ -6,7 +6,7 @@ Framework for detecting phase transitions across 5 domains using LPPLS (Sornette
 
 ## Scientific Hypothesis
 
-> LPPLS parameters (m, ω) from financial bubbles and geological spectral anomalies are drawn from the same distribution — preliminary evidence of universal phase transition signatures.
+> LPPLS parameters (m, ω) from financial bubbles and geological spectral anomalies may share a common distribution — **not confirmed**. KS non-rejection is low-power evidence; paper uses “Not rejected*” (see `CORRECTIONS.md`).
 
 ## Core Math: LPPLS (Sornette 2003)
 
@@ -21,7 +21,7 @@ ln(E[p(t)]) = A + B(tc - t)^m + C(tc - t)^m * cos(ω * ln(tc - t) + φ)
 | Domain | Data Source | Episodes | v2 Results |
 |--------|-----------|----------|------------|
 | **Finance** | Yahoo Finance | 11 bubbles + 9 controls | Precision=78%, Recall=64% |
-| **Commodities** | Yahoo Finance (futures) | 6 bubbles + 4 controls | Precision=67%, Recall=50% |
+| **Commodities** | Yahoo Finance (futures) | 6 bubbles + 4 controls | Precision=67%, Recall=67% |
 | **Housing** | FHFA + Zillow | 10+6 episodes | Precision=67%, Recall=33-50% |
 | **Geology** | Sentinel-2 temporal series | Seismic precursor patterns | KS p>0.05 |
 | **Fraud** | Transaction timelines | Doomsday Bayesian, C-index +27% | Survival model |
@@ -30,10 +30,10 @@ ln(E[p(t)]) = A + B(tc - t)^m + C(tc - t)^m * cos(ω * ln(tc - t) + φ)
 
 | Tier | Domains | Meaning |
 |------|---------|---------|
-| **Supported** | Finance, Commodities | Validated on real data, forward-tested, production-usable |
+| **Benchmark-validated** | Finance, Commodities | Real-data episode metrics in `data/v2_results/`; **not** production/ops-ready (crash eval P≈50% R≈23%) |
 | **Experimental** | Housing, Epidemics | Works but limited recall, needs more data/tuning |
 | **Science-only** | Geology, AI Compute, Landslides | Research validation, not for operational decisions |
-| **Separate track** | Fraud | Different model (survival), not LPPLS bubble detection |
+| **Separate track** | Fraud | Different model (survival), synthetic upper bound (+27% C-index) |
 
 ## Pipeline Architecture (v2)
 

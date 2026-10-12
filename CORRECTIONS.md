@@ -25,3 +25,12 @@
 ## Paper vs. commit history
 
 The paper (`paper/main.tex`) is the authoritative source for all claims. Commit messages reflect state at time of commit and may contain preliminary or subsequently corrected results. When in doubt, trust the paper.
+
+## External pilot hygiene (2026-10-12)
+
+Global OS pilot `PILOT-PB-CLAIMS-v1` (audit only; no metric fishing):
+
+1. README commodities recall **50% → 67%** (matches `benchmark_results.json`).
+2. Maturity tier **production-usable / production-like → benchmark-validated** (crash eval P=50% R≈23% ≠ ops-ready).
+3. Universality wording aligned with this file / paper (“not confirmed”).
+4. Nikkei: forward JSON vs `docs/NIKKEI_FAILURE_ANALYSIS.md` marked **unresolved provenance**.

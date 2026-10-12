@@ -1,11 +1,14 @@
 """Domain Maturity Layer — official status for each domain.
 
 Every domain has a status that determines what claims can be made:
-- production-like: validated on real data, can make operational claims
+- benchmark-validated: real-data episode metrics stored; not ops/production
 - experimental: works but limited validation, cannot make strong claims
 - research-only: research validation only, not for operational decisions
 - synthetic-only: tested on synthetic data only, upper bound estimates
 - diagnostic: diagnostic tool only, not a prediction system
+
+Legacy alias: ``production-like`` is treated as ``benchmark-validated`` (do not
+make operational claims from it).
 """
 
 from __future__ import annotations
@@ -15,35 +18,35 @@ from typing import Any
 
 DOMAIN_MATURITY: dict[str, dict[str, Any]] = {
     "finance": {
-        "status": "production-like",
+        "status": "benchmark-validated",
         "validated": True,
         "n_episodes": 20,
         "precision": 0.78,
         "recall": 0.64,
-        "description": "Validated on real data, forward-tested",
+        "description": "Validated on real episode set; crash eval weaker — not ops-ready",
     },
     "commodities": {
-        "status": "production-like",
+        "status": "benchmark-validated",
         "validated": True,
         "n_episodes": 10,
         "precision": 0.67,
         "recall": 0.67,
-        "description": "Validated on real data, high variance",
+        "description": "Validated on real data, high variance; not ops-ready",
     },
     "crypto": {
-        "status": "production-like",
+        "status": "benchmark-validated",
         "validated": True,
         "n_episodes": 8,
         "precision": None,
         "recall": None,
-        "description": "All post-crash, no active bubbles detected",
+        "description": "All post-crash, no active bubbles detected; not ops-ready",
     },
     "housing": {
         "status": "experimental",
         "validated": False,
         "n_episodes": 10,
-        "precision": None,
-        "recall": None,
+        "precision": 0.67,
+        "recall": 0.33,
         "description": "Works but limited recall, needs more data/tuning",
     },
     "geology": {
@@ -148,6 +151,13 @@ def format_status_table() -> str:
     """Format all domain statuses as a readable table."""
     lines = ["Domain Maturity Status:", "=" * 60]
     for domain, info in DOMAIN_MATURITY.items():
-        icon = {"production-like": "✅", "experimental": "⚠️", "research-only": "🔬", "synthetic-only": "🧪", "diagnostic": "📊"}.get(info["status"], "❓")
+        icon = {
+            "benchmark-validated": "✅",
+            "production-like": "✅",  # legacy alias
+            "experimental": "⚠️",
+            "research-only": "🔬",
+            "synthetic-only": "🧪",
+            "diagnostic": "📊",
+        }.get(info["status"], "❓")
         lines.append(f"  {icon} {domain:15s} | {info['status']:20s} | validated={info['validated']}")
     return "\n".join(lines)
