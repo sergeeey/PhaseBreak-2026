@@ -3,7 +3,16 @@
 **Date:** 2026-03-29
 **Episode:** ^N225 peaked ~41,580 Jul 2024, crashed 26% to ~31,000 on Aug 5
 
-## Pipeline output: NO_BUBBLE (quality=0.21) — complete miss
+## Provenance warning (2026-10-12)
+
+`data/v2_results/benchmark_results.json` → `domains.forward.episodes[nikkei_2024]`
+currently records `verdict=BUBBLE`, `correct=true`, `quality=0.64` on tip `fd1e55c`.
+
+This document records a **different** pipeline run: `NO_BUBBLE` (quality=0.21).
+Until the forward JSON and this analysis are reconciled to the same commit +
+window config, do **not** cite either as the sole authority for Nikkei 2024.
+
+## Pipeline output (this analysis): NO_BUBBLE (quality=0.21) — complete miss
 
 ## Cascade of 3 failures
 

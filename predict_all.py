@@ -493,7 +493,8 @@ def run_all_predictions(
         n = len([r for r in domain_results if r["verdict"] == "NO_BUBBLE"])
         status = get_status_label(domain)
         status_icon = {
-            "production-like": "✅",
+            "benchmark-validated": "✅",
+            "production-like": "✅",  # legacy alias
             "experimental": "⚠️",
             "research-only": "🔬",
             "synthetic-only": "🧪",
